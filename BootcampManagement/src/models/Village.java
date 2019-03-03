@@ -64,6 +64,12 @@ public class Village implements Serializable {
         this.name = name;
     }
 
+    public Village(String id, String name, Subdistrict subdistrict) {
+        this.id = id;
+        this.name = name;
+        this.subdistrict = subdistrict;
+    }
+
     public String getId() {
         return id;
     }

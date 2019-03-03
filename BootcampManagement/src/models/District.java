@@ -60,6 +60,12 @@ public class District implements Serializable {
         this.name = name;
     }
 
+    public District(String id, String name, Province province) {
+        this.id = id;
+        this.name = name;
+        this.province = province;
+    }
+
     public String getId() {
         return id;
     }

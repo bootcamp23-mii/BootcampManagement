@@ -63,6 +63,13 @@ public class University implements Serializable {
         this.name = name;
     }
 
+    public University(String id, String name, String address, Village village) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.village = village;
+    }
+
     public String getId() {
         return id;
     }

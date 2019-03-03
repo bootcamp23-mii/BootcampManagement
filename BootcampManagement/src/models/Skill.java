@@ -60,6 +60,12 @@ public class Skill implements Serializable {
         this.name = name;
     }
 
+    public Skill(String id, String name, Category category) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+    }
+
     public String getId() {
         return id;
     }

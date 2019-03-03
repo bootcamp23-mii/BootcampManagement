@@ -54,9 +54,9 @@ public class Evaluation implements Serializable {
     private String note;
     @OneToMany(mappedBy = "evaluation", fetch = FetchType.LAZY)
     private List<Score> scoreList;
-    @JoinColumn(name = "MEMBER", referencedColumnName = "ID")
+    @JoinColumn(name = "PARTICIPANT", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Employee member1;
+    private Employee participant;
     @JoinColumn(name = "LESSON", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lesson lesson;
@@ -74,6 +74,16 @@ public class Evaluation implements Serializable {
     public Evaluation(String id, Date evaluationdate) {
         this.id = id;
         this.evaluationdate = evaluationdate;
+    }
+
+    public Evaluation(String id, Short isdaily, Date evaluationdate, String note, Employee participant, Lesson lesson, Topic topic) {
+        this.id = id;
+        this.isdaily = isdaily;
+        this.evaluationdate = evaluationdate;
+        this.note = note;
+        this.participant = participant;
+        this.lesson = lesson;
+        this.topic = topic;
     }
 
     public String getId() {
@@ -117,12 +127,12 @@ public class Evaluation implements Serializable {
         this.scoreList = scoreList;
     }
 
-    public Employee getMember1() {
-        return member1;
+    public Employee getParticipant() {
+        return participant;
     }
 
-    public void setMember1(Employee member1) {
-        this.member1 = member1;
+    public void setParticipant(Employee participant) {
+        this.participant = participant;
     }
 
     public Lesson getLesson() {

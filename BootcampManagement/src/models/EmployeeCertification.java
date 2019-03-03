@@ -49,6 +49,12 @@ public class EmployeeCertification implements Serializable {
         this.id = id;
     }
 
+    public EmployeeCertification(String id, Certificate certificate, Employee employee) {
+        this.id = id;
+        this.certificate = certificate;
+        this.employee = employee;
+    }
+
     public String getId() {
         return id;
     }

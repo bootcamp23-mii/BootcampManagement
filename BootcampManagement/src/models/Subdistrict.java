@@ -60,6 +60,12 @@ public class Subdistrict implements Serializable {
         this.name = name;
     }
 
+    public Subdistrict(String id, String name, District district) {
+        this.id = id;
+        this.name = name;
+        this.district = district;
+    }
+
     public String getId() {
         return id;
     }

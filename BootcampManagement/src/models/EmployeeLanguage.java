@@ -49,6 +49,12 @@ public class EmployeeLanguage implements Serializable {
         this.id = id;
     }
 
+    public EmployeeLanguage(String id, Employee employee, Language language) {
+        this.id = id;
+        this.employee = employee;
+        this.language = language;
+    }
+
     public String getId() {
         return id;
     }

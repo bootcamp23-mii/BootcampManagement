@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -41,12 +42,22 @@ public class Participant implements Serializable {
     @JoinColumn(name = "BATCHCLASS", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private BatchClass batchclass;
+    @JoinColumn(name = "ID", referencedColumnName = "ID", insertable = false, updatable = false)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    private Employee employee;
 
     public Participant() {
     }
 
     public Participant(String id) {
         this.id = id;
+    }
+
+    public Participant(String id, String grade, BatchClass batchclass, Employee employee) {
+        this.id = id;
+        this.grade = grade;
+        this.batchclass = batchclass;
+        this.employee = employee;
     }
 
     public String getId() {
@@ -71,6 +82,14 @@ public class Participant implements Serializable {
 
     public void setBatchclass(BatchClass batchclass) {
         this.batchclass = batchclass;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     @Override

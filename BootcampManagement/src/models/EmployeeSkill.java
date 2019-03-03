@@ -49,6 +49,12 @@ public class EmployeeSkill implements Serializable {
         this.id = id;
     }
 
+    public EmployeeSkill(String id, Employee employee, Skill skill) {
+        this.id = id;
+        this.employee = employee;
+        this.skill = skill;
+    }
+
     public String getId() {
         return id;
     }

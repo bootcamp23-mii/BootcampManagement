@@ -43,9 +43,9 @@ public class BatchClass implements Serializable {
     @JoinColumn(name = "BATCH", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Batch batch;
-    @JoinColumn(name = "CLASS", referencedColumnName = "ID")
+    @JoinColumn(name = "CLASSTYPE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Class class1;
+    private ClassType classtype;
     @JoinColumn(name = "TRAINER", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee trainer;
@@ -58,6 +58,14 @@ public class BatchClass implements Serializable {
 
     public BatchClass(String id) {
         this.id = id;
+    }
+
+    public BatchClass(String id, Batch batch, ClassType classtype, Employee trainer, Room room) {
+        this.id = id;
+        this.batch = batch;
+        this.classtype = classtype;
+        this.trainer = trainer;
+        this.room = room;
     }
 
     public String getId() {
@@ -85,12 +93,12 @@ public class BatchClass implements Serializable {
         this.batch = batch;
     }
 
-    public Class getClass1() {
-        return class1;
+    public ClassType getClasstype() {
+        return classtype;
     }
 
-    public void setClass1(Class class1) {
-        this.class1 = class1;
+    public void setClasstype(ClassType classtype) {
+        this.classtype = classtype;
     }
 
     public Employee getTrainer() {

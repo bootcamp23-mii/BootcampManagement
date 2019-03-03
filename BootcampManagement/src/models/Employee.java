@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Employee.findByBirthdate", query = "SELECT e FROM Employee e WHERE e.birthdate = :birthdate")
     , @NamedQuery(name = "Employee.findByGender", query = "SELECT e FROM Employee e WHERE e.gender = :gender")
     , @NamedQuery(name = "Employee.findByMarriedstatus", query = "SELECT e FROM Employee e WHERE e.marriedstatus = :marriedstatus")
+    , @NamedQuery(name = "Employee.findByAddress", query = "SELECT e FROM Employee e WHERE e.address = :address")
     , @NamedQuery(name = "Employee.findByEmail", query = "SELECT e FROM Employee e WHERE e.email = :email")
     , @NamedQuery(name = "Employee.findByPhone", query = "SELECT e FROM Employee e WHERE e.phone = :phone")
     , @NamedQuery(name = "Employee.findByOnboarddate", query = "SELECT e FROM Employee e WHERE e.onboarddate = :onboarddate")
@@ -65,6 +68,9 @@ public class Employee implements Serializable {
     @Column(name = "MARRIEDSTATUS")
     private String marriedstatus;
     @Basic(optional = false)
+    @Column(name = "ADDRESS")
+    private String address;
+    @Basic(optional = false)
     @Column(name = "EMAIL")
     private String email;
     @Basic(optional = false)
@@ -83,6 +89,8 @@ public class Employee implements Serializable {
     @Basic(optional = false)
     @Column(name = "SECURITYANSWER")
     private String securityanswer;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "employee", fetch = FetchType.LAZY)
+    private Participant participant;
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<Organization> organizationList;
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
@@ -103,7 +111,7 @@ public class Employee implements Serializable {
     private Village village;
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<EmployeeLocker> employeeLockerList;
-    @OneToMany(mappedBy = "member1", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "participant", fetch = FetchType.LAZY)
     private List<Evaluation> evaluationList;
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<WorkExperience> workExperienceList;
@@ -127,18 +135,36 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public Employee(String id, String name, Date birthdate, String gender, String marriedstatus, String email, String phone, Date onboarddate, String password, String securityqestion, String securityanswer) {
+    public Employee(String id, String name, Date birthdate, String gender, String marriedstatus, String address, String email, String phone, Date onboarddate, String password, String securityqestion, String securityanswer) {
         this.id = id;
         this.name = name;
         this.birthdate = birthdate;
         this.gender = gender;
         this.marriedstatus = marriedstatus;
+        this.address = address;
         this.email = email;
         this.phone = phone;
         this.onboarddate = onboarddate;
         this.password = password;
         this.securityqestion = securityqestion;
         this.securityanswer = securityanswer;
+    }
+
+    public Employee(String id, String name, Date birthdate, String gender, String marriedstatus, String address, String email, String phone, Date onboarddate, String password, String securityqestion, String securityanswer, Religion religion, Village village) {
+        this.id = id;
+        this.name = name;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.marriedstatus = marriedstatus;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.onboarddate = onboarddate;
+        this.password = password;
+        this.securityqestion = securityqestion;
+        this.securityanswer = securityanswer;
+        this.religion = religion;
+        this.village = village;
     }
 
     public String getId() {
@@ -179,6 +205,14 @@ public class Employee implements Serializable {
 
     public void setMarriedstatus(String marriedstatus) {
         this.marriedstatus = marriedstatus;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEmail() {
@@ -227,6 +261,14 @@ public class Employee implements Serializable {
 
     public void setSecurityanswer(String securityanswer) {
         this.securityanswer = securityanswer;
+    }
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     @XmlTransient

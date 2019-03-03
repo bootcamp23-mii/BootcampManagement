@@ -57,6 +57,13 @@ public class Education implements Serializable {
         this.id = id;
     }
 
+    public Education(String id, Degree degree, Major major, University university) {
+        this.id = id;
+        this.degree = degree;
+        this.major = major;
+        this.university = university;
+    }
+
     public String getId() {
         return id;
     }
