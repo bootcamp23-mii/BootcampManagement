@@ -70,7 +70,7 @@ Contributor(s):
     <mapping class="models.Village"/>
     <mapping class="models.University"/>
     <mapping class="models.Company"/>
-    <mapping class="models.Class"/>
+    <mapping class="models.ClassType"/>
     <mapping class="models.Lesson"/>
     <mapping class="models.Room"/>
     <mapping class="models.Employee"/>
