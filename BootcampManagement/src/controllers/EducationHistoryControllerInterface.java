@@ -6,7 +6,7 @@
 package controllers;
 
 import java.util.List;
-import models.EducationHistory;
+import models.*;
 
 /**
  *
@@ -17,5 +17,5 @@ public interface EducationHistoryControllerInterface {
     public List<EducationHistory> getAll();
     public List<EducationHistory> search(Object keyword);
     public String save(String id, String gpa, String education, String employee);
-    public String delete(String id,String gpa,String education,String employee);
+    public String delete(String id, String gpa, String education, String employee);
 }

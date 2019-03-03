@@ -15,32 +15,32 @@ import org.hibernate.SessionFactory;
  *
  * @author Pandu
  */
-public class EducationHistoryController implements EducationHistoryControllerInterface {
+public class AchievementController implements AchievementControllerInterface {
 
-    private DAOInterface<EducationHistory> dao;
+    private DAOInterface<Achievement> dao;
 
-    public EducationHistoryController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new EducationHistory());
+    public AchievementController(SessionFactory factory) {
+        dao = new GeneralDAO<>(factory, new Achievement());
     }
 
     @Override
-    public EducationHistory getByid(String id) {
+    public Achievement getByid(String id) {
         return dao.getById(id);
     }
 
     @Override
-    public List<EducationHistory> getAll() {
+    public List<Achievement> getAll() {
         return dao.getData("");
     }
 
     @Override
-    public List<EducationHistory> search(Object keyword) {
+    public List<Achievement> search(Object keyword) {
         return dao.getData(keyword);
     }
 
     @Override
-    public String save(String id, String gpa, String education, String employee) {
-        if (dao.saveOrDelete(new EducationHistory(id,gpa , new Education(education),new Employee(employee)), true)) {
+    public String save(String id, String name, String employee) {
+        if (dao.saveOrDelete(new Achievement(id, name, new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -48,8 +48,8 @@ public class EducationHistoryController implements EducationHistoryControllerInt
     }
 
     @Override
-    public String delete(String id, String gpa, String education, String employee) {
-        if (dao.saveOrDelete(new EducationHistory(id,gpa, new Education(education), new Employee(employee)), false)) {
+    public String delete(String id,String name, String employee) {
+        if (dao.saveOrDelete(new Achievement(id, name, new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

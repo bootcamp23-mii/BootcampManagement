@@ -7,43 +7,40 @@ package controllers;
 
 import daos.DAOInterface;
 import daos.GeneralDAO;
-import java.math.BigDecimal;
 import java.util.List;
-import models.Education;
-import models.EducationHistory;
-import models.Employee;
+import models.*;
 import org.hibernate.SessionFactory;
 
 /**
  *
  * @author Pandu
  */
-public class OrganizationController implements EducationHistoryControllerInterface {
+public class OrganizationController implements OrganizationControllerInterface {
 
-    private DAOInterface<EducationHistory> dao;
+    private DAOInterface<Organization> dao;
 
     public OrganizationController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new EducationHistory());
+        dao = new GeneralDAO<>(factory, new Organization());
     }
 
     @Override
-    public EducationHistory getByid(String id) {
+    public Organization getByid(String id) {
         return dao.getById(id);
     }
 
     @Override
-    public List<EducationHistory> getAll() {
+    public List<Organization> getAll() {
         return dao.getData("");
     }
 
     @Override
-    public List<EducationHistory> search(Object keyword) {
+    public List<Organization> search(Object keyword) {
         return dao.getData(keyword);
     }
 
     @Override
-    public String save(String id, String gpa, String education, String employee) {
-        if (dao.saveOrDelete(new EducationHistory(id,gpa , new Education(education),new Employee(employee)), true)) {
+    public String save(String id, String name, String employee) {
+        if (dao.saveOrDelete(new Organization(id, name, new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -51,8 +48,8 @@ public class OrganizationController implements EducationHistoryControllerInterfa
     }
 
     @Override
-    public String delete(String id,String gpa,String education,String employee) {
-        if (dao.saveOrDelete(new EducationHistory(id,gpa, new Education(education), new Employee(employee)), false)) {
+    public String delete(String id,String name, String employee) {
+        if (dao.saveOrDelete(new Organization(id, name, new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

@@ -6,6 +6,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -27,7 +30,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EmployeeCertification.findAll", query = "SELECT e FROM EmployeeCertification e")
-    , @NamedQuery(name = "EmployeeCertification.findById", query = "SELECT e FROM EmployeeCertification e WHERE e.id = :id")})
+    , @NamedQuery(name = "EmployeeCertification.findById", query = "SELECT e FROM EmployeeCertification e WHERE e.id = :id")
+    , @NamedQuery(name = "EmployeeCertification.findByCertificatedate", query = "SELECT e FROM EmployeeCertification e WHERE e.certificatedate = :certificatedate")
+    , @NamedQuery(name = "EmployeeCertification.findByCertificatenumber", query = "SELECT e FROM EmployeeCertification e WHERE e.certificatenumber = :certificatenumber")
+    , @NamedQuery(name = "EmployeeCertification.findAll", query = "SELECT e FROM EmployeeCertification e")
+    , @NamedQuery(name = "EmployeeCertification.findById", query = "SELECT e FROM EmployeeCertification e WHERE e.id = :id")})        
 public class EmployeeCertification implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +42,11 @@ public class EmployeeCertification implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private String id;
+    @Column(name = "CERTIFICATEDATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date certificatedate;
+    @Column(name = "CERTIFICATENUMBER")
+    private String certificatenumber;
     @JoinColumn(name = "CERTIFICATE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Certificate certificate;
@@ -49,8 +61,10 @@ public class EmployeeCertification implements Serializable {
         this.id = id;
     }
 
-    public EmployeeCertification(String id, Certificate certificate, Employee employee) {
+    public EmployeeCertification(String id, Date certificatedate, String certificatenumber, Certificate certificate, Employee employee) {
         this.id = id;
+        this.certificatedate = certificatedate;
+        this.certificatenumber = certificatenumber;
         this.certificate = certificate;
         this.employee = employee;
     }
@@ -61,6 +75,22 @@ public class EmployeeCertification implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getCertificatedate() {
+        return certificatedate;
+    }
+
+    public void setCertificatedate(Date certificatedate) {
+        this.certificatedate = certificatedate;
+    }
+
+    public String getCertificatenumber() {
+        return certificatenumber;
+    }
+
+    public void setCertificatenumber(String certificatenumber) {
+        this.certificatenumber = certificatenumber;
     }
 
     public Certificate getCertificate() {

@@ -12,10 +12,10 @@ import models.*;
  *
  * @author Pandu
  */
-public interface OrganizationControllerInterface {
-    public Organization getByid(String id);
-    public List<Organization> getAll();
-    public List<Organization> search(Object keyword);
+public interface AchievementControllerInterface {
+    public Achievement getByid(String id);
+    public List<Achievement> getAll();
+    public List<Achievement> search(Object keyword);
     public String save(String id, String name, String employee);
-    public String delete(String id, String gpa, String employee);
+    public String delete(String id, String name, String employee);
 }
