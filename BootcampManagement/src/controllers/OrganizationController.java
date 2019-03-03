@@ -7,6 +7,7 @@ package controllers;
 
 import daos.DAOInterface;
 import daos.GeneralDAO;
+import java.math.BigDecimal;
 import java.util.List;
 import models.Education;
 import models.EducationHistory;
@@ -17,11 +18,11 @@ import org.hibernate.SessionFactory;
  *
  * @author Pandu
  */
-public class EducationHistoryController implements EducationHistoryControllerInterface {
+public class OrganizationController implements EducationHistoryControllerInterface {
 
     private DAOInterface<EducationHistory> dao;
 
-    public EducationHistoryController(SessionFactory factory) {
+    public OrganizationController(SessionFactory factory) {
         dao = new GeneralDAO<>(factory, new EducationHistory());
     }
 

@@ -12,7 +12,7 @@ import models.EducationHistory;
  *
  * @author Pandu
  */
-public interface EducationHistoryControllerInterface {
+public interface OrganizationControllerInterface {
     public EducationHistory getByid(String id);
     public List<EducationHistory> getAll();
     public List<EducationHistory> search(Object keyword);
