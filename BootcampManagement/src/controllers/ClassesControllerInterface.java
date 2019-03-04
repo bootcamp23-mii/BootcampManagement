@@ -12,10 +12,10 @@ import models.*;
  *
  * @author gerydanu
  */
-public interface ClassTypeControllerInterface {
-    public ClassType getByid(String id);
-    public List<ClassType> getAll();
-    public List<ClassType> search(Object keyword);
-    public String save(String id, String classtype);
-    public String delete(String id, String classtype);
+public interface ClassesControllerInterface {
+    public Classes getByid(String id);
+    public List<Classes> getAll();
+    public List<Classes> search(Object keyword);
+    public String save(String id, String classes);
+    public String delete(String id, String classes);
 }

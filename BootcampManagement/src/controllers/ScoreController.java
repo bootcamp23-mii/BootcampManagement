@@ -38,17 +38,19 @@ public class ScoreController implements ScoreControllerInterface {
     }
 
     @Override
-    public String save(String id, String rating, String aspect, String evaluation) {
-        if (dao.saveOrDelete(new Score(id, rating, new Aspect(aspect), new Evaluation(evaluation)), true)) {
+    public String save(String id, String rating, String isdeleted, String aspect, String evaluation) {
+        if (dao.saveOrDelete(new Score(id, rating, new Short(isdeleted), new Aspect(aspect), new Evaluation(evaluation)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
         }
     }
 
+    
+    
     @Override
-    public String delete(String id, String rating, String aspect, String evaluation) {
-        if (dao.saveOrDelete(new Score(id, rating, new Aspect(aspect), new Evaluation(evaluation)), false)) {
+    public String delete(String id, String rating, String isdeleted, String aspect, String evaluation) {
+        if (dao.saveOrDelete(new Score(id, rating, new Short(isdeleted), new Aspect(aspect), new Evaluation(evaluation)), true)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

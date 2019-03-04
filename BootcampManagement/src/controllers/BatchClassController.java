@@ -38,8 +38,8 @@ public class BatchClassController implements BatchClassControllerInterface {
     }
 
     @Override
-    public String save(String id, String batch, String classtype, String trainer, String room) {
-        if (dao.saveOrDelete(new BatchClass(id, new Batch(batch), new ClassType(classtype), new Employee(trainer), new Room(room)), true)) {
+    public String save(String id, String isdeleted, String batch, String classes, String trainer, String room) {
+        if (dao.saveOrDelete(new BatchClass(id, new Short(isdeleted), new Batch(batch), new Classes(classes), new Employee(trainer), new Room(room)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -47,8 +47,8 @@ public class BatchClassController implements BatchClassControllerInterface {
     }
 
     @Override
-    public String delete(String id, String batch, String classtype, String trainer, String room) {
-        if (dao.saveOrDelete(new BatchClass(id, new Batch(batch), new ClassType(classtype), new Employee(trainer), new Room(room)), false)) {
+    public String delete(String id, String isdeleted, String batch, String classes, String trainer, String room) {
+        if (dao.saveOrDelete(new BatchClass(id, new Short(isdeleted), new Batch(batch), new Classes(classes), new Employee(trainer), new Room(room)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

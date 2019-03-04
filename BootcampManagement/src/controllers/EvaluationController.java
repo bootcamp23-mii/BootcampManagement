@@ -39,8 +39,8 @@ public class EvaluationController implements EvaluationControllerInterface {
     }
 
     @Override
-    public String save(String id, String isdaily, String evaluationdate, String note, String participant, String lesson, String topic) {
-        if (dao.saveOrDelete(new Evaluation(id, new Short(isdaily), new Date(evaluationdate), note, new Employee(participant), new Lesson(lesson), new Topic(topic)), true)) {
+    public String save(String id, String isdaily, String evaluationdate, String note, String isdeleted, String participant, String lesson, String topic) {
+        if (dao.saveOrDelete(new Evaluation(id, new Short(isdaily), new Date(evaluationdate), note, new Short(isdeleted), new Employee(participant), new Lesson(lesson), new Topic(topic)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -48,8 +48,8 @@ public class EvaluationController implements EvaluationControllerInterface {
     }
 
     @Override
-    public String delete(String id, String isdaily, String evaluationdate, String note, String participant, String lesson, String topic) {
-        if (dao.saveOrDelete(new Evaluation(id, new Short(isdaily), new Date(evaluationdate), note, new Employee(participant), new Lesson(lesson), new Topic(topic)), false)) {
+    public String delete(String id, String isdaily, String evaluationdate, String note, String isdeleted, String participant, String lesson, String topic) {
+        if (dao.saveOrDelete(new Evaluation(id, new Short(isdaily), new Date(evaluationdate), note, new Short(isdeleted), new Employee(participant), new Lesson(lesson), new Topic(topic)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

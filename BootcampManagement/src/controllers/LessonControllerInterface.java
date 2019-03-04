@@ -16,6 +16,6 @@ public interface LessonControllerInterface {
     public Lesson getByid(String id);
     public List<Lesson> getAll();
     public List<Lesson> search(Object keyword);
-    public String save(String id, String name, String classType);
-    public String delete(String id, String name, String classType);
+    public String save(String id, String name, String classes);
+    public String delete(String id, String name, String classes);
 }

@@ -39,8 +39,8 @@ public class ErrorBankController implements ErrorBankControllerInterface {
     }
 
     @Override
-    public String save(String id, String submitdate, String description, String solution, String classtype, String employee) {
-        if (dao.saveOrDelete(new ErrorBank(id, new Date(submitdate), description, solution, new ClassType(classtype), new Employee(employee)), true)) {
+    public String save(String id, String submitdate, String description, String solution, String classes, String employee) {
+        if (dao.saveOrDelete(new ErrorBank(id, new Date(submitdate), description, solution, new Classes(classes), new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -48,8 +48,8 @@ public class ErrorBankController implements ErrorBankControllerInterface {
     }
 
     @Override
-    public String delete(String id, String submitdate, String description, String solution, String classtype, String employee) {
-        if (dao.saveOrDelete(new ErrorBank(id, new Date(submitdate), description, solution, new ClassType(classtype), new Employee(employee)), false)) {
+    public String delete(String id, String submitdate, String description, String solution, String classes, String employee) {
+        if (dao.saveOrDelete(new ErrorBank(id, new Date(submitdate), description, solution, new Classes(classes), new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

@@ -15,31 +15,31 @@ import org.hibernate.SessionFactory;
  *
  * @author gerydanu
  */
-public class ClassTypeController implements ClassTypeControllerInterface {
-    private DAOInterface<ClassType> dao;
+public class ClassesController implements ClassesControllerInterface {
+    private DAOInterface<Classes> dao;
 
-    public ClassTypeController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, ClassType.class);
+    public ClassesController(SessionFactory factory) {
+        dao = new GeneralDAO<>(factory, Classes.class);
     }
 
     @Override
-    public ClassType getByid(String id) {
+    public Classes getByid(String id) {
         return dao.getById(id);
     }
 
     @Override
-    public List<ClassType> getAll() {
+    public List<Classes> getAll() {
         return dao.getData("");
     }
 
     @Override
-    public List<ClassType> search(Object keyword) {
+    public List<Classes> search(Object keyword) {
         return dao.getData(keyword);
     }
 
     @Override
-    public String save(String id, String classtype) {
-        if (dao.saveOrDelete(new ClassType(id, classtype), true)) {
+    public String save(String id, String classes) {
+        if (dao.saveOrDelete(new Classes(id, classes), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -47,8 +47,8 @@ public class ClassTypeController implements ClassTypeControllerInterface {
     }
 
     @Override
-    public String delete(String id, String classtype) {
-        if (dao.saveOrDelete(new ClassType(id, classtype), false)) {
+    public String delete(String id, String classes) {
+        if (dao.saveOrDelete(new Classes(id, classes), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

@@ -7,7 +7,7 @@ package views;
 
 import controllers.BatchClassController;
 import controllers.BatchController;
-import controllers.ClassTypeController;
+import controllers.ClassesController;
 import controllers.RoomController;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +25,12 @@ public class BatchClassView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private BatchClassController bcc = new BatchClassController(factory);
     private BatchController bc = new BatchController(factory);
-    private ClassTypeController ctc = new ClassTypeController(factory);
+    private ClassesController csc = new ClassesController(factory);
     private RoomController rc = new RoomController(factory);
     DefaultTableModel myTableModel = new DefaultTableModel();
     private List<models.BatchClass> batchClassList= new ArrayList<>();
     private List<models.Batch> batchList= new ArrayList<>();
-    private List<models.ClassType> classTypeList= new ArrayList<>();
+    private List<models.Classes> classTypeList= new ArrayList<>();
     private List<models.Room> roomList= new ArrayList<>();
 
     /**
@@ -42,14 +42,14 @@ public class BatchClassView extends javax.swing.JInternalFrame {
     }
     
     private void tableData(List<models.BatchClass> batchClass) {
-        Object[] columnNames = {"ID", "Trainer", "Batch", "Class Type", "Room"};
+        Object[] columnNames = {"ID", "Trainer", "Batch", "Classes", "Room"};
         Object[][] data = new Object[batchClass.size()][columnNames.length];
         for (int i = 0; i < data.length; i++) {
             data[i][0] = (i + 1);
             data[i][1] = batchClass.get(i).getId();
             data[i][2] = batchClass.get(i).getTrainer();
             data[i][3] = batchClass.get(i).getBatch();
-            data[i][3] = batchClass.get(i).getClasstype();
+            data[i][3] = batchClass.get(i).getClasses();
             data[i][3] = batchClass.get(i).getRoom();
 
         }

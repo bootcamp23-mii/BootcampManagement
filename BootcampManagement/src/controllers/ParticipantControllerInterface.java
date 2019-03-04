@@ -16,6 +16,6 @@ public interface ParticipantControllerInterface {
     public Participant getByid(String id);
     public List<Participant> getAll();
     public List<Participant> search(Object keyword);
-    public String save(String id, String grade, String batchclass, String employee);
-    public String delete(String id, String grade, String batchclass, String employee);
+    public String save(String id, String grade, String isdeleted, String batchclass, String employee);
+    public String delete(String id, String grade, String isdeleted, String batchclass, String employee);
 }

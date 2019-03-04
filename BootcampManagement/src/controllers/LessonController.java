@@ -38,8 +38,8 @@ public class LessonController implements LessonControllerInterface {
     }
 
     @Override
-    public String save(String id, String name, String classType) {
-        if (dao.saveOrDelete(new Lesson(id, name, new ClassType(classType)), true)) {
+    public String save(String id, String name, String classes) {
+        if (dao.saveOrDelete(new Lesson(id, name, new Classes(classes)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -47,8 +47,8 @@ public class LessonController implements LessonControllerInterface {
     }
 
     @Override
-    public String delete(String id,String name, String classType) {
-        if (dao.saveOrDelete(new Lesson(id, name, new ClassType(classType)), false)) {
+    public String delete(String id,String name, String classes) {
+        if (dao.saveOrDelete(new Lesson(id, name, new Classes(classes)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

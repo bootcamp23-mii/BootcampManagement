@@ -16,6 +16,6 @@ public interface ErrorBankControllerInterface {
     public ErrorBank getByid(String id);
     public List<ErrorBank> getAll();
     public List<ErrorBank> search(Object keyword);
-    public String save(String id, String submitdate, String description, String solution, String classtype, String employee);
-    public String delete(String id, String submitdate, String description, String solution, String classtype, String employee);
+    public String save(String id, String submitdate, String description, String solution, String classes, String employee);
+    public String delete(String id, String submitdate, String description, String solution, String classes, String employee);
 }

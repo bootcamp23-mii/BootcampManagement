@@ -38,8 +38,8 @@ public class ParticipantController implements ParticipantControllerInterface {
     }
 
     @Override
-    public String save(String id, String grade, String batchclass, String employee) {
-        if (dao.saveOrDelete(new Participant(id, grade, new BatchClass(batchclass), new Employee(employee)), true)) {
+    public String save(String id, String grade, String isdeleted, String batchclass, String employee) {
+        if (dao.saveOrDelete(new Participant(id, grade, new Short(isdeleted), new BatchClass(batchclass), new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -47,8 +47,8 @@ public class ParticipantController implements ParticipantControllerInterface {
     }
 
     @Override
-    public String delete(String id, String grade, String batchclass, String employee) {
-        if (dao.saveOrDelete(new Participant(id, grade, new BatchClass(batchclass), new Employee(employee)), false)) {
+    public String delete(String id, String grade, String isdeleted, String batchclass, String employee) {
+        if (dao.saveOrDelete(new Participant(id, grade, new Short(isdeleted), new BatchClass(batchclass), new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";
