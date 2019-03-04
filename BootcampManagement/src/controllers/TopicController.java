@@ -19,7 +19,7 @@ public class TopicController implements TopicControllerInterface {
     private DAOInterface<Topic> dao;
 
     public TopicController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Topic());
+        dao = new GeneralDAO<>(factory, Topic.class);
     }
 
     @Override

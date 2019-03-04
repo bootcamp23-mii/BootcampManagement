@@ -20,7 +20,7 @@ public class EvaluationController implements EvaluationControllerInterface {
     private DAOInterface<Evaluation> dao;
 
     public EvaluationController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Evaluation());
+        dao = new GeneralDAO<>(factory, Evaluation.class);
     }
 
     @Override

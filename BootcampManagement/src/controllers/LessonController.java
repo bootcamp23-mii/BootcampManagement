@@ -19,7 +19,7 @@ public class LessonController implements LessonControllerInterface {
     private DAOInterface<Lesson> dao;
 
     public LessonController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Lesson());
+        dao = new GeneralDAO<>(factory, Lesson.class);
     }
 
     @Override

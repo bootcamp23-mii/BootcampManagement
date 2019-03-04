@@ -19,7 +19,7 @@ public class ParticipantController implements ParticipantControllerInterface {
     private DAOInterface<Participant> dao;
 
     public ParticipantController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Participant());
+        dao = new GeneralDAO<>(factory, Participant.class);
     }
 
     @Override

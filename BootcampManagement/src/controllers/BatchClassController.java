@@ -19,7 +19,7 @@ public class BatchClassController implements BatchClassControllerInterface {
     private DAOInterface<BatchClass> dao;
 
     public BatchClassController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new BatchClass());
+        dao = new GeneralDAO<>(factory, BatchClass.class);
     }
 
     @Override

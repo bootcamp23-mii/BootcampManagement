@@ -20,7 +20,7 @@ public class AspectController implements AspectControllerInterface {
 
     
     public AspectController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Aspect());
+        dao = new GeneralDAO<>(factory, Aspect.class);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class ClassTypeController implements ClassTypeControllerInterface {
     private DAOInterface<ClassType> dao;
 
     public ClassTypeController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new ClassType());
+        dao = new GeneralDAO<>(factory, ClassType.class);
     }
 
     @Override

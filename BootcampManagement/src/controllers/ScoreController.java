@@ -19,7 +19,7 @@ public class ScoreController implements ScoreControllerInterface {
     private DAOInterface<Score> dao;
 
     public ScoreController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Score());
+        dao = new GeneralDAO<>(factory, Score.class);
     }
 
     @Override

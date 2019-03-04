@@ -19,7 +19,7 @@ public class RoomController implements RoomControllerInterface {
     private DAOInterface<Room> dao;
 
     public RoomController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Room());
+        dao = new GeneralDAO<>(factory, Room.class);
     }
 
     @Override

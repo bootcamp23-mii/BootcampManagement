@@ -20,7 +20,7 @@ public class ErrorBankController implements ErrorBankControllerInterface {
     private DAOInterface<ErrorBank> dao;
 
     public ErrorBankController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new ErrorBank());
+        dao = new GeneralDAO<>(factory, ErrorBank.class);
     }
 
     @Override
