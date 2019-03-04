@@ -24,13 +24,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author FES
  */
 @Entity
-@Table(name = "CLASS_TYPE")
+@Table(name = "CLASSES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ClassType.findAll", query = "SELECT c FROM ClassType c")
-    , @NamedQuery(name = "ClassType.findById", query = "SELECT c FROM ClassType c WHERE c.id = :id")
-    , @NamedQuery(name = "ClassType.findByClasstype", query = "SELECT c FROM ClassType c WHERE c.classtype = :classtype")})
-public class ClassType implements Serializable {
+    @NamedQuery(name = "Classes.findAll", query = "SELECT c FROM Classes c")
+    , @NamedQuery(name = "Classes.findById", query = "SELECT c FROM Classes c WHERE c.id = :id")
+    , @NamedQuery(name = "Classes.findByName", query = "SELECT c FROM Classes c WHERE c.name = :name")})
+public class Classes implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,25 +38,25 @@ public class ClassType implements Serializable {
     @Column(name = "ID")
     private String id;
     @Basic(optional = false)
-    @Column(name = "CLASSTYPE")
-    private String classtype;
-    @OneToMany(mappedBy = "classtype", fetch = FetchType.LAZY)
+    @Column(name = "NAME")
+    private String name;
+    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY)
     private List<ErrorBank> errorBankList;
-    @OneToMany(mappedBy = "classType", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY)
     private List<Lesson> lessonList;
-    @OneToMany(mappedBy = "classtype", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY)
     private List<BatchClass> batchClassList;
 
-    public ClassType() {
+    public Classes() {
     }
 
-    public ClassType(String id) {
+    public Classes(String id) {
         this.id = id;
     }
 
-    public ClassType(String id, String classtype) {
+    public Classes(String id, String name) {
         this.id = id;
-        this.classtype = classtype;
+        this.name = name;
     }
 
     public String getId() {
@@ -67,12 +67,12 @@ public class ClassType implements Serializable {
         this.id = id;
     }
 
-    public String getClasstype() {
-        return classtype;
+    public String getName() {
+        return name;
     }
 
-    public void setClasstype(String classtype) {
-        this.classtype = classtype;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @XmlTransient
@@ -112,10 +112,10 @@ public class ClassType implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ClassType)) {
+        if (!(object instanceof Classes)) {
             return false;
         }
-        ClassType other = (ClassType) object;
+        Classes other = (Classes) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -124,7 +124,7 @@ public class ClassType implements Serializable {
 
     @Override
     public String toString() {
-        return "models.ClassType[ id=" + id + " ]";
+        return "models.Classes[ id=" + id + " ]";
     }
     
 }

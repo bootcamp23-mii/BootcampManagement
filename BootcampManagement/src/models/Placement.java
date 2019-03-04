@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Placement.findByAddress", query = "SELECT p FROM Placement p WHERE p.address = :address")
     , @NamedQuery(name = "Placement.findByDepartment", query = "SELECT p FROM Placement p WHERE p.department = :department")
     , @NamedQuery(name = "Placement.findByStartdate", query = "SELECT p FROM Placement p WHERE p.startdate = :startdate")
-    , @NamedQuery(name = "Placement.findByFinishdate", query = "SELECT p FROM Placement p WHERE p.finishdate = :finishdate")})
+    , @NamedQuery(name = "Placement.findByFinishdate", query = "SELECT p FROM Placement p WHERE p.finishdate = :finishdate")
+    , @NamedQuery(name = "Placement.findByIsdeleted", query = "SELECT p FROM Placement p WHERE p.isdeleted = :isdeleted")})
 public class Placement implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +57,8 @@ public class Placement implements Serializable {
     @Column(name = "FINISHDATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date finishdate;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "COMPANY", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
@@ -75,13 +78,25 @@ public class Placement implements Serializable {
         this.description = description;
     }
 
-    public Placement(String id, String description, String address, String department, Date startdate, Date finishdate, Company company, Employee employee) {
+    public Placement(String id, String description, String address, String department, Date startdate, Short isdeleted, Company company, Employee employee) {
+        this.id = id;
+        this.description = description;
+        this.address = address;
+        this.department = department;
+        this.startdate = startdate;
+        this.isdeleted = isdeleted;
+        this.company = company;
+        this.employee = employee;
+    }
+
+    public Placement(String id, String description, String address, String department, Date startdate, Date finishdate, Short isdeleted, Company company, Employee employee) {
         this.id = id;
         this.description = description;
         this.address = address;
         this.department = department;
         this.startdate = startdate;
         this.finishdate = finishdate;
+        this.isdeleted = isdeleted;
         this.company = company;
         this.employee = employee;
     }
@@ -132,6 +147,14 @@ public class Placement implements Serializable {
 
     public void setFinishdate(Date finishdate) {
         this.finishdate = finishdate;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Company getCompany() {

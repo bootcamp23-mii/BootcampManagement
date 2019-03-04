@@ -41,7 +41,7 @@ public class EmployeeLanguageController implements EmployeeLanguageControllerInt
 
     @Override
     public String save(String id, String employee, String language) {
-        if (dao.saveOrDelete(new EmployeeLanguage(id, new Employee(employee), new Language(language)), true)) {
+        if (dao.saveOrDelete(new EmployeeLanguage(id, new Short("0"), new Employee(employee), new Language(language)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -50,7 +50,7 @@ public class EmployeeLanguageController implements EmployeeLanguageControllerInt
 
     @Override
     public String delete(String id, String employee, String language) {
-        if (dao.saveOrDelete(new EmployeeLanguage(id, new Employee(employee), new Language(language)), false)) {
+        if (dao.saveOrDelete(new EmployeeLanguage(id, new Short("0"), new Employee(employee), new Language(language)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

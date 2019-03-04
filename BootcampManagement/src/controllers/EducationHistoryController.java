@@ -40,7 +40,7 @@ public class EducationHistoryController implements EducationHistoryControllerInt
 
     @Override
     public String save(String id, String gpa, String education, String employee) {
-        if (dao.saveOrDelete(new EducationHistory(id,gpa , new Education(education),new Employee(employee)), true)) {
+        if (dao.saveOrDelete(new EducationHistory(id, gpa, new Short("0"), new Education(education),new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -49,7 +49,7 @@ public class EducationHistoryController implements EducationHistoryControllerInt
 
     @Override
     public String delete(String id, String gpa, String education, String employee) {
-        if (dao.saveOrDelete(new EducationHistory(id,gpa, new Education(education), new Employee(employee)), false)) {
+        if (dao.saveOrDelete(new EducationHistory(id, gpa, new Short("0"), new Education(education), new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

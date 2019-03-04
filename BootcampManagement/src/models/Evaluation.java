@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Evaluation.findById", query = "SELECT e FROM Evaluation e WHERE e.id = :id")
     , @NamedQuery(name = "Evaluation.findByIsdaily", query = "SELECT e FROM Evaluation e WHERE e.isdaily = :isdaily")
     , @NamedQuery(name = "Evaluation.findByEvaluationdate", query = "SELECT e FROM Evaluation e WHERE e.evaluationdate = :evaluationdate")
-    , @NamedQuery(name = "Evaluation.findByNote", query = "SELECT e FROM Evaluation e WHERE e.note = :note")})
+    , @NamedQuery(name = "Evaluation.findByNote", query = "SELECT e FROM Evaluation e WHERE e.note = :note")
+    , @NamedQuery(name = "Evaluation.findByIsdeleted", query = "SELECT e FROM Evaluation e WHERE e.isdeleted = :isdeleted")})
 public class Evaluation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +53,8 @@ public class Evaluation implements Serializable {
     private Date evaluationdate;
     @Column(name = "NOTE")
     private String note;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @OneToMany(mappedBy = "evaluation", fetch = FetchType.LAZY)
     private List<Score> scoreList;
     @JoinColumn(name = "PARTICIPANT", referencedColumnName = "ID")
@@ -76,11 +79,12 @@ public class Evaluation implements Serializable {
         this.evaluationdate = evaluationdate;
     }
 
-    public Evaluation(String id, Short isdaily, Date evaluationdate, String note, Employee participant, Lesson lesson, Topic topic) {
+    public Evaluation(String id, Short isdaily, Date evaluationdate, String note, Short isdeleted, Employee participant, Lesson lesson, Topic topic) {
         this.id = id;
         this.isdaily = isdaily;
         this.evaluationdate = evaluationdate;
         this.note = note;
+        this.isdeleted = isdeleted;
         this.participant = participant;
         this.lesson = lesson;
         this.topic = topic;
@@ -116,6 +120,14 @@ public class Evaluation implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     @XmlTransient

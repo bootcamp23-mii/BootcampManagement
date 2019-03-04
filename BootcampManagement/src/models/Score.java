@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Score.findAll", query = "SELECT s FROM Score s")
     , @NamedQuery(name = "Score.findById", query = "SELECT s FROM Score s WHERE s.id = :id")
-    , @NamedQuery(name = "Score.findByRating", query = "SELECT s FROM Score s WHERE s.rating = :rating")})
+    , @NamedQuery(name = "Score.findByRating", query = "SELECT s FROM Score s WHERE s.rating = :rating")
+    , @NamedQuery(name = "Score.findByIsdeleted", query = "SELECT s FROM Score s WHERE s.isdeleted = :isdeleted")})
 public class Score implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +40,8 @@ public class Score implements Serializable {
     @Basic(optional = false)
     @Column(name = "RATING")
     private String rating;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "ASPECT", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Aspect aspect;
@@ -58,9 +61,10 @@ public class Score implements Serializable {
         this.rating = rating;
     }
 
-    public Score(String id, String rating, Aspect aspect, Evaluation evaluation) {
+    public Score(String id, String rating, Short isdeleted, Aspect aspect, Evaluation evaluation) {
         this.id = id;
         this.rating = rating;
+        this.isdeleted = isdeleted;
         this.aspect = aspect;
         this.evaluation = evaluation;
     }
@@ -79,6 +83,14 @@ public class Score implements Serializable {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Aspect getAspect() {

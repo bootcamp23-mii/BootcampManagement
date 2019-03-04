@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Organization.findAll", query = "SELECT o FROM Organization o")
     , @NamedQuery(name = "Organization.findById", query = "SELECT o FROM Organization o WHERE o.id = :id")
-    , @NamedQuery(name = "Organization.findByName", query = "SELECT o FROM Organization o WHERE o.name = :name")})
+    , @NamedQuery(name = "Organization.findByName", query = "SELECT o FROM Organization o WHERE o.name = :name")
+    , @NamedQuery(name = "Organization.findByIsdeleted", query = "SELECT o FROM Organization o WHERE o.isdeleted = :isdeleted")})
 public class Organization implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +40,8 @@ public class Organization implements Serializable {
     @Basic(optional = false)
     @Column(name = "NAME")
     private String name;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -55,9 +58,10 @@ public class Organization implements Serializable {
         this.name = name;
     }
 
-    public Organization(String id, String name, Employee employee) {
+    public Organization(String id, String name, Short isdeleted, Employee employee) {
         this.id = id;
         this.name = name;
+        this.isdeleted = isdeleted;
         this.employee = employee;
     }
 
@@ -75,6 +79,14 @@ public class Organization implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Employee getEmployee() {

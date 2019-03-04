@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Achievement.findAll", query = "SELECT a FROM Achievement a")
     , @NamedQuery(name = "Achievement.findById", query = "SELECT a FROM Achievement a WHERE a.id = :id")
-    , @NamedQuery(name = "Achievement.findByName", query = "SELECT a FROM Achievement a WHERE a.name = :name")})
+    , @NamedQuery(name = "Achievement.findByName", query = "SELECT a FROM Achievement a WHERE a.name = :name")
+    , @NamedQuery(name = "Achievement.findByIsdeleted", query = "SELECT a FROM Achievement a WHERE a.isdeleted = :isdeleted")})
 public class Achievement implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +40,8 @@ public class Achievement implements Serializable {
     @Basic(optional = false)
     @Column(name = "NAME")
     private String name;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -55,9 +58,10 @@ public class Achievement implements Serializable {
         this.name = name;
     }
 
-    public Achievement(String id, String name, Employee employee) {
+    public Achievement(String id, String name, Short isdeleted, Employee employee) {
         this.id = id;
         this.name = name;
+        this.isdeleted = isdeleted;
         this.employee = employee;
     }
 
@@ -75,6 +79,14 @@ public class Achievement implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Employee getEmployee() {

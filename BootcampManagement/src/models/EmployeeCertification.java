@@ -30,9 +30,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EmployeeCertification.findAll", query = "SELECT e FROM EmployeeCertification e")
+    , @NamedQuery(name = "EmployeeCertification.findById", query = "SELECT e FROM EmployeeCertification e WHERE e.id = :id")
     , @NamedQuery(name = "EmployeeCertification.findByCertificatedate", query = "SELECT e FROM EmployeeCertification e WHERE e.certificatedate = :certificatedate")
     , @NamedQuery(name = "EmployeeCertification.findByCertificatenumber", query = "SELECT e FROM EmployeeCertification e WHERE e.certificatenumber = :certificatenumber")
-    , @NamedQuery(name = "EmployeeCertification.findById", query = "SELECT e FROM EmployeeCertification e WHERE e.id = :id")})        
+    , @NamedQuery(name = "EmployeeCertification.findByIsdeleted", query = "SELECT e FROM EmployeeCertification e WHERE e.isdeleted = :isdeleted")})
 public class EmployeeCertification implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,6 +46,8 @@ public class EmployeeCertification implements Serializable {
     private Date certificatedate;
     @Column(name = "CERTIFICATENUMBER")
     private String certificatenumber;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "CERTIFICATE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Certificate certificate;
@@ -59,10 +62,11 @@ public class EmployeeCertification implements Serializable {
         this.id = id;
     }
 
-    public EmployeeCertification(String id, Date certificatedate, String certificatenumber, Certificate certificate, Employee employee) {
+    public EmployeeCertification(String id, Date certificatedate, String certificatenumber, Short isdeleted, Certificate certificate, Employee employee) {
         this.id = id;
         this.certificatedate = certificatedate;
         this.certificatenumber = certificatenumber;
+        this.isdeleted = isdeleted;
         this.certificate = certificate;
         this.employee = employee;
     }
@@ -89,6 +93,14 @@ public class EmployeeCertification implements Serializable {
 
     public void setCertificatenumber(String certificatenumber) {
         this.certificatenumber = certificatenumber;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Certificate getCertificate() {

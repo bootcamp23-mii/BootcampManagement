@@ -27,7 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EmployeeLanguage.findAll", query = "SELECT e FROM EmployeeLanguage e")
-    , @NamedQuery(name = "EmployeeLanguage.findById", query = "SELECT e FROM EmployeeLanguage e WHERE e.id = :id")})
+    , @NamedQuery(name = "EmployeeLanguage.findById", query = "SELECT e FROM EmployeeLanguage e WHERE e.id = :id")
+    , @NamedQuery(name = "EmployeeLanguage.findByIsdeleted", query = "SELECT e FROM EmployeeLanguage e WHERE e.isdeleted = :isdeleted")})
 public class EmployeeLanguage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +36,8 @@ public class EmployeeLanguage implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private String id;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -49,8 +52,9 @@ public class EmployeeLanguage implements Serializable {
         this.id = id;
     }
 
-    public EmployeeLanguage(String id, Employee employee, Language language) {
+    public EmployeeLanguage(String id, Short isdeleted, Employee employee, Language language) {
         this.id = id;
+        this.isdeleted = isdeleted;
         this.employee = employee;
         this.language = language;
     }
@@ -61,6 +65,14 @@ public class EmployeeLanguage implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Employee getEmployee() {

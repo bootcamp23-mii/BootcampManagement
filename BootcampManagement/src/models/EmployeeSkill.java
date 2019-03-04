@@ -27,7 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EmployeeSkill.findAll", query = "SELECT e FROM EmployeeSkill e")
-    , @NamedQuery(name = "EmployeeSkill.findById", query = "SELECT e FROM EmployeeSkill e WHERE e.id = :id")})
+    , @NamedQuery(name = "EmployeeSkill.findById", query = "SELECT e FROM EmployeeSkill e WHERE e.id = :id")
+    , @NamedQuery(name = "EmployeeSkill.findByIsdeleted", query = "SELECT e FROM EmployeeSkill e WHERE e.isdeleted = :isdeleted")})
 public class EmployeeSkill implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +36,8 @@ public class EmployeeSkill implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private String id;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -49,8 +52,9 @@ public class EmployeeSkill implements Serializable {
         this.id = id;
     }
 
-    public EmployeeSkill(String id, Employee employee, Skill skill) {
+    public EmployeeSkill(String id, Short isdeleted, Employee employee, Skill skill) {
         this.id = id;
+        this.isdeleted = isdeleted;
         this.employee = employee;
         this.skill = skill;
     }
@@ -61,6 +65,14 @@ public class EmployeeSkill implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Employee getEmployee() {

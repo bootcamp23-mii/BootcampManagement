@@ -49,9 +49,9 @@ public class ErrorBank implements Serializable {
     private String description;
     @Column(name = "SOLUTION")
     private String solution;
-    @JoinColumn(name = "CLASSTYPE", referencedColumnName = "ID")
+    @JoinColumn(name = "CLASSES", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private ClassType classtype;
+    private Classes classes;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -68,12 +68,12 @@ public class ErrorBank implements Serializable {
         this.submitdate = submitdate;
     }
 
-    public ErrorBank(String id, Date submitdate, String description, String solution, ClassType classtype, Employee employee) {
+    public ErrorBank(String id, Date submitdate, String description, String solution, Classes classes, Employee employee) {
         this.id = id;
         this.submitdate = submitdate;
         this.description = description;
         this.solution = solution;
-        this.classtype = classtype;
+        this.classes = classes;
         this.employee = employee;
     }
 
@@ -109,12 +109,12 @@ public class ErrorBank implements Serializable {
         this.solution = solution;
     }
 
-    public ClassType getClasstype() {
-        return classtype;
+    public Classes getClasses() {
+        return classes;
     }
 
-    public void setClasstype(ClassType classtype) {
-        this.classtype = classtype;
+    public void setClasses(Classes classes) {
+        this.classes = classes;
     }
 
     public Employee getEmployee() {

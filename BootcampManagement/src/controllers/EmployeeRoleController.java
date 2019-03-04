@@ -41,7 +41,7 @@ public class EmployeeRoleController implements EmployeeRoleControllerInterface {
 
     @Override
     public String save(String id, String startDate, String endDate, String employee, String role) {
-        if (dao.saveOrDelete(new EmployeeRole(id, new Date(startDate), new Date(endDate), new Employee(employee), new Role(role)), true)) {
+        if (dao.saveOrDelete(new EmployeeRole(id, new Date(startDate), new Date(endDate), new Short("0"), new Employee(employee), new Role(role)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -50,7 +50,7 @@ public class EmployeeRoleController implements EmployeeRoleControllerInterface {
 
     @Override
     public String delete(String id, String startDate, String endDate, String employee, String role) {
-        if (dao.saveOrDelete(new EmployeeRole(id, new Date(startDate), new Date(endDate), new Employee(employee), new Role(role)), false)) {
+        if (dao.saveOrDelete(new EmployeeRole(id, new Date(startDate), new Date(endDate), new Short("0"), new Employee(employee), new Role(role)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

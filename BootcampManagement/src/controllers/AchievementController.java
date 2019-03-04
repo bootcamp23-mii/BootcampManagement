@@ -40,7 +40,7 @@ public class AchievementController implements AchievementControllerInterface {
 
     @Override
     public String save(String id, String name, String employee) {
-        if (dao.saveOrDelete(new Achievement(id, name, new Employee(employee)), true)) {
+        if (dao.saveOrDelete(new Achievement(id, name, new Short("0"), new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -49,7 +49,7 @@ public class AchievementController implements AchievementControllerInterface {
 
     @Override
     public String delete(String id,String name, String employee) {
-        if (dao.saveOrDelete(new Achievement(id, name, new Employee(employee)), false)) {
+        if (dao.saveOrDelete(new Achievement(id, name, new Short("0"), new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

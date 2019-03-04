@@ -41,7 +41,7 @@ public class WorkExperienceController implements WorkExperienceControllerInterfa
 
     @Override
     public String save(String id, String name, String description, String startDate, String endDate, String employee) {
-        if (dao.saveOrDelete(new WorkExperience(id, name, description, new Date(startDate), new Date(endDate), new Employee(employee)), true)) {
+        if (dao.saveOrDelete(new WorkExperience(id, name, description, new Date(startDate), new Date(endDate), new Short("0"), new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -50,7 +50,7 @@ public class WorkExperienceController implements WorkExperienceControllerInterfa
 
     @Override
     public String delete(String id, String name, String description, String startDate, String endDate, String employee) {
-        if (dao.saveOrDelete(new WorkExperience(id, name, description, new Date(startDate), new Date(endDate), new Employee(employee)), false)) {
+        if (dao.saveOrDelete(new WorkExperience(id, name, description, new Date(startDate), new Date(endDate), new Short("0"), new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

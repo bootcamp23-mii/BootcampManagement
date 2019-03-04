@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EducationHistory.findAll", query = "SELECT e FROM EducationHistory e")
     , @NamedQuery(name = "EducationHistory.findById", query = "SELECT e FROM EducationHistory e WHERE e.id = :id")
-    , @NamedQuery(name = "EducationHistory.findByGpa", query = "SELECT e FROM EducationHistory e WHERE e.gpa = :gpa")})
+    , @NamedQuery(name = "EducationHistory.findByGpa", query = "SELECT e FROM EducationHistory e WHERE e.gpa = :gpa")
+    , @NamedQuery(name = "EducationHistory.findByIsdeleted", query = "SELECT e FROM EducationHistory e WHERE e.isdeleted = :isdeleted")})
 public class EducationHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +40,8 @@ public class EducationHistory implements Serializable {
     @Basic(optional = false)
     @Column(name = "GPA")
     private String gpa;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "EDUCATION", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Education education;
@@ -58,9 +61,10 @@ public class EducationHistory implements Serializable {
         this.gpa = gpa;
     }
 
-    public EducationHistory(String id, String gpa, Education education, Employee employee) {
+    public EducationHistory(String id, String gpa, Short isdeleted, Education education, Employee employee) {
         this.id = id;
         this.gpa = gpa;
+        this.isdeleted = isdeleted;
         this.education = education;
         this.employee = employee;
     }
@@ -79,6 +83,14 @@ public class EducationHistory implements Serializable {
 
     public void setGpa(String gpa) {
         this.gpa = gpa;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Education getEducation() {

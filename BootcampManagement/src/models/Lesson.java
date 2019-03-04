@@ -42,9 +42,9 @@ public class Lesson implements Serializable {
     @Basic(optional = false)
     @Column(name = "NAME")
     private String name;
-    @JoinColumn(name = "CLASS_TYPE", referencedColumnName = "ID")
+    @JoinColumn(name = "CLASSES", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private ClassType classType;
+    private Classes classes;
     @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
     private List<Evaluation> evaluationList;
 
@@ -60,10 +60,10 @@ public class Lesson implements Serializable {
         this.name = name;
     }
 
-    public Lesson(String id, String name, ClassType classType) {
+    public Lesson(String id, String name, Classes classes) {
         this.id = id;
         this.name = name;
-        this.classType = classType;
+        this.classes = classes;
     }
 
     public String getId() {
@@ -82,12 +82,12 @@ public class Lesson implements Serializable {
         this.name = name;
     }
 
-    public ClassType getClassType() {
-        return classType;
+    public Classes getClasses() {
+        return classes;
     }
 
-    public void setClassType(ClassType classType) {
-        this.classType = classType;
+    public void setClasses(Classes classes) {
+        this.classes = classes;
     }
 
     @XmlTransient

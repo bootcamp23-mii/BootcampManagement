@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "BatchClass.findAll", query = "SELECT b FROM BatchClass b")
-    , @NamedQuery(name = "BatchClass.findById", query = "SELECT b FROM BatchClass b WHERE b.id = :id")})
+    , @NamedQuery(name = "BatchClass.findById", query = "SELECT b FROM BatchClass b WHERE b.id = :id")
+    , @NamedQuery(name = "BatchClass.findByIsdeleted", query = "SELECT b FROM BatchClass b WHERE b.isdeleted = :isdeleted")})
 public class BatchClass implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,14 +39,16 @@ public class BatchClass implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private String id;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @OneToMany(mappedBy = "batchclass", fetch = FetchType.LAZY)
     private List<Participant> participantList;
     @JoinColumn(name = "BATCH", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Batch batch;
-    @JoinColumn(name = "CLASSTYPE", referencedColumnName = "ID")
+    @JoinColumn(name = "CLASSES", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private ClassType classtype;
+    private Classes classes;
     @JoinColumn(name = "TRAINER", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee trainer;
@@ -60,10 +63,11 @@ public class BatchClass implements Serializable {
         this.id = id;
     }
 
-    public BatchClass(String id, Batch batch, ClassType classtype, Employee trainer, Room room) {
+    public BatchClass(String id, Short isdeleted, Batch batch, Classes classes, Employee trainer, Room room) {
         this.id = id;
+        this.isdeleted = isdeleted;
         this.batch = batch;
-        this.classtype = classtype;
+        this.classes = classes;
         this.trainer = trainer;
         this.room = room;
     }
@@ -74,6 +78,14 @@ public class BatchClass implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     @XmlTransient
@@ -93,12 +105,12 @@ public class BatchClass implements Serializable {
         this.batch = batch;
     }
 
-    public ClassType getClasstype() {
-        return classtype;
+    public Classes getClasses() {
+        return classes;
     }
 
-    public void setClasstype(ClassType classtype) {
-        this.classtype = classtype;
+    public void setClasses(Classes classes) {
+        this.classes = classes;
     }
 
     public Employee getTrainer() {

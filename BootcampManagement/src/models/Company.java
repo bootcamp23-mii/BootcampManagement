@@ -73,7 +73,7 @@ public class Company implements Serializable {
         this.phone = phone;
         this.village = village;
     }
-    
+
     public String getId() {
         return id;
     }

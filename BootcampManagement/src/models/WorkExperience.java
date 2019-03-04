@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WorkExperience.findByName", query = "SELECT w FROM WorkExperience w WHERE w.name = :name")
     , @NamedQuery(name = "WorkExperience.findByDescription", query = "SELECT w FROM WorkExperience w WHERE w.description = :description")
     , @NamedQuery(name = "WorkExperience.findByStartdate", query = "SELECT w FROM WorkExperience w WHERE w.startdate = :startdate")
-    , @NamedQuery(name = "WorkExperience.findByEnddate", query = "SELECT w FROM WorkExperience w WHERE w.enddate = :enddate")})
+    , @NamedQuery(name = "WorkExperience.findByEnddate", query = "SELECT w FROM WorkExperience w WHERE w.enddate = :enddate")
+    , @NamedQuery(name = "WorkExperience.findByIsdeleted", query = "SELECT w FROM WorkExperience w WHERE w.isdeleted = :isdeleted")})
 public class WorkExperience implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +57,8 @@ public class WorkExperience implements Serializable {
     @Column(name = "ENDDATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date enddate;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -75,12 +78,22 @@ public class WorkExperience implements Serializable {
         this.enddate = enddate;
     }
 
-    public WorkExperience(String id, String name, String description, Date startdate, Date enddate, Employee employee) {
+    public WorkExperience(String id, String name, String description, Date startdate, Short isdeleted, Employee employee) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.startdate = startdate;
+        this.isdeleted = isdeleted;
+        this.employee = employee;
+    }
+
+    public WorkExperience(String id, String name, String description, Date startdate, Date enddate, Short isdeleted, Employee employee) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.startdate = startdate;
         this.enddate = enddate;
+        this.isdeleted = isdeleted;
         this.employee = employee;
     }
 
@@ -122,6 +135,14 @@ public class WorkExperience implements Serializable {
 
     public void setEnddate(Date enddate) {
         this.enddate = enddate;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Employee getEmployee() {

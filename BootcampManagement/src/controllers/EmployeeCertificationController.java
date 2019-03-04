@@ -41,7 +41,7 @@ public class EmployeeCertificationController implements EmployeeCertificationCon
 
     @Override
     public String save(String id, String certificateDate, String certificateNumber, String certificate, String employee) {
-        if (dao.saveOrDelete(new EmployeeCertification(id, new Date(certificateDate), certificateNumber, new Certificate(certificate), new Employee(employee)), true)) {
+        if (dao.saveOrDelete(new EmployeeCertification(id, new Date(certificateDate), certificateNumber, new Short("0"), new Certificate(certificate), new Employee(employee)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -50,7 +50,7 @@ public class EmployeeCertificationController implements EmployeeCertificationCon
 
     @Override
     public String delete(String id, String certificateDate, String certificateNumber, String certificate, String employee) {
-        if (dao.saveOrDelete(new EmployeeCertification(id, new Date(certificateDate), certificateNumber, new Certificate(certificate), new Employee(employee)), false)) {
+        if (dao.saveOrDelete(new EmployeeCertification(id, new Date(certificateDate), certificateNumber, new Short("0"), new Certificate(certificate), new Employee(employee)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

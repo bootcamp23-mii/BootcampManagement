@@ -41,7 +41,7 @@ public class EmployeeSkillController implements EmployeeSkillControllerInterface
 
     @Override
     public String save(String id, String employee, String skill) {
-        if (dao.saveOrDelete(new EmployeeSkill(id, new Employee(employee), new Skill(skill)), true)) {
+        if (dao.saveOrDelete(new EmployeeSkill(id, new Short("0"), new Employee(employee), new Skill(skill)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -50,7 +50,7 @@ public class EmployeeSkillController implements EmployeeSkillControllerInterface
 
     @Override
     public String delete(String id, String employee, String skill) {
-        if (dao.saveOrDelete(new EmployeeSkill(id, new Employee(employee), new Skill(skill)), false)) {
+        if (dao.saveOrDelete(new EmployeeSkill(id, new Short("0"), new Employee(employee), new Skill(skill)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

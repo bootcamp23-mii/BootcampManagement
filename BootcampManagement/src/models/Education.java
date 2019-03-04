@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Education.findAll", query = "SELECT e FROM Education e")
-    , @NamedQuery(name = "Education.findById", query = "SELECT e FROM Education e WHERE e.id = :id")})
+    , @NamedQuery(name = "Education.findById", query = "SELECT e FROM Education e WHERE e.id = :id")
+    , @NamedQuery(name = "Education.findByIsdeleted", query = "SELECT e FROM Education e WHERE e.isdeleted = :isdeleted")})
 public class Education implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +39,8 @@ public class Education implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private String id;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "DEGREE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Degree degree;
@@ -57,8 +60,9 @@ public class Education implements Serializable {
         this.id = id;
     }
 
-    public Education(String id, Degree degree, Major major, University university) {
+    public Education(String id, Short isdeleted, Degree degree, Major major, University university) {
         this.id = id;
+        this.isdeleted = isdeleted;
         this.degree = degree;
         this.major = major;
         this.university = university;
@@ -70,6 +74,14 @@ public class Education implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Degree getDegree() {

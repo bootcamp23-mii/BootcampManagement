@@ -46,7 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Employee.findByOnboarddate", query = "SELECT e FROM Employee e WHERE e.onboarddate = :onboarddate")
     , @NamedQuery(name = "Employee.findByPassword", query = "SELECT e FROM Employee e WHERE e.password = :password")
     , @NamedQuery(name = "Employee.findBySecurityqestion", query = "SELECT e FROM Employee e WHERE e.securityqestion = :securityqestion")
-    , @NamedQuery(name = "Employee.findBySecurityanswer", query = "SELECT e FROM Employee e WHERE e.securityanswer = :securityanswer")})
+    , @NamedQuery(name = "Employee.findBySecurityanswer", query = "SELECT e FROM Employee e WHERE e.securityanswer = :securityanswer")
+    , @NamedQuery(name = "Employee.findByIsdeleted", query = "SELECT e FROM Employee e WHERE e.isdeleted = :isdeleted")})
 public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -89,6 +90,8 @@ public class Employee implements Serializable {
     @Basic(optional = false)
     @Column(name = "SECURITYANSWER")
     private String securityanswer;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "employee", fetch = FetchType.LAZY)
     private Participant participant;
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
@@ -103,6 +106,12 @@ public class Employee implements Serializable {
     private List<BatchClass> batchClassList;
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<EmployeeAccess> employeeAccessList;
+    @JoinColumn(name = "HIRINGLOCATION", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private District hiringlocation;
+    @JoinColumn(name = "BIRTHPLACE", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private District birthplace;
     @JoinColumn(name = "RELIGION", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Religion religion;
@@ -150,7 +159,7 @@ public class Employee implements Serializable {
         this.securityanswer = securityanswer;
     }
 
-    public Employee(String id, String name, Date birthdate, String gender, String marriedstatus, String address, String email, String phone, Date onboarddate, String password, String securityqestion, String securityanswer, Religion religion, Village village) {
+    public Employee(String id, String name, Date birthdate, String gender, String marriedstatus, String address, String email, String phone, Date onboarddate, String password, String securityqestion, String securityanswer, Short isdeleted, District hiringlocation, District birthplace, Religion religion, Village village) {
         this.id = id;
         this.name = name;
         this.birthdate = birthdate;
@@ -163,6 +172,9 @@ public class Employee implements Serializable {
         this.password = password;
         this.securityqestion = securityqestion;
         this.securityanswer = securityanswer;
+        this.isdeleted = isdeleted;
+        this.hiringlocation = hiringlocation;
+        this.birthplace = birthplace;
         this.religion = religion;
         this.village = village;
     }
@@ -263,6 +275,14 @@ public class Employee implements Serializable {
         this.securityanswer = securityanswer;
     }
 
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
+    }
+
     public Participant getParticipant() {
         return participant;
     }
@@ -323,6 +343,22 @@ public class Employee implements Serializable {
 
     public void setEmployeeAccessList(List<EmployeeAccess> employeeAccessList) {
         this.employeeAccessList = employeeAccessList;
+    }
+
+    public District getHiringlocation() {
+        return hiringlocation;
+    }
+
+    public void setHiringlocation(District hiringlocation) {
+        this.hiringlocation = hiringlocation;
+    }
+
+    public District getBirthplace() {
+        return birthplace;
+    }
+
+    public void setBirthplace(District birthplace) {
+        this.birthplace = birthplace;
     }
 
     public Religion getReligion() {

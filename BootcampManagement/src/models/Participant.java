@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Participant.findAll", query = "SELECT p FROM Participant p")
     , @NamedQuery(name = "Participant.findById", query = "SELECT p FROM Participant p WHERE p.id = :id")
-    , @NamedQuery(name = "Participant.findByGrade", query = "SELECT p FROM Participant p WHERE p.grade = :grade")})
+    , @NamedQuery(name = "Participant.findByGrade", query = "SELECT p FROM Participant p WHERE p.grade = :grade")
+    , @NamedQuery(name = "Participant.findByIsdeleted", query = "SELECT p FROM Participant p WHERE p.isdeleted = :isdeleted")})
 public class Participant implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +40,8 @@ public class Participant implements Serializable {
     private String id;
     @Column(name = "GRADE")
     private String grade;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "BATCHCLASS", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private BatchClass batchclass;
@@ -53,9 +56,17 @@ public class Participant implements Serializable {
         this.id = id;
     }
 
-    public Participant(String id, String grade, BatchClass batchclass, Employee employee) {
+    public Participant(String id, Short isdeleted, BatchClass batchclass, Employee employee) {
+        this.id = id;
+        this.isdeleted = isdeleted;
+        this.batchclass = batchclass;
+        this.employee = employee;
+    }
+
+    public Participant(String id, String grade, Short isdeleted, BatchClass batchclass, Employee employee) {
         this.id = id;
         this.grade = grade;
+        this.isdeleted = isdeleted;
         this.batchclass = batchclass;
         this.employee = employee;
     }
@@ -74,6 +85,14 @@ public class Participant implements Serializable {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public BatchClass getBatchclass() {

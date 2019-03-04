@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EmployeeRole.findAll", query = "SELECT e FROM EmployeeRole e")
     , @NamedQuery(name = "EmployeeRole.findById", query = "SELECT e FROM EmployeeRole e WHERE e.id = :id")
     , @NamedQuery(name = "EmployeeRole.findByStartdate", query = "SELECT e FROM EmployeeRole e WHERE e.startdate = :startdate")
-    , @NamedQuery(name = "EmployeeRole.findByEnddate", query = "SELECT e FROM EmployeeRole e WHERE e.enddate = :enddate")})
+    , @NamedQuery(name = "EmployeeRole.findByEnddate", query = "SELECT e FROM EmployeeRole e WHERE e.enddate = :enddate")
+    , @NamedQuery(name = "EmployeeRole.findByIsdeleted", query = "SELECT e FROM EmployeeRole e WHERE e.isdeleted = :isdeleted")})
 public class EmployeeRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,6 +47,8 @@ public class EmployeeRole implements Serializable {
     @Column(name = "ENDDATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date enddate;
+    @Column(name = "ISDELETED")
+    private Short isdeleted;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -60,10 +63,19 @@ public class EmployeeRole implements Serializable {
         this.id = id;
     }
 
-    public EmployeeRole(String id, Date startdate, Date enddate, Employee employee, Role role) {
+    public EmployeeRole(String id, Date startdate, Short isdeleted, Employee employee, Role role) {
+        this.id = id;
+        this.startdate = startdate;
+        this.isdeleted = isdeleted;
+        this.employee = employee;
+        this.role = role;
+    }
+
+    public EmployeeRole(String id, Date startdate, Date enddate, Short isdeleted, Employee employee, Role role) {
         this.id = id;
         this.startdate = startdate;
         this.enddate = enddate;
+        this.isdeleted = isdeleted;
         this.employee = employee;
         this.role = role;
     }
@@ -90,6 +102,14 @@ public class EmployeeRole implements Serializable {
 
     public void setEnddate(Date enddate) {
         this.enddate = enddate;
+    }
+
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
     }
 
     public Employee getEmployee() {

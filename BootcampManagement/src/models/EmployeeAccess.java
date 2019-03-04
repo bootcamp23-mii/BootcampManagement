@@ -69,6 +69,14 @@ public class EmployeeAccess implements Serializable {
         this.receivedate = receivedate;
     }
 
+    public EmployeeAccess(String id, Date receivedate, String notes, AccessCard accesscard, Employee employee) {
+        this.id = id;
+        this.receivedate = receivedate;
+        this.notes = notes;
+        this.accesscard = accesscard;
+        this.employee = employee;
+    }
+
     public EmployeeAccess(String id, Date receivedate, Date returndate, String notes, AccessCard accesscard, Employee employee) {
         this.id = id;
         this.receivedate = receivedate;

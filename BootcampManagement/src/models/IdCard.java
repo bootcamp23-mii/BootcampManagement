@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "IdCard.findAll", query = "SELECT i FROM IdCard i")
     , @NamedQuery(name = "IdCard.findById", query = "SELECT i FROM IdCard i WHERE i.id = :id")
-    , @NamedQuery(name = "IdCard.findByReceivedate", query = "SELECT i FROM IdCard i WHERE i.receivedate = :receivedate")})
+    , @NamedQuery(name = "IdCard.findByReceivedate", query = "SELECT i FROM IdCard i WHERE i.receivedate = :receivedate")
+    , @NamedQuery(name = "IdCard.findByReturndate", query = "SELECT i FROM IdCard i WHERE i.returndate = :returndate")
+    , @NamedQuery(name = "IdCard.findByNote", query = "SELECT i FROM IdCard i WHERE i.note = :note")})
 public class IdCard implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,6 +45,11 @@ public class IdCard implements Serializable {
     @Column(name = "RECEIVEDATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date receivedate;
+    @Column(name = "RETURNDATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date returndate;
+    @Column(name = "NOTE")
+    private String note;
     @JoinColumn(name = "EMPLOYEE", referencedColumnName = "ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
@@ -59,9 +66,18 @@ public class IdCard implements Serializable {
         this.receivedate = receivedate;
     }
 
-    public IdCard(String id, Date receivedate, Employee employee) {
+    public IdCard(String id, Date receivedate, String note, Employee employee) {
         this.id = id;
         this.receivedate = receivedate;
+        this.note = note;
+        this.employee = employee;
+    }
+
+    public IdCard(String id, Date receivedate, Date returndate, String note, Employee employee) {
+        this.id = id;
+        this.receivedate = receivedate;
+        this.returndate = returndate;
+        this.note = note;
         this.employee = employee;
     }
 
@@ -79,6 +95,22 @@ public class IdCard implements Serializable {
 
     public void setReceivedate(Date receivedate) {
         this.receivedate = receivedate;
+    }
+
+    public Date getReturndate() {
+        return returndate;
+    }
+
+    public void setReturndate(Date returndate) {
+        this.returndate = returndate;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Employee getEmployee() {
