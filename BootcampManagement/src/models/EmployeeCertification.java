@@ -30,10 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EmployeeCertification.findAll", query = "SELECT e FROM EmployeeCertification e")
-    , @NamedQuery(name = "EmployeeCertification.findById", query = "SELECT e FROM EmployeeCertification e WHERE e.id = :id")
     , @NamedQuery(name = "EmployeeCertification.findByCertificatedate", query = "SELECT e FROM EmployeeCertification e WHERE e.certificatedate = :certificatedate")
     , @NamedQuery(name = "EmployeeCertification.findByCertificatenumber", query = "SELECT e FROM EmployeeCertification e WHERE e.certificatenumber = :certificatenumber")
-    , @NamedQuery(name = "EmployeeCertification.findAll", query = "SELECT e FROM EmployeeCertification e")
     , @NamedQuery(name = "EmployeeCertification.findById", query = "SELECT e FROM EmployeeCertification e WHERE e.id = :id")})        
 public class EmployeeCertification implements Serializable {
 

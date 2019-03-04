@@ -19,6 +19,6 @@ public class TestController {
         SessionFactory factory = HibernateUtil.getSessionFactory();
         EducationHistoryControllerInterface eh = new EducationHistoryController(factory);
 //        System.out.println(eh.save("", "4.0", "CVE1", "14303"));
-        System.out.println(eh.getByid("CVEH1").getId());
+        System.out.println(eh.getByid("CVEH1").getEmployee());
     }
 }

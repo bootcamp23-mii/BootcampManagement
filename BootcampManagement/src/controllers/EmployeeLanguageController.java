@@ -21,7 +21,7 @@ public class EmployeeLanguageController implements EmployeeLanguageControllerInt
     private DAOInterface<EmployeeLanguage> dao;
 
     public EmployeeLanguageController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new EmployeeLanguage());
+        dao = new GeneralDAO<>(factory, EmployeeLanguage.class);
     }
 
     @Override

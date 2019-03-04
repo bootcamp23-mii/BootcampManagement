@@ -20,7 +20,7 @@ public class EducationHistoryController implements EducationHistoryControllerInt
     private DAOInterface<EducationHistory> dao;
 
     public EducationHistoryController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new EducationHistory());
+        dao = new GeneralDAO<>(factory, EducationHistory.class);
     }
 
     @Override

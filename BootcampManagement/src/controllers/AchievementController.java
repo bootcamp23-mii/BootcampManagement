@@ -20,7 +20,7 @@ public class AchievementController implements AchievementControllerInterface {
     private DAOInterface<Achievement> dao;
 
     public AchievementController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Achievement());
+        dao = new GeneralDAO<>(factory, Achievement.class);
     }
 
     @Override

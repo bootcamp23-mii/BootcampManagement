@@ -21,7 +21,7 @@ public class EmployeeSkillController implements EmployeeSkillControllerInterface
     private DAOInterface<EmployeeSkill> dao;
 
     public EmployeeSkillController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new EmployeeSkill());
+        dao = new GeneralDAO<>(factory, EmployeeSkill.class);
     }
 
     @Override

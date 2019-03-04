@@ -8,6 +8,8 @@ package daos;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -23,9 +25,13 @@ public class GeneralDAO<T> implements DAOInterface<T>{
     private Transaction transaction;
     private T t;
 
-    public GeneralDAO(SessionFactory factory, T t) {
-        this.factory = factory;
-        this.t = t;
+    public GeneralDAO(SessionFactory factory, Class<T> t) {
+        try {
+            this.factory = factory;
+            this.t = t.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public GeneralDAO() {

@@ -21,7 +21,7 @@ public class WorkExperienceController implements WorkExperienceControllerInterfa
     private DAOInterface<WorkExperience> dao;
 
     public WorkExperienceController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new WorkExperience());
+        dao = new GeneralDAO<>(factory, WorkExperience.class);
     }
 
     @Override

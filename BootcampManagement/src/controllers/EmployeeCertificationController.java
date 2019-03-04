@@ -21,7 +21,7 @@ public class EmployeeCertificationController implements EmployeeCertificationCon
     private DAOInterface<EmployeeCertification> dao;
 
     public EmployeeCertificationController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new EmployeeCertification());
+        dao = new GeneralDAO<>(factory, EmployeeCertification.class);
     }
 
     @Override

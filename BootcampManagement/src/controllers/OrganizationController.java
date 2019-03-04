@@ -20,7 +20,7 @@ public class OrganizationController implements OrganizationControllerInterface {
     private DAOInterface<Organization> dao;
 
     public OrganizationController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new Organization());
+        dao = new GeneralDAO<>(factory, Organization.class);
     }
 
     @Override

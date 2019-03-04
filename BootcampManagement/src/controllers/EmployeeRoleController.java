@@ -21,7 +21,7 @@ public class EmployeeRoleController implements EmployeeRoleControllerInterface {
     private DAOInterface<EmployeeRole> dao;
 
     public EmployeeRoleController(SessionFactory factory) {
-        dao = new GeneralDAO<>(factory, new EmployeeRole());
+        dao = new GeneralDAO<>(factory, EmployeeRole.class);
     }
 
     @Override
