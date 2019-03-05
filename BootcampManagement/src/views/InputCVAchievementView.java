@@ -31,6 +31,15 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         pnMTop = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         pnMTRCenter = new javax.swing.JPanel();
+        pnMTRC1 = new javax.swing.JPanel();
+        lblAchievement = new javax.swing.JLabel();
+        tfAchievement = new javax.swing.JTextField();
+        pnMTRC2 = new javax.swing.JPanel();
+        btSave = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        pnMTRC3 = new javax.swing.JPanel();
+        scpAchievement = new javax.swing.JScrollPane();
+        tbAchievement = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
@@ -75,16 +84,62 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         pnMTRCenter.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRCenter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        javax.swing.GroupLayout pnMTRCenterLayout = new javax.swing.GroupLayout(pnMTRCenter);
-        pnMTRCenter.setLayout(pnMTRCenterLayout);
-        pnMTRCenterLayout.setHorizontalGroup(
-            pnMTRCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 646, Short.MAX_VALUE)
+        pnMTRC1.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC1.setPreferredSize(new java.awt.Dimension(640, 38));
+        pnMTRC1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        lblAchievement.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblAchievement.setText("Achievement: ");
+        pnMTRC1.add(lblAchievement);
+
+        tfAchievement.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tfAchievement.setPreferredSize(new java.awt.Dimension(400, 23));
+        pnMTRC1.add(tfAchievement);
+
+        pnMTRCenter.add(pnMTRC1);
+
+        pnMTRC2.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC2.setPreferredSize(new java.awt.Dimension(640, 38));
+        pnMTRC2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        btSave.setText("Save");
+        pnMTRC2.add(btSave);
+
+        btDelete.setText("Delete");
+        pnMTRC2.add(btDelete);
+
+        pnMTRCenter.add(pnMTRC2);
+
+        pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 280));
+
+        scpAchievement.setBackground(new java.awt.Color(204, 255, 255));
+
+        tbAchievement.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scpAchievement.setViewportView(tbAchievement);
+
+        javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
+        pnMTRC3.setLayout(pnMTRC3Layout);
+        pnMTRC3Layout.setHorizontalGroup(
+            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scpAchievement, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
-        pnMTRCenterLayout.setVerticalGroup(
-            pnMTRCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
+        pnMTRC3Layout.setVerticalGroup(
+            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scpAchievement, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
         );
+
+        pnMTRCenter.add(pnMTRC3);
 
         pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
 
@@ -153,13 +208,22 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
+    private javax.swing.JButton btSave;
+    private javax.swing.JLabel lblAchievement;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnMTBottom;
     private javax.swing.JPanel pnMTLeft;
+    private javax.swing.JPanel pnMTRC1;
+    private javax.swing.JPanel pnMTRC2;
+    private javax.swing.JPanel pnMTRC3;
     private javax.swing.JPanel pnMTRCenter;
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
+    private javax.swing.JScrollPane scpAchievement;
+    private javax.swing.JTable tbAchievement;
+    private javax.swing.JTextField tfAchievement;
     // End of variables declaration//GEN-END:variables
 }

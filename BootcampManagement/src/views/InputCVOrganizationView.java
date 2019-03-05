@@ -31,6 +31,15 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         pnMTop = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         pnMTRCenter = new javax.swing.JPanel();
+        pnMTRC1 = new javax.swing.JPanel();
+        lblOrganization = new javax.swing.JLabel();
+        tfOrganization = new javax.swing.JTextField();
+        pnMTRC2 = new javax.swing.JPanel();
+        btSave = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        pnMTRC3 = new javax.swing.JPanel();
+        scpOrganization = new javax.swing.JScrollPane();
+        tbOrganization = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
@@ -52,7 +61,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         pnMTop.setLayout(pnMTopLayout);
         pnMTopLayout.setHorizontalGroup(
             pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 716, Short.MAX_VALUE)
+            .addGap(0, 700, Short.MAX_VALUE)
             .addGroup(pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnMTopLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -74,16 +83,62 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         pnMTRCenter.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRCenter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        javax.swing.GroupLayout pnMTRCenterLayout = new javax.swing.GroupLayout(pnMTRCenter);
-        pnMTRCenter.setLayout(pnMTRCenterLayout);
-        pnMTRCenterLayout.setHorizontalGroup(
-            pnMTRCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 662, Short.MAX_VALUE)
+        pnMTRC1.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC1.setPreferredSize(new java.awt.Dimension(640, 38));
+        pnMTRC1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        lblOrganization.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblOrganization.setText("Organization: ");
+        pnMTRC1.add(lblOrganization);
+
+        tfOrganization.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tfOrganization.setPreferredSize(new java.awt.Dimension(400, 23));
+        pnMTRC1.add(tfOrganization);
+
+        pnMTRCenter.add(pnMTRC1);
+
+        pnMTRC2.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC2.setPreferredSize(new java.awt.Dimension(640, 38));
+        pnMTRC2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        btSave.setText("Save");
+        pnMTRC2.add(btSave);
+
+        btDelete.setText("Delete");
+        pnMTRC2.add(btDelete);
+
+        pnMTRCenter.add(pnMTRC2);
+
+        pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 300));
+
+        scpOrganization.setBackground(new java.awt.Color(204, 255, 255));
+
+        tbOrganization.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scpOrganization.setViewportView(tbOrganization);
+
+        javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
+        pnMTRC3.setLayout(pnMTRC3Layout);
+        pnMTRC3Layout.setHorizontalGroup(
+            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scpOrganization, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
-        pnMTRCenterLayout.setVerticalGroup(
-            pnMTRCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+        pnMTRC3Layout.setVerticalGroup(
+            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scpOrganization, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
+
+        pnMTRCenter.add(pnMTRC3);
 
         pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
 
@@ -152,13 +207,22 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
+    private javax.swing.JButton btSave;
+    private javax.swing.JLabel lblOrganization;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnMTBottom;
     private javax.swing.JPanel pnMTLeft;
+    private javax.swing.JPanel pnMTRC1;
+    private javax.swing.JPanel pnMTRC2;
+    private javax.swing.JPanel pnMTRC3;
     private javax.swing.JPanel pnMTRCenter;
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
+    private javax.swing.JScrollPane scpOrganization;
+    private javax.swing.JTable tbOrganization;
+    private javax.swing.JTextField tfOrganization;
     // End of variables declaration//GEN-END:variables
 }

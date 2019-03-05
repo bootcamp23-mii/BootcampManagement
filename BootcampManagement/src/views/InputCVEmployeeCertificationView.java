@@ -31,6 +31,11 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTop = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         pnMTRCenter = new javax.swing.JPanel();
+        pnMTRC1 = new javax.swing.JPanel();
+        lblEducationHis1 = new javax.swing.JLabel();
+        cbEducationHis = new javax.swing.JComboBox<>();
+        lblEducationHis2 = new javax.swing.JLabel();
+        tfEducationHisGPA = new javax.swing.JTextField();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
@@ -74,16 +79,28 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTRCenter.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRCenter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        javax.swing.GroupLayout pnMTRCenterLayout = new javax.swing.GroupLayout(pnMTRCenter);
-        pnMTRCenter.setLayout(pnMTRCenterLayout);
-        pnMTRCenterLayout.setHorizontalGroup(
-            pnMTRCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 662, Short.MAX_VALUE)
-        );
-        pnMTRCenterLayout.setVerticalGroup(
-            pnMTRCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
-        );
+        pnMTRC1.setBackground(new java.awt.Color(204, 255, 255));
+
+        lblEducationHis1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblEducationHis1.setText("Education: ");
+        pnMTRC1.add(lblEducationHis1);
+
+        cbEducationHis.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cbEducationHis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
+        cbEducationHis.setMinimumSize(new java.awt.Dimension(100, 25));
+        cbEducationHis.setPreferredSize(new java.awt.Dimension(390, 25));
+        pnMTRC1.add(cbEducationHis);
+
+        lblEducationHis2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblEducationHis2.setText(" GPA:  ");
+        pnMTRC1.add(lblEducationHis2);
+
+        tfEducationHisGPA.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfEducationHisGPA.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfEducationHisGPA.setPreferredSize(new java.awt.Dimension(80, 25));
+        pnMTRC1.add(tfEducationHisGPA);
+
+        pnMTRCenter.add(pnMTRC1);
 
         pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
 
@@ -153,12 +170,17 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btOke;
+    private javax.swing.JComboBox<String> cbEducationHis;
+    private javax.swing.JLabel lblEducationHis1;
+    private javax.swing.JLabel lblEducationHis2;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnMTBottom;
     private javax.swing.JPanel pnMTLeft;
+    private javax.swing.JPanel pnMTRC1;
     private javax.swing.JPanel pnMTRCenter;
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
+    private javax.swing.JTextField tfEducationHisGPA;
     // End of variables declaration//GEN-END:variables
 }
