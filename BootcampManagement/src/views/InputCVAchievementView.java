@@ -5,12 +5,18 @@
  */
 package views;
 
+import controllers.*;
+import org.hibernate.SessionFactory;
+import tools.*;
+
 /**
  *
  * @author FES
  */
 public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private AchievementControllerInterface c = new AchievementController(factory);
     /**
      * Creates new form InputCVAchievementView
      */

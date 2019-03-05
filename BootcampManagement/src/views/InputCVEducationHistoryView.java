@@ -5,12 +5,19 @@
  */
 package views;
 
+import controllers.*;
+import org.hibernate.SessionFactory;
+import tools.*;
+
 /**
  *
  * @author FES
  */
 public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
 
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EducationHistoryControllerInterface c = new EducationHistoryController(factory);
+    
     /**
      * Creates new form InputCVEducationHistory
      */

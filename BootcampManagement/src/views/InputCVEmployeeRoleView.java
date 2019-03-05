@@ -5,11 +5,18 @@
  */
 package views;
 
+import controllers.*;
+import org.hibernate.SessionFactory;
+import tools.*;
+
 /**
  *
  * @author FES
  */
 public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
+
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EmployeeRoleControllerInterface c = new EmployeeRoleController(factory);
 
     /**
      * Creates new form InputCVEmployeeRoleView

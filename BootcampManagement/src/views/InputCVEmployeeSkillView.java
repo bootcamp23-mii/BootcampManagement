@@ -5,12 +5,19 @@
  */
 package views;
 
+import controllers.*;
+import org.hibernate.SessionFactory;
+import tools.*;
+
 /**
  *
  * @author FES
  */
 public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
 
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EmployeeSkillControllerInterface c = new EmployeeSkillController(factory);
+    
     /**
      * Creates new form InputCVEmployeeSkillView
      */

@@ -5,12 +5,19 @@
  */
 package views;
 
+import controllers.*;
+import org.hibernate.SessionFactory;
+import tools.*;
+
 /**
  *
  * @author FES
  */
 public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
 
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EmployeeLanguageControllerInterface c = new EmployeeLanguageController(factory);
+    
     /**
      * Creates new form InputCVEmployeeLanguageView
      */

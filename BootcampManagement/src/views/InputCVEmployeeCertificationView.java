@@ -5,12 +5,18 @@
  */
 package views;
 
+import controllers.*;
+import org.hibernate.SessionFactory;
+import tools.*;
+
 /**
  *
  * @author FES
  */
 public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame {
 
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EmployeeCertificationControllerInterface c = new EmployeeCertificationController(factory);
     /**
      * Creates new form InputCVEmployeeCertificateView
      */
@@ -34,8 +40,17 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTRC1 = new javax.swing.JPanel();
         lblEducationHis1 = new javax.swing.JLabel();
         cbEducationHis = new javax.swing.JComboBox<>();
-        lblEducationHis2 = new javax.swing.JLabel();
-        tfEducationHisGPA = new javax.swing.JTextField();
+        pnMTRC2 = new javax.swing.JPanel();
+        lblEmpCertification2 = new javax.swing.JLabel();
+        tfCertificateNumber = new javax.swing.JTextField();
+        lblEmpCertification3 = new javax.swing.JLabel();
+        tfDate = new javax.swing.JTextField();
+        pnMTRC3 = new javax.swing.JPanel();
+        btSave = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        pnMTRC4 = new javax.swing.JPanel();
+        scpEmpCertification = new javax.swing.JScrollPane();
+        tbEmpCertification = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
@@ -80,27 +95,91 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTRCenter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         pnMTRC1.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC1.setPreferredSize(new java.awt.Dimension(630, 35));
+        pnMTRC1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING));
 
         lblEducationHis1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblEducationHis1.setText("Education: ");
+        lblEducationHis1.setText("Certification: ");
+        lblEducationHis1.setInheritsPopupMenu(false);
         pnMTRC1.add(lblEducationHis1);
 
         cbEducationHis.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         cbEducationHis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
         cbEducationHis.setMinimumSize(new java.awt.Dimension(100, 25));
-        cbEducationHis.setPreferredSize(new java.awt.Dimension(390, 25));
+        cbEducationHis.setPreferredSize(new java.awt.Dimension(350, 25));
         pnMTRC1.add(cbEducationHis);
 
-        lblEducationHis2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblEducationHis2.setText(" GPA:  ");
-        pnMTRC1.add(lblEducationHis2);
-
-        tfEducationHisGPA.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfEducationHisGPA.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfEducationHisGPA.setPreferredSize(new java.awt.Dimension(80, 25));
-        pnMTRC1.add(tfEducationHisGPA);
-
         pnMTRCenter.add(pnMTRC1);
+
+        pnMTRC2.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC2.setPreferredSize(new java.awt.Dimension(630, 35));
+        pnMTRC2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        lblEmpCertification2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblEmpCertification2.setText("Number: ");
+        pnMTRC2.add(lblEmpCertification2);
+
+        tfCertificateNumber.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfCertificateNumber.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfCertificateNumber.setPreferredSize(new java.awt.Dimension(150, 25));
+        pnMTRC2.add(tfCertificateNumber);
+
+        lblEmpCertification3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblEmpCertification3.setText("  Date: ");
+        pnMTRC2.add(lblEmpCertification3);
+
+        tfDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfDate.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfDate.setPreferredSize(new java.awt.Dimension(150, 25));
+        pnMTRC2.add(tfDate);
+
+        pnMTRCenter.add(pnMTRC2);
+
+        pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 38));
+        pnMTRC3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        btSave.setText("Save");
+        pnMTRC3.add(btSave);
+
+        btDelete.setText("Delete");
+        pnMTRC3.add(btDelete);
+
+        pnMTRCenter.add(pnMTRC3);
+
+        pnMTRC4.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRC4.setPreferredSize(new java.awt.Dimension(640, 250));
+
+        scpEmpCertification.setBackground(new java.awt.Color(204, 255, 255));
+        scpEmpCertification.setPreferredSize(new java.awt.Dimension(452, 240));
+
+        tbEmpCertification.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scpEmpCertification.setViewportView(tbEmpCertification);
+
+        javax.swing.GroupLayout pnMTRC4Layout = new javax.swing.GroupLayout(pnMTRC4);
+        pnMTRC4.setLayout(pnMTRC4Layout);
+        pnMTRC4Layout.setHorizontalGroup(
+            pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scpEmpCertification, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        pnMTRC4Layout.setVerticalGroup(
+            pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnMTRC4Layout.createSequentialGroup()
+                .addComponent(scpEmpCertification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
+        pnMTRCenter.add(pnMTRC4);
 
         pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
 
@@ -169,18 +248,27 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
+    private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbEducationHis;
     private javax.swing.JLabel lblEducationHis1;
-    private javax.swing.JLabel lblEducationHis2;
+    private javax.swing.JLabel lblEmpCertification2;
+    private javax.swing.JLabel lblEmpCertification3;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnMTBottom;
     private javax.swing.JPanel pnMTLeft;
     private javax.swing.JPanel pnMTRC1;
+    private javax.swing.JPanel pnMTRC2;
+    private javax.swing.JPanel pnMTRC3;
+    private javax.swing.JPanel pnMTRC4;
     private javax.swing.JPanel pnMTRCenter;
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JTextField tfEducationHisGPA;
+    private javax.swing.JScrollPane scpEmpCertification;
+    private javax.swing.JTable tbEmpCertification;
+    private javax.swing.JTextField tfCertificateNumber;
+    private javax.swing.JTextField tfDate;
     // End of variables declaration//GEN-END:variables
 }

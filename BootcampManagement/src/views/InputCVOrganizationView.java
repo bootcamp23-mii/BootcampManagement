@@ -5,12 +5,19 @@
  */
 package views;
 
+import controllers.*;
+import org.hibernate.SessionFactory;
+import tools.*;
+
 /**
  *
  * @author FES
  */
 public class InputCVOrganizationView extends javax.swing.JInternalFrame {
 
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private OrganizationControllerInterface c = new OrganizationController(factory);
+    
     /**
      * Creates new form InputCVOrganizationView
      */
