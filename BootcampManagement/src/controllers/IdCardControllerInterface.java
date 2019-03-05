@@ -17,6 +17,6 @@ interface IdCardControllerInterface {
     public IdCard getByid(String id);
     public List<IdCard> getAll();
     public List<IdCard> search(Object keyword);
-    public String save(String id, Date receivedate, String employee);
-    public String delete(String id, Date receivedate, String employee);
+    public String save(String id, String receivedate, String returndate, String note, String employee);
+    public String delete(String id, String receivedate, String returndate, String note, String employee);
 }

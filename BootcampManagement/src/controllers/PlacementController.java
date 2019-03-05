@@ -41,20 +41,22 @@ public class PlacementController implements PlacementControllerInterface{
     }
 
     @Override
-    public String save(String id, String description, String address, String department, Date startdate, Date finishdate, String company, String employee) {
-        if (dao.saveOrDelete(new Placement(id, description, address, department, startdate, finishdate, new Company(company), new Employee(employee)), true)) {
+    public String save(String id, String isdeleted, String description, String address, String department, String startdate, String finishdate, String company, String employee) {
+        if (dao.saveOrDelete(new Placement(id, description, address, department, new Date(startdate), new Date(finishdate), new Short("0"), new Company(company), new Employee(employee)), true)) {
             return "Save Data Success";
-        } else {
-            return "Save Failed";
         }
+        return "Save Failed";
     }
 
     @Override
-    public String delete(String id, String description, String address, String department, Date startdate, Date finishdate, String company, String employee) {
-        if (dao.saveOrDelete(new Placement(id, description, address, department, startdate, finishdate, new Company(company), new Employee(employee)), false)) {
+    public String delete(String id, String isdeleted, String description, String address, String department, String startdate, String finishdate, String company, String employee) {
+        if (dao.saveOrDelete(new Placement(id, description, address, department, new Date(startdate), new Date(finishdate), new Short("0"), new Company(company), new Employee(employee)), true)) {
             return "Delete Data Success";
-        } else {
-            return "Delete Failed";
         }
+        return "Delete Failed";
     }
+
+   
+
+    
 }

@@ -32,30 +32,28 @@ public class IdCardController implements IdCardControllerInterface{
 
     @Override
     public List<IdCard> getAll() {
-       return dao.getData("");
+      return dao.getData("");
     }
 
     @Override
     public List<IdCard> search(Object keyword) {
-       return dao.getData(keyword);
+        return dao.getData(keyword);
     }
 
     @Override
-    public String save(String id, Date receivedate, String employee) {
-       if (dao.saveOrDelete(new IdCard(id, receivedate, new Employee(employee)), true)){
-        return "Save Data Success";
-       }else{
-           return "Save Failed";
-       }
-    }
-
-    @Override
-    public String delete(String id, Date receivedate, String employee) {
-        if (dao.saveOrDelete(new IdCard(id, receivedate, new Employee(employee)), false)) {
-            return "Delete Data Success";
-        } else {
-            return "Delete Failed";
+    public String save(String id, String receivedate, String returndate, String note, String employee) {
+        if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
+            return "Save Data Success";
         }
+        return "Save Failed";
     }
-    
+
+    @Override
+    public String delete(String id, String receivedate, String returndate, String note, String employee) {
+        if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
+            return "Delete Data Success";
+        }
+        return "Delete Failed";
+    }
+
 }
