@@ -69,7 +69,7 @@ public class District implements Serializable {
         this.name = name;
         this.province = province;
     }
-
+    
     public String getId() {
         return id;
     }

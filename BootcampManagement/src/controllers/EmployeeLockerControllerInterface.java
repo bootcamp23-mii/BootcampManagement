@@ -15,7 +15,7 @@ import models.Locker;
  *
  * @author Firsta
  */
-interface EmployeeLockerControllerInterface {
+    public interface EmployeeLockerControllerInterface {
     public EmployeeLocker getById (String id);
     public List<EmployeeLocker> getAll();
     public List<EmployeeLocker> search (Object keyword);

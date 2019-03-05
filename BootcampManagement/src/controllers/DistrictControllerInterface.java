@@ -13,7 +13,7 @@ import models.Province;
  *
  * @author Firsta
  */
-interface DistrictControllerInterface {
+    public interface DistrictControllerInterface {
     public District getById(String id);
     public List<District> getAll();
     public List<District> search(Object keyword);

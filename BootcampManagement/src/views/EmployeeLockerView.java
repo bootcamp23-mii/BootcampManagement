@@ -52,8 +52,6 @@ public class EmployeeLockerView extends javax.swing.JInternalFrame {
 
         jLabel2.setText("ID");
 
-        jTextField1.setText("jTextField1");
-
         jLabel3.setText("Name");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));

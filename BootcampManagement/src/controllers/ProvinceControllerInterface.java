@@ -12,7 +12,7 @@ import models.Province;
  *
  * @author Firsta
  */
-interface ProvinceControllerInterface {
+    public interface ProvinceControllerInterface {
     public Province getById (String id);
     public List<Province> getAll();
     public List<Province> search (Object keyword);

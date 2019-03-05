@@ -15,7 +15,7 @@ import models.Placement;
  *
  * @author Firsta
  */
-interface PlacementControllerInterface {
+    public interface PlacementControllerInterface {
     public Placement getById (String id);
     public List<Placement> getALL();
     public List<Placement> search(Object keyword);

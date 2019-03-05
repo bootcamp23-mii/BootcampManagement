@@ -13,7 +13,7 @@ import models.Locker;
  *
  * @author Firsta
  */
-interface LockerControllerInterface {
+    public interface LockerControllerInterface {
     public Locker getById (String id);
     public List<Locker> getAll();
     public List<Locker> search(Object keyword);

@@ -13,7 +13,7 @@ import models.Subdistrict;
  *
  * @author Firsta
  */
-interface SubDistrictControllerInterface {
+    public interface SubDistrictControllerInterface {
     public Subdistrict getById(String id);
     public List<Subdistrict> getAll();
     public List<Subdistrict> search (Object keyword);

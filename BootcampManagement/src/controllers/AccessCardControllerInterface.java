@@ -12,7 +12,7 @@ import models.AccessCard;
  *
  * @author Firsta
  */
-interface AccessCardControllerInterface {
+    public interface AccessCardControllerInterface {
     public AccessCard getById(String id);
     public List<AccessCard> getAll();
     public List<AccessCard> search(Object keyword);

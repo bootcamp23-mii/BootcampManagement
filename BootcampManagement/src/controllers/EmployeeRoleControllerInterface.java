@@ -12,7 +12,7 @@ import models.*;
  *
  * @author Pandu
  */
-public interface EmployeeRoleControllerInterface {
+    public interface EmployeeRoleControllerInterface {
     public EmployeeRole getByid(String id);
     public List<EmployeeRole> getAll();
     public List<EmployeeRole> search(Object keyword);

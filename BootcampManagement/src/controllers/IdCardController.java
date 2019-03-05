@@ -7,6 +7,7 @@ package controllers;
 
 import daos.DAOInterface;
 import daos.GeneralDAO;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import models.Employee;
@@ -42,16 +43,30 @@ public class IdCardController implements IdCardControllerInterface{
 
     @Override
     public String save(String id, String receivedate, String returndate, String note, String employee) {
-        if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        try {
+            Date date = dateFormat.parse(receivedate);
+            Date date1= dateFormat.parse(returndate);
+            if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
             return "Save Data Success";
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "Save Failed";
     }
 
     @Override
     public String delete(String id, String receivedate, String returndate, String note, String employee) {
-        if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        try {
+            Date date = dateFormat.parse(receivedate);
+            Date date1= dateFormat.parse(returndate);
+            if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
             return "Delete Data Success";
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "Delete Failed";
     }

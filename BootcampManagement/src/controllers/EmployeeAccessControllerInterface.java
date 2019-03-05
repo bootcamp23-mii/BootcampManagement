@@ -15,7 +15,7 @@ import models.EmployeeAccess;
  *
  * @author Firsta
  */
-interface EmployeeAccessControllerInterface {
+    public interface EmployeeAccessControllerInterface {
     public EmployeeAccess getById (String id);
     public List<EmployeeAccess> getAll();
     public List<EmployeeAccess> search (Object keyword);

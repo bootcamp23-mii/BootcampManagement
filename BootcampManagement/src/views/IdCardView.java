@@ -5,11 +5,15 @@
  */
 package views;
 
+import controllers.EmployeeController;
 import controllers.IdCardController;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import models.Employee;
+import models.IdCard;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
 
@@ -18,26 +22,86 @@ import tools.HibernateUtil;
  * @author Firsta
  */
 public class IdCardView extends javax.swing.JInternalFrame {
+       SessionFactory factory = HibernateUtil.getSessionFactory();
        DefaultTableModel model = new DefaultTableModel();
-       
-       private SessionFactory factory = HibernateUtil.getSessionFactory();
        IdCardController icc = new IdCardController(factory);
+       EmployeeController ec = new EmployeeController(factory);
        
-       private List<models.IdCard> idcardlist = new ArrayList<>();
+       private List<models.Employee> employeelList= new ArrayList<>();
+       private List<models.IdCard> idcardList = new ArrayList<>();
        
-       private DefaultTableModel tableModel;
-    
     public IdCardView() {
         initComponents();
-        this.setBounds(0, 0, 0, 0);  
+        tableData(icc.getAll());
+        initUserConf();
+       
     }
     
-//    private boolean konfirmasi(){
-//        if (cbId.getSelectedIndex() == 0| | tfReceiveDate. || cbEmployee.getSelectedIndex() == 0) {
-//            JOptionPane.showMessageDialog(null, "Maaf data tidak boleh kosong");
+    private void initUserConf(){
+        for (Employee employee : ec.getAll()) {
+            cbEmployee.addItem(employee.getId()+" - "+employee.getName());
+        }
+
+    }
+    
+    private boolean confirm(){
+        if (tfId.getText().equals("") || cbEmployee.getSelectedIndex()==0 || 
+            tfReceiveDate.getText().equals("") ||
+            tfReturnDate.getText().equals("") || tfNote.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+            return false;
+        }
+        return true;
+    }
+    
+    private void filterhuruf(KeyEvent a) {
+        if (Character.isAlphabetic(a.getKeyChar())) {
+            a.consume();
+            JOptionPane.showMessageDialog(null, "Hanya Bisa Memasukan Karakter Angka");
+        }
+    }
+
+    private void clearing() {
+        tfId.setEnabled(true);
+        tfId.setEditable(true);
+        tfId.setText("");
+        tfReceiveDate.setText("");
+        tfReturnDate.setText("");
+        tfSearch.setText("");
+        cbEmployee.setSelectedIndex(0);
+    }                                     
+    
+    private boolean isEmpty(){
+        if(icc.search(tfId.getText()).isEmpty()){
+            return true;
+        }
+        return false;
+    }
+    
+//    void tampilEmployee(){
+//        for (Employee employee : ec.getAll()) {
+//            cbEmployee.addItem(employee.getId()+" - "+employee.getName());
 //        }
 //    }
-
+        
+    
+    private void tableData(List<IdCard> cards){
+        Object[] columnNames = {"No","ID","Name","Receive Date","Return Date","Note"};
+        Object[][] data = new Object[cards.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            Object[] objects = data[i];
+            data[i][0] = (i+1);
+            data[i][1] = cards.get(i).getId();
+            data[i][2] = cards.get(i).getEmployee().getName();
+            data[i][3] = cards.get(i).getReceivedate();
+            data[i][4] = cards.get(i).getReturndate();
+            data[i][5] = cards.get(i).getNote();
+            
+            model = new DefaultTableModel(data, columnNames);
+            tbIdCard.setModel(model);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,15 +120,19 @@ public class IdCardView extends javax.swing.JInternalFrame {
         lblEmployee = new javax.swing.JLabel();
         cbEmployee = new javax.swing.JComboBox<>();
         btSave = new javax.swing.JButton();
-        btSearch = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbIdCard = new javax.swing.JTable();
         lblSearch = new javax.swing.JLabel();
         tfSearch = new javax.swing.JTextField();
-        cbSearch = new javax.swing.JComboBox<>();
         btReset = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         tfId = new javax.swing.JTextField();
+        lblReturnDate = new javax.swing.JLabel();
+        lblNote = new javax.swing.JLabel();
+        tfReturnDate = new javax.swing.JTextField();
+        tfNote = new javax.swing.JTextField();
+        chbSearch = new javax.swing.JCheckBox();
+        btSearch = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -79,15 +147,26 @@ public class IdCardView extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("ID CARD");
 
         lblId.setText("ID");
 
         lblReceiveDate.setText("Receive Date");
 
+        tfReceiveDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfReceiveDateActionPerformed(evt);
+            }
+        });
+
         lblEmployee.setText("Name");
 
-        cbEmployee.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbEmployeeActionPerformed(evt);
+            }
+        });
 
         btSave.setText("Save");
         btSave.addActionListener(new java.awt.event.ActionListener() {
@@ -95,8 +174,6 @@ public class IdCardView extends javax.swing.JInternalFrame {
                 btSaveActionPerformed(evt);
             }
         });
-
-        btSearch.setText("Search");
 
         tbIdCard.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -113,111 +190,205 @@ public class IdCardView extends javax.swing.JInternalFrame {
 
         lblSearch.setText("Search");
 
-        cbSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Search", "ById" }));
-        cbSearch.addActionListener(new java.awt.event.ActionListener() {
+        btReset.setText("Reset");
+        btReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSearchActionPerformed(evt);
+                btResetActionPerformed(evt);
             }
         });
 
-        btReset.setText("Reset");
-
         btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
+
+        tfId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfIdActionPerformed(evt);
+            }
+        });
+
+        lblReturnDate.setText("Return Date");
+
+        lblNote.setText("Note");
+
+        chbSearch.setText("By id");
+        chbSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbSearchActionPerformed(evt);
+            }
+        });
+
+        btSearch.setText("Search");
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblEmployee)
-                    .addComponent(lblReceiveDate)
-                    .addComponent(lblId))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfReceiveDate, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(btSearch))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btSave)
-                                .addGap(20, 20, 20)
-                                .addComponent(btReset)
-                                .addGap(18, 18, 18)
-                                .addComponent(btDelete))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblSearch)
-                                .addGap(73, 73, 73)
-                                .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(80, 80, 80))
             .addGroup(layout.createSequentialGroup()
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(135, 135, 135)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblReceiveDate)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(296, 296, 296)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblId)
+                            .addComponent(lblEmployee))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tfReceiveDate, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfId, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(45, 45, 45)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNote)
+                                    .addComponent(lblReturnDate)
+                                    .addComponent(lblSearch))
+                                .addGap(15, 15, 15)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfNote, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(chbSearch)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btSave)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btReset)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btDelete)
+                                    .addComponent(btSearch)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                                .addGap(2, 2, 2)))
+                        .addGap(0, 50, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(218, 218, 218)
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblId)
+                    .addComponent(lblReturnDate)
+                    .addComponent(tfReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEmployee)
+                    .addComponent(cbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNote)
+                    .addComponent(tfNote, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblSearch)
-                                .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblId))
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btSearch)
-                            .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btDelete)
-                            .addComponent(btReset)
-                            .addComponent(btSave))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblEmployee)
-                            .addComponent(cbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblReceiveDate)
-                            .addComponent(tfReceiveDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+                    .addComponent(tfReceiveDate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblReceiveDate)
+                        .addComponent(lblSearch)
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 15, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chbSearch)
+                    .addComponent(btSearch))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btSave)
+                    .addComponent(btReset)
+                    .addComponent(btDelete))
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        // TODO add your handling code here:
+        if (confirm()) {
+            if (isEmpty()) JOptionPane.showMessageDialog(null, icc.save(tfId.getText(), 
+               tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(),
+               cbEmployee.getSelectedItem().toString().split(" - ")[0])); 
+            else 
+            {
+                try {
+                    int reply = JOptionPane.showConfirmDialog(null,
+                    "Anda yakin akan melakukan perubahan data?","Konfirmasi", 
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if(reply == JOptionPane.YES_OPTION){
+                        JOptionPane.showMessageDialog(null, icc.save(tfId.getText(), 
+                        tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(), 
+                        cbEmployee.getSelectedItem().toString().split(" - ")[0] ));
+                        tableData(icc.getAll());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            tableData(icc.getAll());
+        }
     }//GEN-LAST:event_btSaveActionPerformed
 
-    private void cbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSearchActionPerformed
+    private void cbEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEmployeeActionPerformed
+
+    }//GEN-LAST:event_cbEmployeeActionPerformed
+
+    private void btResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResetActionPerformed
+        clearing();
+    }//GEN-LAST:event_btResetActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        if(tfSearch.equals("")) JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+        else
+        {
+            try {
+                int reply = JOptionPane.showConfirmDialog(null,
+                "Anda yakin ingin menghapus data?","Konfirmasi",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(reply == JOptionPane.YES_OPTION){
+                    JOptionPane.showMessageDialog(null, 
+                    icc.delete(tfId.getText(), tfReceiveDate.getText(),
+                    tfReturnDate.getText(), tfNote.getText(), cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+                    tableData(icc.getAll());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableData(icc.getAll());
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
+        tableData(icc.search(tfSearch.getText()));
+    }//GEN-LAST:event_btSearchActionPerformed
+
+    private void chbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbSearchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbSearchActionPerformed
+    }//GEN-LAST:event_chbSearchActionPerformed
+
+    private void tfReceiveDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfReceiveDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfReceiveDateActionPerformed
+
+    private void tfIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfIdActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -226,18 +397,22 @@ public class IdCardView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btSave;
     private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbEmployee;
-    private javax.swing.JComboBox<String> cbSearch;
+    private javax.swing.JCheckBox chbSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblEmployee;
     private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblNote;
     private javax.swing.JLabel lblReceiveDate;
+    private javax.swing.JLabel lblReturnDate;
     private javax.swing.JLabel lblSearch;
     private javax.swing.JTable tbIdCard;
     private javax.swing.JTextField tfId;
+    private javax.swing.JTextField tfNote;
     private javax.swing.JTextField tfReceiveDate;
+    private javax.swing.JTextField tfReturnDate;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,7 @@ import models.Village;
  *
  * @author Firsta
  */
-interface VillageControllerInterface {
+    public interface VillageControllerInterface {
     public Village getById (String id);
     public List<Village> getAll();
     public List<Village> search (Object keyword);

@@ -13,7 +13,7 @@ import models.Village;
  *
  * @author Firsta
  */
-interface CompanyControllerInterface {
+    public interface CompanyControllerInterface {
     public Company getById(String id);
     public List<Company> getAll();
     public List<Company> search(Object keyword);

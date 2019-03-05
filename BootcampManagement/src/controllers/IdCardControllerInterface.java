@@ -13,7 +13,7 @@ import models.IdCard;
  *
  * @author Firsta
  */
-interface IdCardControllerInterface {
+    public interface IdCardControllerInterface {
     public IdCard getByid(String id);
     public List<IdCard> getAll();
     public List<IdCard> search(Object keyword);
