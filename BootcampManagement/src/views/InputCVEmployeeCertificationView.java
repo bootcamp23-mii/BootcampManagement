@@ -6,6 +6,12 @@
 package views;
 
 import controllers.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Certificate;
+import models.EmployeeCertification;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -17,13 +23,56 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
 
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private EmployeeCertificationControllerInterface c = new EmployeeCertificationController(factory);
+    private CertificateControllerInterface cc = new CertificateController(factory);
+    
+    private DefaultTableModel tableModel;
+    private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
+    private List<models.Certificate> certificateList = new ArrayList<>();
     /**
      * Creates new form InputCVEmployeeCertificateView
      */
     public InputCVEmployeeCertificationView() {
         initComponents();
+        setDefaultCondition();
     }
 
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+        dcEmployeeCertification.setDateFormat(dateFormatOut);
+        tfCertificateDate.setEnabled(false);
+        getRoleList();
+        setComboBox();
+    }
+
+    private void showAllTable(List<EmployeeCertification> ec){
+        Object[] columnNames = {"Nomor", "Certificate", "Date", "Certificate Number"};
+        Object[][] data = new Object[ec.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = ec.get(i).getCertificate().getName();
+                data[i][2] = dateFormatOut.format(ec.get(i).getCertificatedate());
+                data[i][3] = ec.get(i).getCertificatenumber();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbEmpCertification.setModel(tableModel);
+    }
+    
+    private void getRoleList(){
+        for (Certificate data : cc.getAll()) {
+            certificateList.add(data);
+        }
+    }
+    
+    private void setComboBox(){
+        for (Certificate data : certificateList) {
+            cbEmpCertification.addItem(data.getId()+" - "+data.getName());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,13 +87,14 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         lblTitle = new javax.swing.JLabel();
         pnMTRCenter = new javax.swing.JPanel();
         pnMTRC1 = new javax.swing.JPanel();
-        lblEducationHis1 = new javax.swing.JLabel();
-        cbEducationHis = new javax.swing.JComboBox<>();
+        lblEmpCertification = new javax.swing.JLabel();
+        cbEmpCertification = new javax.swing.JComboBox<>();
         pnMTRC2 = new javax.swing.JPanel();
         lblEmpCertification2 = new javax.swing.JLabel();
-        tfCertificateNumber = new javax.swing.JTextField();
         lblEmpCertification3 = new javax.swing.JLabel();
-        tfDate = new javax.swing.JTextField();
+        dcEmployeeCertification = new datechooser.beans.DateChooserCombo();
+        tfCertificateDate = new javax.swing.JTextField();
+        tfCertificateNumber = new javax.swing.JTextField();
         pnMTRC3 = new javax.swing.JPanel();
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
@@ -72,7 +122,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTop.setLayout(pnMTopLayout);
         pnMTopLayout.setHorizontalGroup(
             pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 716, Short.MAX_VALUE)
+            .addGap(0, 700, Short.MAX_VALUE)
             .addGroup(pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnMTopLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -98,40 +148,57 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTRC1.setPreferredSize(new java.awt.Dimension(630, 35));
         pnMTRC1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING));
 
-        lblEducationHis1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblEducationHis1.setText("Certification: ");
-        lblEducationHis1.setInheritsPopupMenu(false);
-        pnMTRC1.add(lblEducationHis1);
+        lblEmpCertification.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblEmpCertification.setText("Certification: ");
+        lblEmpCertification.setInheritsPopupMenu(false);
+        pnMTRC1.add(lblEmpCertification);
 
-        cbEducationHis.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cbEducationHis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
-        cbEducationHis.setMinimumSize(new java.awt.Dimension(100, 25));
-        cbEducationHis.setPreferredSize(new java.awt.Dimension(350, 25));
-        pnMTRC1.add(cbEducationHis);
+        cbEmpCertification.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cbEmpCertification.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
+        cbEmpCertification.setMinimumSize(new java.awt.Dimension(100, 25));
+        cbEmpCertification.setPreferredSize(new java.awt.Dimension(350, 25));
+        pnMTRC1.add(cbEmpCertification);
 
         pnMTRCenter.add(pnMTRC1);
 
         pnMTRC2.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC2.setPreferredSize(new java.awt.Dimension(630, 35));
-        pnMTRC2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        pnMTRC2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblEmpCertification2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblEmpCertification2.setText("Number: ");
-        pnMTRC2.add(lblEmpCertification2);
+        pnMTRC2.add(lblEmpCertification2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+
+        lblEmpCertification3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblEmpCertification3.setText("  Date: ");
+        pnMTRC2.add(lblEmpCertification3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, -1, -1));
+
+        dcEmployeeCertification.addCommitListener(new datechooser.events.CommitListener() {
+            public void onCommit(datechooser.events.CommitEvent evt) {
+                dcEmployeeCertificationOnCommit(evt);
+            }
+        });
+        pnMTRC2.add(dcEmployeeCertification, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 30, -1));
+
+        tfCertificateDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfCertificateDate.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfCertificateDate.setPreferredSize(new java.awt.Dimension(150, 25));
+        tfCertificateDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfCertificateDateActionPerformed(evt);
+            }
+        });
+        pnMTRC2.add(tfCertificateDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, -1, -1));
 
         tfCertificateNumber.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         tfCertificateNumber.setMinimumSize(new java.awt.Dimension(6, 25));
         tfCertificateNumber.setPreferredSize(new java.awt.Dimension(150, 25));
-        pnMTRC2.add(tfCertificateNumber);
-
-        lblEmpCertification3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblEmpCertification3.setText("  Date: ");
-        pnMTRC2.add(lblEmpCertification3);
-
-        tfDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfDate.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfDate.setPreferredSize(new java.awt.Dimension(150, 25));
-        pnMTRC2.add(tfDate);
+        tfCertificateNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfCertificateNumberActionPerformed(evt);
+            }
+        });
+        pnMTRC2.add(tfCertificateNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, -1));
 
         pnMTRCenter.add(pnMTRC2);
 
@@ -150,33 +217,36 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTRC4.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC4.setPreferredSize(new java.awt.Dimension(640, 250));
 
-        scpEmpCertification.setBackground(new java.awt.Color(204, 255, 255));
-        scpEmpCertification.setPreferredSize(new java.awt.Dimension(452, 240));
+        scpEmpCertification.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scpEmpCertification.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         tbEmpCertification.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
+        tbEmpCertification.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbEmpCertificationMouseClicked(evt);
+            }
+        });
         scpEmpCertification.setViewportView(tbEmpCertification);
 
         javax.swing.GroupLayout pnMTRC4Layout = new javax.swing.GroupLayout(pnMTRC4);
         pnMTRC4.setLayout(pnMTRC4Layout);
         pnMTRC4Layout.setHorizontalGroup(
             pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpEmpCertification, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(scpEmpCertification, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
         pnMTRC4Layout.setVerticalGroup(
             pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnMTRC4Layout.createSequentialGroup()
-                .addComponent(scpEmpCertification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 10, Short.MAX_VALUE))
+                .addGap(5, 5, 5)
+                .addComponent(scpEmpCertification, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnMTRCenter.add(pnMTRC4);
@@ -207,7 +277,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         );
         pnMTRightLayout.setVerticalGroup(
             pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -223,7 +293,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         );
         pnMTLeftLayout.setVerticalGroup(
             pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -232,7 +302,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,13 +316,39 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_btOkeActionPerformed
 
+    private void tfCertificateDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCertificateDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfCertificateDateActionPerformed
+
+    private void tfCertificateNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCertificateNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfCertificateNumberActionPerformed
+
+    private void dcEmployeeCertificationOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dcEmployeeCertificationOnCommit
+        tfCertificateDate.setText(dcEmployeeCertification.getText());
+    }//GEN-LAST:event_dcEmployeeCertificationOnCommit
+
+    private void tbEmpCertificationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmpCertificationMouseClicked
+        String temp="";
+        for (Certificate data : certificateList) {
+            if (data.getName().equals(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 1).toString()))temp=data.getId();
+        }
+        for (int i = 0; i < cbEmpCertification.getItemCount(); i++) {
+            if (cbEmpCertification.getItemAt(i).split(" - ")[0].equals(temp))
+            cbEmpCertification.setSelectedIndex(i);
+        }
+        tfCertificateDate.setText(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 2).toString());
+        tfCertificateNumber.setText(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 3).toString());
+    }//GEN-LAST:event_tbEmpCertificationMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
-    private javax.swing.JComboBox<String> cbEducationHis;
-    private javax.swing.JLabel lblEducationHis1;
+    private javax.swing.JComboBox<String> cbEmpCertification;
+    private datechooser.beans.DateChooserCombo dcEmployeeCertification;
+    private javax.swing.JLabel lblEmpCertification;
     private javax.swing.JLabel lblEmpCertification2;
     private javax.swing.JLabel lblEmpCertification3;
     private javax.swing.JLabel lblTitle;
@@ -268,7 +364,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
     private javax.swing.JPanel pnMain;
     private javax.swing.JScrollPane scpEmpCertification;
     private javax.swing.JTable tbEmpCertification;
+    private javax.swing.JTextField tfCertificateDate;
     private javax.swing.JTextField tfCertificateNumber;
-    private javax.swing.JTextField tfDate;
     // End of variables declaration//GEN-END:variables
 }

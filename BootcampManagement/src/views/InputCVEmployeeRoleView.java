@@ -6,6 +6,17 @@
 package views;
 
 import controllers.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import models.*;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -17,14 +28,60 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
 
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private EmployeeRoleControllerInterface c = new EmployeeRoleController(factory);
+    private RoleControllerInterface cr = new RoleController(factory);
 
+    private DefaultTableModel tableModel;
+    private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
+    
+    private List<models.Role> roleList = new ArrayList<>();
     /**
      * Creates new form InputCVEmployeeRoleView
      */
     public InputCVEmployeeRoleView() {
         initComponents();
+        setDefaultCondition();
+        
+    }
+    
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+        dcStartDate.setDateFormat(dateFormatOut);
+        dcEndDate.setDateFormat(dateFormatOut);
+        tfStartDate.setEnabled(false);
+        tfEndDate.setEnabled(false);
+        getRoleList();
+        setComboBox();
     }
 
+    private void showAllTable(List<EmployeeRole> er){
+        Object[] columnNames = {"Nomor", "Role", "Start Date", "End Date"};
+        Object[][] data = new Object[er.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = er.get(i).getRole().getName();
+                data[i][2] = dateFormatOut.format(er.get(i).getStartdate());
+                data[i][3] = dateFormatOut.format(er.get(i).getEnddate());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbEmployeeRole.setModel(tableModel);
+    }
+    
+    private void getRoleList(){
+        for (Role data : cr.getAll()) {
+            roleList.add(data);
+        }
+    }
+    
+    private void setComboBox(){
+        for (Role data : roleList) {
+            cbEmpRole.addItem(data.getId()+" - "+data.getName());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,21 +101,21 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         cbEmpRole = new javax.swing.JComboBox<>();
         pnMTRC2 = new javax.swing.JPanel();
         lblRole2 = new javax.swing.JLabel();
-        ftfRoleStart = new javax.swing.JFormattedTextField();
         lblRole3 = new javax.swing.JLabel();
-        ftfRoleEnd = new javax.swing.JFormattedTextField();
-        btClear = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
         btSave = new javax.swing.JButton();
+        dcStartDate = new datechooser.beans.DateChooserCombo();
+        dcEndDate = new datechooser.beans.DateChooserCombo();
+        tfEndDate = new javax.swing.JTextField();
+        tfStartDate = new javax.swing.JTextField();
         pnMTRC3 = new javax.swing.JPanel();
-        scpTable = new javax.swing.JScrollPane();
+        scpEmployeeRole = new javax.swing.JScrollPane();
         tbEmployeeRole = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
-        setBackground(new java.awt.Color(204, 255, 255));
-        setBorder(null);
         setPreferredSize(new java.awt.Dimension(700, 500));
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
@@ -112,215 +169,303 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         pnMTRCenter.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         pnMTRC1.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC1.setPreferredSize(new java.awt.Dimension(640, 101));
+        pnMTRC1.setPreferredSize(new java.awt.Dimension(640, 40));
+        pnMTRC1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblRole1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblRole1.setText(" Role:  ");
+        pnMTRC1.add(lblRole1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         cbEmpRole.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         cbEmpRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
         cbEmpRole.setMinimumSize(new java.awt.Dimension(56, 25));
         cbEmpRole.setName(""); // NOI18N
         cbEmpRole.setPreferredSize(new java.awt.Dimension(140, 25));
-
-        javax.swing.GroupLayout pnMTRC1Layout = new javax.swing.GroupLayout(pnMTRC1);
-        pnMTRC1.setLayout(pnMTRC1Layout);
-        pnMTRC1Layout.setHorizontalGroup(
-            pnMTRC1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnMTRC1Layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(lblRole1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbEmpRole, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(401, Short.MAX_VALUE))
-        );
-        pnMTRC1Layout.setVerticalGroup(
-            pnMTRC1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnMTRC1Layout.createSequentialGroup()
-                .addContainerGap(65, Short.MAX_VALUE)
-                .addGroup(pnMTRC1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRole1)
-                    .addComponent(cbEmpRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+        pnMTRC1.add(cbEmpRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 167, -1));
 
         pnMTRCenter.add(pnMTRC1);
 
         pnMTRC2.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC2.setPreferredSize(new java.awt.Dimension(640, 103));
+        pnMTRC2.setPreferredSize(new java.awt.Dimension(640, 70));
+        pnMTRC2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblRole2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblRole2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblRole2.setText("  Start Date: ");
-
-        ftfRoleStart.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
-        ftfRoleStart.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        ftfRoleStart.setPreferredSize(new java.awt.Dimension(100, 25));
+        pnMTRC2.add(lblRole2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 25));
 
         lblRole3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblRole3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblRole3.setText("End Date:");
+        pnMTRC2.add(lblRole3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 42, -1, -1));
 
-        ftfRoleEnd.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
-        ftfRoleEnd.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        ftfRoleEnd.setPreferredSize(new java.awt.Dimension(100, 25));
-
-        btClear.setText("Clear");
-        btClear.addActionListener(new java.awt.event.ActionListener() {
+        btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btClearActionPerformed(evt);
+                btDeleteActionPerformed(evt);
             }
         });
+        pnMTRC2.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, -1, 25));
 
         btSave.setText("Save");
+        pnMTRC2.add(btSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 40, -1, 25));
 
-        javax.swing.GroupLayout pnMTRC2Layout = new javax.swing.GroupLayout(pnMTRC2);
-        pnMTRC2.setLayout(pnMTRC2Layout);
-        pnMTRC2Layout.setHorizontalGroup(
-            pnMTRC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnMTRC2Layout.createSequentialGroup()
-                .addGroup(pnMTRC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnMTRC2Layout.createSequentialGroup()
-                        .addComponent(lblRole2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ftfRoleStart, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnMTRC2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblRole3)
-                        .addGap(18, 18, 18)
-                        .addComponent(ftfRoleEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(btClear)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btSave)
-                .addContainerGap(264, Short.MAX_VALUE))
-        );
-        pnMTRC2Layout.setVerticalGroup(
-            pnMTRC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnMTRC2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnMTRC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ftfRoleStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblRole2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnMTRC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnMTRC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblRole3)
-                        .addComponent(ftfRoleEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnMTRC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btClear, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(36, Short.MAX_VALUE))
-        );
+        dcStartDate.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+            new datechooser.view.appearance.ViewAppearance("custom",
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    true,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 255),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(128, 128, 128),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(255, 0, 0),
+                    false,
+                    false,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                (datechooser.view.BackRenderer)null,
+                false,
+                true)));
+    try {
+        dcStartDate.setDefaultPeriods(new datechooser.model.multiple.PeriodSet(new datechooser.model.multiple.Period(new java.util.GregorianCalendar(2019, 2, 9),
+            new java.util.GregorianCalendar(2019, 2, 9))));
+} catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
+    e1.printStackTrace();
+    }
+    dcStartDate.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+        public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+            dcStartDateOnSelectionChange(evt);
+        }
+    });
+    dcStartDate.addCommitListener(new datechooser.events.CommitListener() {
+        public void onCommit(datechooser.events.CommitEvent evt) {
+            dcStartDateOnCommit(evt);
+        }
+    });
+    pnMTRC2.add(dcStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, 30, -1));
 
-        pnMTRCenter.add(pnMTRC2);
+    dcEndDate.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+        new datechooser.view.appearance.ViewAppearance("custom",
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                true,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 255),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(128, 128, 128),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(255, 0, 0),
+                false,
+                false,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            (datechooser.view.BackRenderer)null,
+            false,
+            true)));
+dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+    public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+        dcEndDateOnSelectionChange(evt);
+    }
+    });
+    dcEndDate.addCommitListener(new datechooser.events.CommitListener() {
+        public void onCommit(datechooser.events.CommitEvent evt) {
+            dcEndDateOnCommit(evt);
+        }
+    });
+    pnMTRC2.add(dcEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 40, 30, -1));
+    pnMTRC2.add(tfEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 120, 30));
+    pnMTRC2.add(tfStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 120, 30));
 
-        pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 150));
+    pnMTRCenter.add(pnMTRC2);
 
-        tbEmployeeRole.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        scpTable.setViewportView(tbEmployeeRole);
+    pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 150));
 
-        javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
-        pnMTRC3.setLayout(pnMTRC3Layout);
-        pnMTRC3Layout.setHorizontalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpTable, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-        );
-        pnMTRC3Layout.setVerticalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpTable, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-        );
+    scpEmployeeRole.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    scpEmployeeRole.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        pnMTRCenter.add(pnMTRC3);
+    tbEmployeeRole.setModel(new javax.swing.table.DefaultTableModel(
+        new Object [][] {
 
-        pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
+        },
+        new String [] {
 
-        pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
+        }
+    ));
+    tbEmployeeRole.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            tbEmployeeRoleMouseClicked(evt);
+        }
+    });
+    scpEmployeeRole.setViewportView(tbEmployeeRole);
 
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
-        btOke.getAccessibleContext().setAccessibleName("");
+    javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
+    pnMTRC3.setLayout(pnMTRC3Layout);
+    pnMTRC3Layout.setHorizontalGroup(
+        pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(scpEmployeeRole, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+    );
+    pnMTRC3Layout.setVerticalGroup(
+        pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(scpEmployeeRole, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
 
-        pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
+    pnMTRCenter.add(pnMTRC3);
 
-        pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
+    pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout pnMTRightLayout = new javax.swing.GroupLayout(pnMTRight);
-        pnMTRight.setLayout(pnMTRightLayout);
-        pnMTRightLayout.setHorizontalGroup(
-            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        pnMTRightLayout.setVerticalGroup(
-            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
-        );
+    pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
 
-        pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
+    btOke.setText("Oke");
+    btOke.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btOkeActionPerformed(evt);
+        }
+    });
+    pnMTBottom.add(btOke);
+    btOke.getAccessibleContext().setAccessibleName("");
 
-        pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
+    pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
-        javax.swing.GroupLayout pnMTLeftLayout = new javax.swing.GroupLayout(pnMTLeft);
-        pnMTLeft.setLayout(pnMTLeftLayout);
-        pnMTLeftLayout.setHorizontalGroup(
-            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        pnMTLeftLayout.setVerticalGroup(
-            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
-        );
+    pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
 
-        pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
+    javax.swing.GroupLayout pnMTRightLayout = new javax.swing.GroupLayout(pnMTRight);
+    pnMTRight.setLayout(pnMTRightLayout);
+    pnMTRightLayout.setHorizontalGroup(
+        pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 20, Short.MAX_VALUE)
+    );
+    pnMTRightLayout.setVerticalGroup(
+        pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 380, Short.MAX_VALUE)
+    );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
-        );
+    pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
 
-        pack();
+    pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
+
+    javax.swing.GroupLayout pnMTLeftLayout = new javax.swing.GroupLayout(pnMTLeft);
+    pnMTLeft.setLayout(pnMTLeftLayout);
+    pnMTLeftLayout.setHorizontalGroup(
+        pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 20, Short.MAX_VALUE)
+    );
+    pnMTLeftLayout.setVerticalGroup(
+        pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 380, Short.MAX_VALUE)
+    );
+
+    pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+    );
+
+    pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btOkeActionPerformed
 
-    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btClearActionPerformed
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void dcStartDateOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dcStartDateOnSelectionChange
+
+    }//GEN-LAST:event_dcStartDateOnSelectionChange
+
+    private void dcEndDateOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dcEndDateOnSelectionChange
+
+    }//GEN-LAST:event_dcEndDateOnSelectionChange
+
+    private void dcEndDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dcEndDateOnCommit
+        tfEndDate.setText(dcEndDate.getText());
+    }//GEN-LAST:event_dcEndDateOnCommit
+
+    private void dcStartDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dcStartDateOnCommit
+        tfStartDate.setText(dcStartDate.getText());
+    }//GEN-LAST:event_dcStartDateOnCommit
+
+    private void tbEmployeeRoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmployeeRoleMouseClicked
+        String temp="";
+        for (Role data : roleList) {
+            if (data.getName().equals(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 1).toString()))temp=data.getId();
+        }
+        for (int i = 0; i < cbEmpRole.getItemCount(); i++) {
+            if (cbEmpRole.getItemAt(i).split(" - ")[0].equals(temp))
+            cbEmpRole.setSelectedIndex(i);
+        }
+        tfStartDate.setText(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 2).toString());
+        tfEndDate.setText(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 3).toString());
+    }//GEN-LAST:event_tbEmployeeRoleMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btClear;
+    private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbEmpRole;
-    private javax.swing.JFormattedTextField ftfRoleEnd;
-    private javax.swing.JFormattedTextField ftfRoleStart;
+    private datechooser.beans.DateChooserCombo dcEndDate;
+    private datechooser.beans.DateChooserCombo dcStartDate;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblRole1;
     private javax.swing.JLabel lblRole2;
@@ -335,7 +480,9 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JScrollPane scpTable;
+    private javax.swing.JScrollPane scpEmployeeRole;
     private javax.swing.JTable tbEmployeeRole;
+    private javax.swing.JTextField tfEndDate;
+    private javax.swing.JTextField tfStartDate;
     // End of variables declaration//GEN-END:variables
 }

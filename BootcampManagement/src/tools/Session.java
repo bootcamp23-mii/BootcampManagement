@@ -10,7 +10,7 @@ package tools;
  * @author FES
  */
 public class Session {
-    static String session;
+    static String session = "14303";
 
     public static String getSession() {
         return session;

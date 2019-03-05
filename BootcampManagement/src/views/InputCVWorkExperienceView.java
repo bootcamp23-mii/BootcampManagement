@@ -6,6 +6,13 @@
 package views;
 
 import controllers.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.EmployeeRole;
+import models.Role;
+import models.WorkExperience;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -18,13 +25,45 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private WorkExperienceControllerInterface c = new WorkExperienceController(factory);
     
+    private DefaultTableModel tableModel;
+    private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
+    
     /**
      * Creates new form InputCVWorkExperienceView
      */
     public InputCVWorkExperienceView() {
         initComponents();
+        setDefaultCondition();
+        
+    }
+    
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+        dcStartDate.setDateFormat(dateFormatOut);
+        dcEndDate.setDateFormat(dateFormatOut);
+        tfStartDate.setEnabled(false);
+        tfEndDate.setEnabled(false);
+
     }
 
+    private void showAllTable(List<WorkExperience> er){
+        Object[] columnNames = {"Nomor", "Name", "Start Date", "End Date", "Description"};
+        Object[][] data = new Object[er.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = er.get(i).getName();
+                data[i][2] = dateFormatOut.format(er.get(i).getStartdate());
+                data[i][3] = dateFormatOut.format(er.get(i).getEnddate());
+                data[i][4] = er.get(i).getDescription();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbWorkExperience.setModel(tableModel);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,21 +79,23 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         pnMTRCenter = new javax.swing.JPanel();
         pnMTRC1 = new javax.swing.JPanel();
         lblEducationHis1 = new javax.swing.JLabel();
-        tfCertificateNumber1 = new javax.swing.JTextField();
+        tfName = new javax.swing.JTextField();
         pnMTRC2 = new javax.swing.JPanel();
         lblEmpCertification2 = new javax.swing.JLabel();
-        tfCertificateNumber = new javax.swing.JTextField();
+        dcStartDate = new datechooser.beans.DateChooserCombo();
         lblEmpCertification3 = new javax.swing.JLabel();
-        tfDate = new javax.swing.JTextField();
+        dcEndDate = new datechooser.beans.DateChooserCombo();
+        tfStartDate = new javax.swing.JTextField();
+        tfEndDate = new javax.swing.JTextField();
         pnMTRC5 = new javax.swing.JPanel();
-        lblEducationHis2 = new javax.swing.JLabel();
-        tfCertificateNumber2 = new javax.swing.JTextField();
+        lblWorkExperience2 = new javax.swing.JLabel();
+        tfDescription = new javax.swing.JTextField();
         pnMTRC3 = new javax.swing.JPanel();
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         pnMTRC4 = new javax.swing.JPanel();
-        scpEmpCertification = new javax.swing.JScrollPane();
-        tbEmpCertification = new javax.swing.JTable();
+        scpWorkExperience = new javax.swing.JScrollPane();
+        tbWorkExperience = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
@@ -76,7 +117,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         pnMTop.setLayout(pnMTopLayout);
         pnMTopLayout.setHorizontalGroup(
             pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 716, Short.MAX_VALUE)
+            .addGap(0, 715, Short.MAX_VALUE)
             .addGroup(pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnMTopLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -107,34 +148,46 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         lblEducationHis1.setInheritsPopupMenu(false);
         pnMTRC1.add(lblEducationHis1);
 
-        tfCertificateNumber1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfCertificateNumber1.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfCertificateNumber1.setPreferredSize(new java.awt.Dimension(438, 25));
-        pnMTRC1.add(tfCertificateNumber1);
+        tfName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfName.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfName.setPreferredSize(new java.awt.Dimension(438, 25));
+        pnMTRC1.add(tfName);
 
         pnMTRCenter.add(pnMTRC1);
 
         pnMTRC2.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC2.setPreferredSize(new java.awt.Dimension(630, 35));
-        pnMTRC2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        pnMTRC2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblEmpCertification2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblEmpCertification2.setText("Start Date: ");
-        pnMTRC2.add(lblEmpCertification2);
-
-        tfCertificateNumber.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfCertificateNumber.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfCertificateNumber.setPreferredSize(new java.awt.Dimension(150, 25));
-        pnMTRC2.add(tfCertificateNumber);
+        pnMTRC2.add(lblEmpCertification2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        pnMTRC2.add(dcStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, 20, -1));
 
         lblEmpCertification3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblEmpCertification3.setText("  End Date: ");
-        pnMTRC2.add(lblEmpCertification3);
+        pnMTRC2.add(lblEmpCertification3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, -1, -1));
+        pnMTRC2.add(dcEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 0, 20, -1));
 
-        tfDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfDate.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfDate.setPreferredSize(new java.awt.Dimension(150, 25));
-        pnMTRC2.add(tfDate);
+        tfStartDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfStartDate.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfStartDate.setPreferredSize(new java.awt.Dimension(150, 25));
+        tfStartDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfStartDateActionPerformed(evt);
+            }
+        });
+        pnMTRC2.add(tfStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, -1));
+
+        tfEndDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfEndDate.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfEndDate.setPreferredSize(new java.awt.Dimension(150, 25));
+        tfEndDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfEndDateActionPerformed(evt);
+            }
+        });
+        pnMTRC2.add(tfEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
 
         pnMTRCenter.add(pnMTRC2);
 
@@ -142,15 +195,15 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         pnMTRC5.setPreferredSize(new java.awt.Dimension(640, 70));
         pnMTRC5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        lblEducationHis2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblEducationHis2.setText("Description: ");
-        lblEducationHis2.setInheritsPopupMenu(false);
-        pnMTRC5.add(lblEducationHis2);
+        lblWorkExperience2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblWorkExperience2.setText("Description: ");
+        lblWorkExperience2.setInheritsPopupMenu(false);
+        pnMTRC5.add(lblWorkExperience2);
 
-        tfCertificateNumber2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfCertificateNumber2.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfCertificateNumber2.setPreferredSize(new java.awt.Dimension(630, 25));
-        pnMTRC5.add(tfCertificateNumber2);
+        tfDescription.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfDescription.setMinimumSize(new java.awt.Dimension(6, 25));
+        tfDescription.setPreferredSize(new java.awt.Dimension(630, 25));
+        pnMTRC5.add(tfDescription);
 
         pnMTRCenter.add(pnMTRC5);
 
@@ -170,34 +223,35 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         pnMTRC4.setPreferredSize(new java.awt.Dimension(640, 170));
         pnMTRC4.setRequestFocusEnabled(false);
 
-        scpEmpCertification.setBackground(new java.awt.Color(204, 255, 255));
-        scpEmpCertification.setPreferredSize(new java.awt.Dimension(452, 170));
+        scpWorkExperience.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scpWorkExperience.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        tbEmpCertification.setModel(new javax.swing.table.DefaultTableModel(
+        tbWorkExperience.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        tbEmpCertification.setPreferredSize(new java.awt.Dimension(300, 170));
-        scpEmpCertification.setViewportView(tbEmpCertification);
+        tbWorkExperience.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbWorkExperienceMouseClicked(evt);
+            }
+        });
+        scpWorkExperience.setViewportView(tbWorkExperience);
 
         javax.swing.GroupLayout pnMTRC4Layout = new javax.swing.GroupLayout(pnMTRC4);
         pnMTRC4.setLayout(pnMTRC4Layout);
         pnMTRC4Layout.setHorizontalGroup(
             pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpEmpCertification, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnMTRC4Layout.createSequentialGroup()
+                .addComponent(scpWorkExperience, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                .addContainerGap())
         );
         pnMTRC4Layout.setVerticalGroup(
             pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnMTRC4Layout.createSequentialGroup()
-                .addComponent(scpEmpCertification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(scpWorkExperience, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
         );
 
         pnMTRCenter.add(pnMTRC4);
@@ -228,7 +282,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         );
         pnMTRightLayout.setVerticalGroup(
             pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 407, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -244,7 +298,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         );
         pnMTLeftLayout.setVerticalGroup(
             pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 407, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -253,7 +307,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnMain, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,16 +321,33 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btOkeActionPerformed
 
+    private void tfStartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStartDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfStartDateActionPerformed
+
+    private void tfEndDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfEndDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfEndDateActionPerformed
+
+    private void tbWorkExperienceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbWorkExperienceMouseClicked
+        tfName.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 1).toString());
+        tfStartDate.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 2).toString());
+        tfStartDate.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 3).toString());
+        tfDescription.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 4).toString());
+    }//GEN-LAST:event_tbWorkExperienceMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
+    private datechooser.beans.DateChooserCombo dcEndDate;
+    private datechooser.beans.DateChooserCombo dcStartDate;
     private javax.swing.JLabel lblEducationHis1;
-    private javax.swing.JLabel lblEducationHis2;
     private javax.swing.JLabel lblEmpCertification2;
     private javax.swing.JLabel lblEmpCertification3;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblWorkExperience2;
     private javax.swing.JPanel pnMTBottom;
     private javax.swing.JPanel pnMTLeft;
     private javax.swing.JPanel pnMTRC1;
@@ -288,11 +359,11 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JScrollPane scpEmpCertification;
-    private javax.swing.JTable tbEmpCertification;
-    private javax.swing.JTextField tfCertificateNumber;
-    private javax.swing.JTextField tfCertificateNumber1;
-    private javax.swing.JTextField tfCertificateNumber2;
-    private javax.swing.JTextField tfDate;
+    private javax.swing.JScrollPane scpWorkExperience;
+    private javax.swing.JTable tbWorkExperience;
+    private javax.swing.JTextField tfDescription;
+    private javax.swing.JTextField tfEndDate;
+    private javax.swing.JTextField tfName;
+    private javax.swing.JTextField tfStartDate;
     // End of variables declaration//GEN-END:variables
 }

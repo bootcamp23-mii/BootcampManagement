@@ -6,6 +6,9 @@
 package views;
 
 import controllers.*;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Achievement;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -17,13 +20,35 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private AchievementControllerInterface c = new AchievementController(factory);
+    
+    private DefaultTableModel tableModel;
     /**
      * Creates new form InputCVAchievementView
      */
     public InputCVAchievementView() {
         initComponents();
+        setDefaultCondition();
     }
 
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+    }
+
+    private void showAllTable(List<Achievement> dataList){
+        Object[] columnNames = {"Nomor","Achievement"};
+        Object[][] data = new Object[dataList.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = dataList.get(i).getName();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbAchievement.setModel(tableModel);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,7 +69,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
-        scpAchievement = new javax.swing.JScrollPane();
+        spcAchievement = new javax.swing.JScrollPane();
         tbAchievement = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
@@ -119,31 +144,26 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 280));
 
-        scpAchievement.setBackground(new java.awt.Color(204, 255, 255));
+        spcAchievement.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        spcAchievement.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        spcAchievement.setPreferredSize(new java.awt.Dimension(640, 280));
 
         tbAchievement.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        scpAchievement.setViewportView(tbAchievement);
+        tbAchievement.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbAchievementMouseClicked(evt);
+            }
+        });
+        spcAchievement.setViewportView(tbAchievement);
 
-        javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
-        pnMTRC3.setLayout(pnMTRC3Layout);
-        pnMTRC3Layout.setHorizontalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpAchievement, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-        );
-        pnMTRC3Layout.setVerticalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpAchievement, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-        );
+        pnMTRC3.add(spcAchievement);
 
         pnMTRCenter.add(pnMTRC3);
 
@@ -212,6 +232,10 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btOkeActionPerformed
 
+    private void tbAchievementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAchievementMouseClicked
+        tfAchievement.setText(tbAchievement.getValueAt(tbAchievement.getSelectedRow(), 1).toString());
+    }//GEN-LAST:event_tbAchievementMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
@@ -228,7 +252,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JScrollPane scpAchievement;
+    private javax.swing.JScrollPane spcAchievement;
     private javax.swing.JTable tbAchievement;
     private javax.swing.JTextField tfAchievement;
     // End of variables declaration//GEN-END:variables

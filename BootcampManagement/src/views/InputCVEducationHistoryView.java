@@ -6,6 +6,11 @@
 package views;
 
 import controllers.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Education;
+import models.EducationHistory;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -17,14 +22,56 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
 
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private EducationHistoryControllerInterface c = new EducationHistoryController(factory);
+    private EducationControllerInterface ce = new EducationController(factory);
     
+    private DefaultTableModel tableModel;
+    
+    private List<models.Education> educationList = new ArrayList<>();
     /**
      * Creates new form InputCVEducationHistory
      */
     public InputCVEducationHistoryView() {
         initComponents();
+        setDefaultCondition();
+        
     }
 
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+        getEducationList();
+        setComboBox();
+    }
+    
+    private void showAllTable(List<EducationHistory> eh){
+        Object[] columnNames = {"Nomor", "GPA", "Degree", "Major", "University"};
+        Object[][] data = new Object[eh.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = eh.get(i).getGpa();
+                data[i][2] = eh.get(i).getEducation().getDegree().getName();
+                data[i][3] = eh.get(i).getEducation().getMajor().getName();
+                data[i][4] = eh.get(i).getEducation().getUniversity().getName();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbEducationHistory.setModel(tableModel);
+    }
+    
+    private void getEducationList(){
+        for (Education data : ce.getAll()) {
+            educationList.add(data);
+        }
+    }
+    
+    private void setComboBox(){
+        for (Education data : educationList) {
+            cbEducationHis.addItem(data.getId()+" - "+data.getDegree().getName()+" ("+data.getMajor().getName()+") "+data.getUniversity().getName());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,7 +95,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
-        scpEducationHistory = new javax.swing.JScrollPane();
+        spcEducationHistory = new javax.swing.JScrollPane();
         tbEducationHistory = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
@@ -141,23 +188,26 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 280));
 
-        scpEducationHistory.setPreferredSize(new java.awt.Dimension(640, 250));
+        spcEducationHistory.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        spcEducationHistory.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        spcEducationHistory.setPreferredSize(new java.awt.Dimension(640, 280));
 
         tbEducationHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        tbEducationHistory.setPreferredSize(new java.awt.Dimension(640, 380));
-        scpEducationHistory.setViewportView(tbEducationHistory);
+        tbEducationHistory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbEducationHistoryMouseClicked(evt);
+            }
+        });
+        spcEducationHistory.setViewportView(tbEducationHistory);
 
-        pnMTRC3.add(scpEducationHistory);
+        pnMTRC3.add(spcEducationHistory);
 
         pnMTRCenter.add(pnMTRC3);
 
@@ -230,6 +280,21 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btClearActionPerformed
 
+    private void tbEducationHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEducationHistoryMouseClicked
+        String temp="";
+        for (Education data : educationList) {
+            if (data.getDegree().getName().equals(tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 2).toString())
+                    &&data.getMajor().getName().equals(tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 3).toString())
+                    &&data.getUniversity().getName().equals(tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 4).toString())
+                    )temp=data.getId();
+        }
+        for (int i = 0; i < cbEducationHis.getItemCount(); i++) {
+            if (cbEducationHis.getItemAt(i).split(" - ")[0].equals(temp))
+            cbEducationHis.setSelectedIndex(i);
+        }
+        tfEducationHisGPA.setText(tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 1).toString());
+    }//GEN-LAST:event_tbEducationHistoryMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
@@ -249,7 +314,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JScrollPane scpEducationHistory;
+    private javax.swing.JScrollPane spcEducationHistory;
     private javax.swing.JTable tbEducationHistory;
     private javax.swing.JTextField tfEducationHisGPA;
     // End of variables declaration//GEN-END:variables

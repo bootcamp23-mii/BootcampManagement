@@ -21,7 +21,14 @@ public class TestCV extends javax.swing.JFrame {
      */
     public TestCV() {
         initComponents();
-        views.IpnutCVView view = new views.IpnutCVView();
+//        views.InputCVEmployeeRoleView view = new views.InputCVEmployeeRoleView();
+//        views.InputCVEducationHistoryView view = new views.InputCVEducationHistoryView();
+//        views.InputCVEmployeeLanguageView view = new views.InputCVEmployeeLanguageView();
+//        views.InputCVEmployeeSkillView view = new views.InputCVEmployeeSkillView();
+//        views.InputCVOrganizationView view = new views.InputCVOrganizationView();
+//        views.InputCVAchievementView view = new views.InputCVAchievementView();
+//        views.InputCVEmployeeCertificationView view = new views.InputCVEmployeeCertificationView();
+        views.InputCVWorkExperienceView view = new views.InputCVWorkExperienceView();
         jPanel1.add(view);
         view.setVisible(true);
         getMiddle();
@@ -86,7 +93,7 @@ public class TestCV extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

@@ -6,6 +6,11 @@
 package views;
 
 import controllers.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.EmployeeLanguage;
+import models.Language;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -17,14 +22,50 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
 
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private EmployeeLanguageControllerInterface c = new EmployeeLanguageController(factory);
+    private LanguageControllerInterface cl = new LanguageController(factory);
     
+    private DefaultTableModel tableModel;
+    private List<models.Language> languageList = new ArrayList<>();
     /**
      * Creates new form InputCVEmployeeLanguageView
      */
     public InputCVEmployeeLanguageView() {
         initComponents();
+        setDefaultCondition();
     }
 
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+        getLanguageList();
+        setComboBox();
+    }
+
+    private void showAllTable(List<EmployeeLanguage> er){
+        Object[] columnNames = {"Nomor", "Language"};
+        Object[][] data = new Object[er.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = er.get(i).getLanguage().getName();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbEmpLanguage.setModel(tableModel);
+    }
+    
+    private void getLanguageList(){
+        for (Language data : cl.getAll()) {
+            languageList.add(data);
+        }
+    }
+    
+    private void setComboBox(){
+        for (Language data : languageList) {
+            cbEmployeeLanguage.addItem(data.getId()+" - "+data.getName());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,8 +86,8 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
-        scpEmployeeLanguage = new javax.swing.JScrollPane();
-        tbEmployeeLanguage = new javax.swing.JTable();
+        spcEmpLanguage = new javax.swing.JScrollPane();
+        tbEmpLanguage = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
@@ -68,7 +109,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         pnMTop.setLayout(pnMTopLayout);
         pnMTopLayout.setHorizontalGroup(
             pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 716, Short.MAX_VALUE)
+            .addGap(0, 700, Short.MAX_VALUE)
             .addGroup(pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnMTopLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -121,31 +162,26 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 300));
 
-        scpEmployeeLanguage.setBackground(new java.awt.Color(204, 255, 255));
+        spcEmpLanguage.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        spcEmpLanguage.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        spcEmpLanguage.setPreferredSize(new java.awt.Dimension(640, 280));
 
-        tbEmployeeLanguage.setModel(new javax.swing.table.DefaultTableModel(
+        tbEmpLanguage.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        scpEmployeeLanguage.setViewportView(tbEmployeeLanguage);
+        tbEmpLanguage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbEmpLanguageMouseClicked(evt);
+            }
+        });
+        spcEmpLanguage.setViewportView(tbEmpLanguage);
 
-        javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
-        pnMTRC3.setLayout(pnMTRC3Layout);
-        pnMTRC3Layout.setHorizontalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpEmployeeLanguage, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-        );
-        pnMTRC3Layout.setVerticalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpEmployeeLanguage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
+        pnMTRC3.add(spcEmpLanguage);
 
         pnMTRCenter.add(pnMTRC3);
 
@@ -214,6 +250,17 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btOkeActionPerformed
 
+    private void tbEmpLanguageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmpLanguageMouseClicked
+        String temp="";
+        for (Language data : languageList) {
+            if (data.getName().equals(tbEmpLanguage.getValueAt(tbEmpLanguage.getSelectedRow(), 1).toString()))temp=data.getId();
+        }
+        for (int i = 0; i < cbEmployeeLanguage.getItemCount(); i++) {
+            if (cbEmployeeLanguage.getItemAt(i).split(" - ")[0].equals(temp))
+            cbEmployeeLanguage.setSelectedIndex(i);
+        }
+    }//GEN-LAST:event_tbEmpLanguageMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
@@ -231,7 +278,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JScrollPane scpEmployeeLanguage;
-    private javax.swing.JTable tbEmployeeLanguage;
+    private javax.swing.JScrollPane spcEmpLanguage;
+    private javax.swing.JTable tbEmpLanguage;
     // End of variables declaration//GEN-END:variables
 }

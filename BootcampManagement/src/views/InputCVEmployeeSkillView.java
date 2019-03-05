@@ -6,6 +6,11 @@
 package views;
 
 import controllers.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.EmployeeSkill;
+import models.Skill;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -17,14 +22,53 @@ public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
 
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private EmployeeSkillControllerInterface c = new EmployeeSkillController(factory);
+    private SkillControllerInterface cs = new SkillController(factory);
+    
+    private DefaultTableModel tableModel;
+    private List<models.Skill> skillList = new ArrayList<>();
     
     /**
      * Creates new form InputCVEmployeeSkillView
      */
     public InputCVEmployeeSkillView() {
         initComponents();
+        setDefaultCondition();
     }
 
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+        getSkillList();
+        setComboBox();
+    }
+
+    private void showAllTable(List<EmployeeSkill> dataList){
+        Object[] columnNames = {"Nomor", "Skill","Category"};
+        Object[][] data = new Object[dataList.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = dataList.get(i).getSkill().getName();
+                data[i][2] = dataList.get(i).getSkill().getCategory().getName();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbEmpSkill.setModel(tableModel);
+    }
+    
+    private void getSkillList(){
+        for (Skill data : cs.getAll()) {
+            skillList.add(data);
+        }
+    }
+    
+    private void setComboBox(){
+        for (Skill data : skillList) {
+            cbEmployeeSkill.addItem(data.getId()+" - "+data.getName()+"("+data.getCategory().getName()+")");
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,8 +89,8 @@ public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
-        scpEmployeeSkill = new javax.swing.JScrollPane();
-        tbEmployeeSkill = new javax.swing.JTable();
+        spcEmpSkill = new javax.swing.JScrollPane();
+        tbEmpSkill = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
@@ -121,31 +165,26 @@ public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
         pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 300));
 
-        scpEmployeeSkill.setBackground(new java.awt.Color(204, 255, 255));
+        spcEmpSkill.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        spcEmpSkill.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        spcEmpSkill.setPreferredSize(new java.awt.Dimension(640, 280));
 
-        tbEmployeeSkill.setModel(new javax.swing.table.DefaultTableModel(
+        tbEmpSkill.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        scpEmployeeSkill.setViewportView(tbEmployeeSkill);
+        tbEmpSkill.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbEmpSkillMouseClicked(evt);
+            }
+        });
+        spcEmpSkill.setViewportView(tbEmpSkill);
 
-        javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
-        pnMTRC3.setLayout(pnMTRC3Layout);
-        pnMTRC3Layout.setHorizontalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpEmployeeSkill, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-        );
-        pnMTRC3Layout.setVerticalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpEmployeeSkill, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
+        pnMTRC3.add(spcEmpSkill);
 
         pnMTRCenter.add(pnMTRC3);
 
@@ -214,6 +253,19 @@ public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btOkeActionPerformed
 
+    private void tbEmpSkillMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmpSkillMouseClicked
+        String temp="";
+        for (Skill data : skillList) {
+            if (data.getName().equals(tbEmpSkill.getValueAt(tbEmpSkill.getSelectedRow(), 1).toString())
+                &&data.getCategory().getName().equals(tbEmpSkill.getValueAt(tbEmpSkill.getSelectedRow(), 2).toString())
+            )temp=data.getId();
+        }
+        for (int i = 0; i < cbEmployeeSkill.getItemCount(); i++) {
+            if (cbEmployeeSkill.getItemAt(i).split(" - ")[0].equals(temp))
+            cbEmployeeSkill.setSelectedIndex(i);
+        }
+    }//GEN-LAST:event_tbEmpSkillMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
@@ -231,7 +283,7 @@ public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JScrollPane scpEmployeeSkill;
-    private javax.swing.JTable tbEmployeeSkill;
+    private javax.swing.JScrollPane spcEmpSkill;
+    private javax.swing.JTable tbEmpSkill;
     // End of variables declaration//GEN-END:variables
 }

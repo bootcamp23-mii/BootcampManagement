@@ -6,6 +6,9 @@
 package views;
 
 import controllers.*;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Organization;
 import org.hibernate.SessionFactory;
 import tools.*;
 
@@ -18,13 +21,34 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private OrganizationControllerInterface c = new OrganizationController(factory);
     
+    private DefaultTableModel tableModel;
     /**
      * Creates new form InputCVOrganizationView
      */
     public InputCVOrganizationView() {
         initComponents();
+        setDefaultCondition();
     }
 
+    private void setDefaultCondition(){
+        showAllTable(c.search(Session.getSession()));
+    }
+
+    private void showAllTable(List<Organization> dataList){
+        Object[] columnNames = {"Nomor","Organization"};
+        Object[][] data = new Object[dataList.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            try {
+                data[i][0] = (i + 1);
+                data[i][1] = dataList.get(i).getName();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableModel = new DefaultTableModel(data, columnNames);
+        tbOrganization.setModel(tableModel);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,7 +69,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
-        scpOrganization = new javax.swing.JScrollPane();
+        spcOrganization = new javax.swing.JScrollPane();
         tbOrganization = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
         btOke = new javax.swing.JButton();
@@ -119,31 +143,26 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 300));
 
-        scpOrganization.setBackground(new java.awt.Color(204, 255, 255));
+        spcOrganization.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        spcOrganization.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        spcOrganization.setPreferredSize(new java.awt.Dimension(640, 280));
 
         tbOrganization.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        scpOrganization.setViewportView(tbOrganization);
+        tbOrganization.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbOrganizationMouseClicked(evt);
+            }
+        });
+        spcOrganization.setViewportView(tbOrganization);
 
-        javax.swing.GroupLayout pnMTRC3Layout = new javax.swing.GroupLayout(pnMTRC3);
-        pnMTRC3.setLayout(pnMTRC3Layout);
-        pnMTRC3Layout.setHorizontalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpOrganization, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-        );
-        pnMTRC3Layout.setVerticalGroup(
-            pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpOrganization, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
+        pnMTRC3.add(spcOrganization);
 
         pnMTRCenter.add(pnMTRC3);
 
@@ -212,6 +231,10 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btOkeActionPerformed
 
+    private void tbOrganizationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbOrganizationMouseClicked
+        tfOrganization.setText(tbOrganization.getValueAt(tbOrganization.getSelectedRow(), 1).toString());
+    }//GEN-LAST:event_tbOrganizationMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
@@ -228,7 +251,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnMTRight;
     private javax.swing.JPanel pnMTop;
     private javax.swing.JPanel pnMain;
-    private javax.swing.JScrollPane scpOrganization;
+    private javax.swing.JScrollPane spcOrganization;
     private javax.swing.JTable tbOrganization;
     private javax.swing.JTextField tfOrganization;
     // End of variables declaration//GEN-END:variables
