@@ -14,5 +14,6 @@ import java.util.List;
 public interface DAOInterface<T> {
     public boolean saveOrDelete(T entity, boolean isSave);
     public List<T> getData(Object keyword);
+    public List<T> getDataWD(Object keyword, int isDeleted);
     public T getById(Object id);
 }

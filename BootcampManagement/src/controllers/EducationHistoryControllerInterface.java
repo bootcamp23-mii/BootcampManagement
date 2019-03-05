@@ -16,6 +16,8 @@ public interface EducationHistoryControllerInterface {
     public EducationHistory getByid(String id);
     public List<EducationHistory> getAll();
     public List<EducationHistory> search(Object keyword);
+    public List<EducationHistory> searchWD(Object keyword);
     public String save(String id, String gpa, String education, String employee);
     public String delete(String id, String gpa, String education, String employee);
+    public String deleteSoft(String id, String gpa, String education, String employee);
 }

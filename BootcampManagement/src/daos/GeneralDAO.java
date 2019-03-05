@@ -25,6 +25,10 @@ public class GeneralDAO<T> implements DAOInterface<T>{
     private Transaction transaction;
     private T t;
 
+    public GeneralDAO() {
+
+    }
+
     public GeneralDAO(SessionFactory factory, Class<T> t) {
         try {
             this.factory = factory;
@@ -32,10 +36,6 @@ public class GeneralDAO<T> implements DAOInterface<T>{
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public GeneralDAO() {
-
     }
 
     private String getQuery(String keyword) {
@@ -108,4 +108,33 @@ public class GeneralDAO<T> implements DAOInterface<T>{
         return result;
     }
 
+    private String getQueryWD(String keyword, int isdeleted) {
+        String query = "From " + t.getClass().getSimpleName();
+        if (!keyword.equals("")) {
+            query += " where ";
+            for (Field field : t.getClass().getDeclaredFields()) {
+                if (!field.getName().contains("UID") && !field.getName().contains("List")) {
+                    query += field.getName() + " like '%" + keyword + "%' OR ";
+                }
+            }
+            query = query.substring(0, query.lastIndexOf("OR"));
+        }
+        return query + " and isdeleted="+isdeleted+" order by 1";
+    }
+    
+    @Override
+    public List<T> getDataWD(Object keyword, int isDeleted) {
+        List<T> obj = new ArrayList<>();
+        session = this.factory.openSession();
+        transaction = session.beginTransaction();
+        try {
+            obj = session.createQuery(getQueryWD(keyword + "",isDeleted)).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+        return obj;
+    }
 }

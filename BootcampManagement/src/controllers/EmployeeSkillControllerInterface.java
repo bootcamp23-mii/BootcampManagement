@@ -16,6 +16,8 @@ public interface EmployeeSkillControllerInterface {
     public EmployeeSkill getByid(String id);
     public List<EmployeeSkill> getAll();
     public List<EmployeeSkill> search(Object keyword);
+    public List<EmployeeSkill> searchWD(Object keyword);
     public String save(String id, String employee, String skill);
     public String delete(String id, String employee, String skill);
+    public String deleteSoft(String id, String employee, String skill);
 }

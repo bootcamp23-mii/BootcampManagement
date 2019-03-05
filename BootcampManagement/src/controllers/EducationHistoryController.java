@@ -37,6 +37,11 @@ public class EducationHistoryController implements EducationHistoryControllerInt
     public List<EducationHistory> search(Object keyword) {
         return dao.getData(keyword);
     }
+    
+    @Override
+    public List<EducationHistory> searchWD(Object keyword) {
+        return dao.getDataWD(keyword,0);
+    }
 
     @Override
     public String save(String id, String gpa, String education, String employee) {
@@ -50,6 +55,23 @@ public class EducationHistoryController implements EducationHistoryControllerInt
     @Override
     public String delete(String id, String gpa, String education, String employee) {
         if (dao.saveOrDelete(new EducationHistory(id, gpa, new Short("0"), new Education(education), new Employee(employee)), false)) {
+            return "Delete Data Success!";
+        } else {
+            return "Delete Failed!";
+        }
+    }
+    
+    @Override
+    public String deleteSoft(String id, String gpa, String education, String employee) {
+        String tempID="";
+        List<EducationHistory> dataList = searchWD("");
+        for (EducationHistory data : dataList) {
+            if (data.getGpa().equals(gpa)
+                    &&data.getEducation().getId().equals(employee)
+                    &&data.getEmployee().getId().equals(employee)
+                    )tempID=data.getId();
+        }
+        if (dao.saveOrDelete(new EducationHistory(tempID, gpa, new Short("1"), new Education(education), new Employee(employee)), true)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

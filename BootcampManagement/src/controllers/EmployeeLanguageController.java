@@ -40,6 +40,11 @@ public class EmployeeLanguageController implements EmployeeLanguageControllerInt
     }
 
     @Override
+    public List<EmployeeLanguage> searchWD(Object keyword) {
+        return dao.getDataWD(keyword,0);
+    }
+
+    @Override
     public String save(String id, String employee, String language) {
         if (dao.saveOrDelete(new EmployeeLanguage(id, new Short("0"), new Employee(employee), new Language(language)), true)) {
             return "Save Data Success!";
@@ -51,6 +56,22 @@ public class EmployeeLanguageController implements EmployeeLanguageControllerInt
     @Override
     public String delete(String id, String employee, String language) {
         if (dao.saveOrDelete(new EmployeeLanguage(id, new Short("0"), new Employee(employee), new Language(language)), false)) {
+            return "Delete Data Success!";
+        } else {
+            return "Delete Failed!";
+        }
+    }
+
+    @Override
+    public String deleteSoft(String id, String employee, String language) {
+        String tempID="";
+        List<EmployeeLanguage> dataList = searchWD("");
+        for (EmployeeLanguage data : dataList) {
+            if (data.getEmployee().getId().equals(employee)
+                    &&data.getLanguage().getId().equals(language)
+                    )tempID=data.getId();
+        }
+        if (dao.saveOrDelete(new EmployeeLanguage(tempID, new Short("1"), new Employee(employee), new Language(language)), true)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

@@ -16,6 +16,8 @@ public interface EmployeeCertificationControllerInterface {
     public EmployeeCertification getByid(String id);
     public List<EmployeeCertification> getAll();
     public List<EmployeeCertification> search(Object keyword);
+    public List<EmployeeCertification> searchWD(Object keyword);
     public String save(String id, String certificateDate, String certificateNumber, String certificate, String employee);
     public String delete(String id, String certificateDate, String certificateNumber, String certificate, String employee);
+    public String deleteSoft(String id, String certificateDate, String certificateNumber, String certificate, String employee);
 }

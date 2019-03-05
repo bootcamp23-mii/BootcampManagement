@@ -16,6 +16,8 @@ public interface EducationControllerInterface {
     public Education getByid(String id);
     public List<Education> getAll();
     public List<Education> search(Object keyword);
+    public List<Education> searchWD(Object keyword);
     public String save(String id, String degree, String major, String university);
     public String delete(String id, String degree, String major, String university);
+    public String deleteSoft(String id, String degree, String major, String university);
 }

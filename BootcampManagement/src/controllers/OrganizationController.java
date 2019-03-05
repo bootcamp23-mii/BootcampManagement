@@ -39,6 +39,11 @@ public class OrganizationController implements OrganizationControllerInterface {
     }
 
     @Override
+    public List<Organization> searchWD(Object keyword) {
+        return dao.getDataWD(keyword,0);
+    }
+
+    @Override
     public String save(String id, String name, String employee) {
         if (dao.saveOrDelete(new Organization(id, name, new Short("0"), new Employee(employee)), true)) {
             return "Save Data Success!";
@@ -50,6 +55,22 @@ public class OrganizationController implements OrganizationControllerInterface {
     @Override
     public String delete(String id,String name, String employee) {
         if (dao.saveOrDelete(new Organization(id, name, new Short("0"), new Employee(employee)), false)) {
+            return "Delete Data Success!";
+        } else {
+            return "Delete Failed!";
+        }
+    }
+
+    @Override
+    public String deleteSoft(String id,String name, String employee) {
+        String tempID="";
+        List<Organization> dataList = searchWD("");
+        for (Organization data : dataList) {
+            if (data.getName().equals(name)
+                    &&data.getEmployee().getId().equals(employee)
+                    )tempID=data.getId();
+        }
+        if (dao.saveOrDelete(new Organization(tempID, name, new Short("1"), new Employee(employee)), true)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

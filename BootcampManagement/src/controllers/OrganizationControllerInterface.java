@@ -16,6 +16,8 @@ public interface OrganizationControllerInterface {
     public Organization getByid(String id);
     public List<Organization> getAll();
     public List<Organization> search(Object keyword);
+    public List<Organization> searchWD(Object keyword);
     public String save(String id, String name, String employee);
     public String delete(String id, String gpa, String employee);
+    public String deleteSoft(String id, String gpa, String employee);
 }

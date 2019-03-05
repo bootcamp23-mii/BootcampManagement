@@ -16,6 +16,8 @@ public interface AchievementControllerInterface {
     public Achievement getByid(String id);
     public List<Achievement> getAll();
     public List<Achievement> search(Object keyword);
+    public List<Achievement> searchWD(Object keyword);
     public String save(String id, String name, String employee);
     public String delete(String id, String name, String employee);
+    public String deleteSoft(String id, String name, String employee);
 }

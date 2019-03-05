@@ -39,6 +39,11 @@ public class EducationController implements EducationControllerInterface {
     }
 
     @Override
+    public List<Education> searchWD(Object keyword) {
+        return dao.getDataWD(keyword,0);
+    }
+
+    @Override
     public String save(String id, String degree, String major, String university) {
         if (dao.saveOrDelete(new Education("", new Short("0"), new Degree(degree), new Major(major), new University(university)), true)) {
             return "Save Data Success!";
@@ -50,6 +55,23 @@ public class EducationController implements EducationControllerInterface {
     @Override
     public String delete(String id, String degree, String major, String university) {
         if (dao.saveOrDelete(new Education("", new Short("0"), new Degree(degree), new Major(major), new University(university)), false)) {
+            return "Delete Data Success!";
+        } else {
+            return "Delete Failed!";
+        }
+    }
+
+    @Override
+    public String deleteSoft(String id, String degree, String major, String university) {
+        String tempID="";
+        List<Education> dataList = searchWD("");
+        for (Education data : dataList) {
+            if (data.getDegree().equals(degree)
+                    &&data.getMajor().getId().equals(major)
+                    &&data.getUniversity().getId().equals(university)
+                    )tempID=data.getId();
+        }
+        if (dao.saveOrDelete(new Education(tempID, new Short("1"), new Degree(degree), new Major(major), new University(university)), true)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";
