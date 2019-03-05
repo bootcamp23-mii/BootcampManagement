@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import models.Employee;
+import models.Batch;
+import models.BatchClass;
+import models.Classes;
+import models.Room;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
@@ -28,6 +32,7 @@ public class BatchClassView extends javax.swing.JInternalFrame {
     private ClassesController csc = new ClassesController(factory);
     private RoomController rc = new RoomController(factory);
     DefaultTableModel myTableModel = new DefaultTableModel();
+    private List<models.Employee> trainerList = new ArrayList<>();
     private List<models.BatchClass> batchClassList= new ArrayList<>();
     private List<models.Batch> batchList= new ArrayList<>();
     private List<models.Classes> classTypeList= new ArrayList<>();
@@ -38,25 +43,51 @@ public class BatchClassView extends javax.swing.JInternalFrame {
      */
     public BatchClassView() {
         initComponents();
-        tableData(bcc.getAll());
+        tableBatchClass(bcc.getAll());
+        showTrainer();
+        showBatch();
+        showClasses();
+        showRoom();
     }
     
-    private void tableData(List<models.BatchClass> batchClass) {
-        Object[] columnNames = {"ID", "Trainer", "Batch", "Classes", "Room"};
+    private void showTrainer() {
+        for (Employee trainer : trainerList) cbTrainer.addItem(trainer.getName());
+    }
+    
+    void showBatch() {
+        for (Batch batch : bc.getAll()) {
+            cbBatch.addItem(batch.getId()+" - "+batch.getName());
+        }
+    }
+    
+    void showClasses() {
+        for (Classes classes : csc.getAll()) {
+            cbClass.addItem(classes.getId()+" - "+classes.getName());
+        }
+    }
+    
+    void showRoom() {
+        for (Room room : rc.getAll()) {
+            cbRoom.addItem(room.getId()+" - "+room.getName());
+        }
+    }
+    
+    private void tableBatchClass(List<models.BatchClass> batchClass) {
+        Object[] columnNames = {"No.", "ID", "Trainer", "Batch", "Classes", "Room"};
         Object[][] data = new Object[batchClass.size()][columnNames.length];
         for (int i = 0; i < data.length; i++) {
             data[i][0] = (i + 1);
             data[i][1] = batchClass.get(i).getId();
-            data[i][2] = batchClass.get(i).getTrainer();
-            data[i][3] = batchClass.get(i).getBatch();
-            data[i][3] = batchClass.get(i).getClasses();
-            data[i][3] = batchClass.get(i).getRoom();
+            data[i][2] = batchClass.get(i).getTrainer().getName();
+            data[i][3] = batchClass.get(i).getBatch().getName();
+            data[i][4] = batchClass.get(i).getClasses().getName();
+            data[i][5] = batchClass.get(i).getRoom().getName();
 
         }
         myTableModel = new DefaultTableModel(data, columnNames);
         tbBatchClass.setModel(myTableModel);
-        
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,7 +98,7 @@ public class BatchClassView extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblTitleBatchClass = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         pnBatchClass = new javax.swing.JPanel();
         lblID = new javax.swing.JLabel();
         tfID = new javax.swing.JTextField();
@@ -79,74 +110,128 @@ public class BatchClassView extends javax.swing.JInternalFrame {
         cbClass = new javax.swing.JComboBox<>();
         lblRoom = new javax.swing.JLabel();
         cbRoom = new javax.swing.JComboBox<>();
+        chbGetById = new javax.swing.JCheckBox();
+        jTextField1 = new javax.swing.JTextField();
+        btSearch = new javax.swing.JButton();
         pnTable = new javax.swing.JPanel();
         scpBatchClass = new javax.swing.JScrollPane();
         tbBatchClass = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(153, 255, 153));
         setClosable(true);
-        getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
+        setTitle("BATCH CLASS");
+        setMinimumSize(new java.awt.Dimension(620, 450));
+        setPreferredSize(new java.awt.Dimension(640, 500));
 
-        lblTitleBatchClass.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitleBatchClass.setText("BATCH CLASS");
-        getContentPane().add(lblTitleBatchClass, java.awt.BorderLayout.PAGE_START);
+        jPanel1.setBackground(new java.awt.Color(153, 255, 153));
+        jPanel1.setPreferredSize(new java.awt.Dimension(20, 20));
 
-        pnBatchClass.setLayout(new java.awt.GridLayout(5, 2, 5, 5));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 601, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        pnBatchClass.setBackground(new java.awt.Color(153, 255, 153));
+        pnBatchClass.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblID.setText("ID");
-        pnBatchClass.add(lblID);
-        pnBatchClass.add(tfID);
+        pnBatchClass.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(72, 3, 100, 38));
+        pnBatchClass.add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 3, 310, 38));
 
         lblTrainer.setText("Trainer");
-        pnBatchClass.add(lblTrainer);
+        pnBatchClass.add(lblTrainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(72, 46, 100, 38));
 
-        pnBatchClass.add(cbTrainer);
+        pnBatchClass.add(cbTrainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 46, 310, 38));
 
         lblBatch.setText("Batch");
-        pnBatchClass.add(lblBatch);
+        pnBatchClass.add(lblBatch, new org.netbeans.lib.awtextra.AbsoluteConstraints(72, 89, 100, 38));
 
-        pnBatchClass.add(cbBatch);
+        pnBatchClass.add(cbBatch, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 89, 310, 38));
 
         lblClass.setText("Class");
-        pnBatchClass.add(lblClass);
+        pnBatchClass.add(lblClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(72, 132, 100, 38));
 
-        pnBatchClass.add(cbClass);
+        pnBatchClass.add(cbClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 132, 310, 38));
 
         lblRoom.setText("Room");
-        pnBatchClass.add(lblRoom);
+        pnBatchClass.add(lblRoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(72, 175, 100, 38));
 
-        pnBatchClass.add(cbRoom);
+        pnBatchClass.add(cbRoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 175, 310, 38));
+
+        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
+        chbGetById.setText("Get by ID");
+        chbGetById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbGetByIdActionPerformed(evt);
+            }
+        });
+        pnBatchClass.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 90, 38));
+        pnBatchClass.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 261, 170, 38));
+
+        btSearch.setText("Search");
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSearchActionPerformed(evt);
+            }
+        });
+        pnBatchClass.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, 210, 38));
 
         getContentPane().add(pnBatchClass, java.awt.BorderLayout.CENTER);
 
+        pnTable.setBackground(new java.awt.Color(153, 255, 153));
+
+        scpBatchClass.setBackground(new java.awt.Color(153, 255, 153));
+
+        tbBatchClass.setAutoCreateRowSorter(true);
         tbBatchClass.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Trainer", "Batch", "Class", "Room"
+                "No.", "ID", "Trainer", "Batch", "Class", "Room"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbBatchClass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbBatchClassMouseClicked(evt);
+            }
+        });
         scpBatchClass.setViewportView(tbBatchClass);
 
         javax.swing.GroupLayout pnTableLayout = new javax.swing.GroupLayout(pnTable);
         pnTable.setLayout(pnTableLayout);
         pnTableLayout.setHorizontalGroup(
             pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGap(0, 601, Short.MAX_VALUE)
             .addGroup(pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(scpBatchClass, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+                .addComponent(scpBatchClass, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE))
         );
         pnTableLayout.setVerticalGroup(
             pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 122, Short.MAX_VALUE)
             .addGroup(pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTableLayout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(scpBatchClass, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(pnTableLayout.createSequentialGroup()
+                    .addComponent(scpBatchClass, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 26, Short.MAX_VALUE)))
         );
 
         getContentPane().add(pnTable, java.awt.BorderLayout.PAGE_END);
@@ -154,17 +239,38 @@ public class BatchClassView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btSearchActionPerformed
+
+    private void chbGetByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbGetByIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chbGetByIdActionPerformed
+
+    private void tbBatchClassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbBatchClassMouseClicked
+        tfID.setText(tbBatchClass.getValueAt(tbBatchClass.getSelectedRow(), 1).toString());
+        for (int i = 0; i < cbTrainer.getItemCount(); i++) {
+            if (cbTrainer.getItemAt(i).equals(tbBatchClass.getValueAt(tbBatchClass.getSelectedRow(), 2).toString()))
+                cbTrainer.setSelectedIndex(i);
+        }
+
+        tfID.setEnabled(false);
+    }//GEN-LAST:event_tbBatchClassMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbBatch;
     private javax.swing.JComboBox<String> cbClass;
     private javax.swing.JComboBox<String> cbRoom;
     private javax.swing.JComboBox<String> cbTrainer;
+    private javax.swing.JCheckBox chbGetById;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblBatch;
     private javax.swing.JLabel lblClass;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblRoom;
-    private javax.swing.JLabel lblTitleBatchClass;
     private javax.swing.JLabel lblTrainer;
     private javax.swing.JPanel pnBatchClass;
     private javax.swing.JPanel pnTable;
