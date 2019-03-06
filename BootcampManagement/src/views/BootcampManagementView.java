@@ -421,6 +421,20 @@ public class BootcampManagementView extends javax.swing.JFrame {
         view.revalidate();
     }//GEN-LAST:event_mnCVFotoActionPerformed
 
+    private void mnLessonViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnLessonViewActionPerformed
+        LessonView lv = new LessonView();
+        pnBootcamp.add(lv);
+        pnLogin.setVisible(false);
+        lv.setVisible(true);
+    }//GEN-LAST:event_mnLessonViewActionPerformed
+
+    private void mnScoreViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnScoreViewActionPerformed
+        ScoreView sv = new ScoreView();
+        pnBootcamp.add(sv);
+        pnLogin.setVisible(false);
+        sv.setVisible(true);
+    }//GEN-LAST:event_mnScoreViewActionPerformed
+
     /**
      * @param args the command line arguments
      */
