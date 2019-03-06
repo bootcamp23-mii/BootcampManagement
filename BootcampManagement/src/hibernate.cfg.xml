@@ -93,5 +93,6 @@ Contributor(s):
     <mapping class="models.Participant"/>
     <mapping class="models.Placement"/>
     <mapping class="models.ErrorBank"/>
+    <mapping class="models.Upload"/>
   </session-factory>
 </hibernate-configuration>

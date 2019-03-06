@@ -5,19 +5,60 @@
  */
 package views;
 
+import controllers.UploadController;
+import controllers.UploadControllerInterface;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import models.Upload;
+//import oracle.sql.BLOB;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
+import tools.Session;
+
 /**
  *
  * @author FES
  */
 public class InputCVFoto extends javax.swing.JInternalFrame {
+    
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private UploadControllerInterface c = new UploadController(factory);
 
+    private List<Upload> list = new ArrayList<>();
+    private Blob blobPhoto;
+    private Serializable serializable;
+    
     /**
      * Creates new form InputCVFoto
      */
     public InputCVFoto() {
         initComponents();
+        setDefaultCondition();
     }
 
+    private void setDefaultCondition() {
+        list=c.search(Session.getSession());
+        if (!list.isEmpty()){
+            serializable=list.get(0).getPhoto();
+            blobPhoto = (Blob) serializable;
+            try {
+                InputStream in = blobPhoto.getBinaryStream();  
+                BufferedImage image = ImageIO.read(in);
+                lblImage.setIcon(new ImageIcon(image));
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,21 +68,213 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pn = new javax.swing.JPanel();
+        pnMTop3 = new javax.swing.JPanel();
+        lblTitle3 = new javax.swing.JLabel();
+        pnMTRCenter = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        lblImage = new javax.swing.JLabel();
+        btUpload = new javax.swing.JButton();
+        pnMTBottom = new javax.swing.JPanel();
+        btOke = new javax.swing.JButton();
+        pnMTRight = new javax.swing.JPanel();
+        pnMTLeft = new javax.swing.JPanel();
+
+        setPreferredSize(new java.awt.Dimension(700, 500));
+
+        pn.setBackground(new java.awt.Color(204, 255, 255));
+        pn.setPreferredSize(new java.awt.Dimension(700, 500));
+
+        pnMTop3.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTop3.setPreferredSize(new java.awt.Dimension(700, 50));
+
+        lblTitle3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lblTitle3.setText("Upload Image");
+
+        javax.swing.GroupLayout pnMTop3Layout = new javax.swing.GroupLayout(pnMTop3);
+        pnMTop3.setLayout(pnMTop3Layout);
+        pnMTop3Layout.setHorizontalGroup(
+            pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnMTop3Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lblTitle3)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        pnMTop3Layout.setVerticalGroup(
+            pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+            .addGroup(pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnMTop3Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lblTitle3)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        pnMTRCenter.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRCenter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnMTRCenter.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblImage.setText("Image");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(119, Short.MAX_VALUE)
+                .addComponent(lblImage)
+                .addGap(117, 117, 117))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(131, 131, 131)
+                .addComponent(lblImage)
+                .addContainerGap(141, Short.MAX_VALUE))
+        );
+
+        pnMTRCenter.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 270, 290));
+
+        btUpload.setText("Upload");
+        btUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btUploadActionPerformed(evt);
+            }
+        });
+        pnMTRCenter.add(btUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, 40));
+
+        pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
+
+        btOke.setText("Oke");
+        btOke.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btOkeActionPerformed(evt);
+            }
+        });
+        pnMTBottom.add(btOke);
+
+        pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
+
+        javax.swing.GroupLayout pnMTRightLayout = new javax.swing.GroupLayout(pnMTRight);
+        pnMTRight.setLayout(pnMTRightLayout);
+        pnMTRightLayout.setHorizontalGroup(
+            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        pnMTRightLayout.setVerticalGroup(
+            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 410, Short.MAX_VALUE)
+        );
+
+        pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
+        pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
+
+        javax.swing.GroupLayout pnMTLeftLayout = new javax.swing.GroupLayout(pnMTLeft);
+        pnMTLeft.setLayout(pnMTLeftLayout);
+        pnMTLeftLayout.setHorizontalGroup(
+            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        pnMTLeftLayout.setVerticalGroup(
+            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 410, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout pnLayout = new javax.swing.GroupLayout(pn);
+        pn.setLayout(pnLayout);
+        pnLayout.setHorizontalGroup(
+            pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnMTop3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnLayout.createSequentialGroup()
+                            .addComponent(pnMTLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(5, 5, 5)
+                            .addComponent(pnMTRCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(5, 5, 5)
+                            .addComponent(pnMTRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pnMTBottom, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        pnLayout.setVerticalGroup(
+            pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(pnMTop3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(5, 5, 5)
+                    .addGroup(pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnMTLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnMTRCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnMTRight, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(5, 5, 5)
+                    .addComponent(pnMTBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(pn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(pn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btOkeActionPerformed
+
+    private void btUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUploadActionPerformed
+        
+    }//GEN-LAST:event_btUploadActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btOke;
+    private javax.swing.JButton btUpload;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblImage;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTitle1;
+    private javax.swing.JLabel lblTitle2;
+    private javax.swing.JLabel lblTitle3;
+    private javax.swing.JPanel pn;
+    private javax.swing.JPanel pnMTBottom;
+    private javax.swing.JPanel pnMTLeft;
+    private javax.swing.JPanel pnMTRCenter;
+    private javax.swing.JPanel pnMTRight;
+    private javax.swing.JPanel pnMTop;
+    private javax.swing.JPanel pnMTop1;
+    private javax.swing.JPanel pnMTop2;
+    private javax.swing.JPanel pnMTop3;
+    private javax.swing.JPanel pnMain;
+    private javax.swing.JPanel pnMain1;
+    private javax.swing.JPanel pnMain2;
     // End of variables declaration//GEN-END:variables
 }

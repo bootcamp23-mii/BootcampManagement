@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b8cec276-3035-4b5e-8459-e66e04abf7f5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="hql">
+		<![CDATA[From Employee]]>
+	</queryString>
+	<field name="achievementList" class="java.util.List"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="batchClassList" class="java.util.List"/>
+	<field name="birthdate" class="java.util.Date"/>
+	<field name="birthplace" class="models.District"/>
+	<field name="educationHistoryList" class="java.util.List"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="employeeAccessList" class="java.util.List"/>
+	<field name="employeeCertificationList" class="java.util.List"/>
+	<field name="employeeLanguageList" class="java.util.List"/>
+	<field name="employeeLockerList" class="java.util.List"/>
+	<field name="employeeRoleList" class="java.util.List"/>
+	<field name="employeeSkillList" class="java.util.List"/>
+	<field name="errorBankList" class="java.util.List"/>
+	<field name="evaluationList" class="java.util.List"/>
+	<field name="gender" class="java.lang.String"/>
+	<field name="hiringlocation" class="models.District"/>
+	<field name="id" class="java.lang.String"/>
+	<field name="idCardList" class="java.util.List"/>
+	<field name="isdeleted" class="java.lang.Short"/>
+	<field name="marriedstatus" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="onboarddate" class="java.util.Date"/>
+	<field name="organizationList" class="java.util.List"/>
+	<field name="participant" class="models.Participant"/>
+	<field name="password" class="java.lang.String"/>
+	<field name="phone" class="java.lang.String"/>
+	<field name="placementList" class="java.util.List"/>
+	<field name="religion" class="models.Religion"/>
+	<field name="securityanswer" class="java.lang.String"/>
+	<field name="securityqestion" class="java.lang.String"/>
+	<field name="village" class="models.Village"/>
+	<field name="workExperienceList" class="java.util.List"/>
+	<field name="achievementList_1" class="java.util.List">
+		<fieldDescription><![CDATA[achievementList]]></fieldDescription>
+	</field>
+	<field name="address_1" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="batchClassList_1" class="java.util.List">
+		<fieldDescription><![CDATA[batchClassList]]></fieldDescription>
+	</field>
+	<field name="birthdate_1" class="java.util.Date">
+		<fieldDescription><![CDATA[birthdate]]></fieldDescription>
+	</field>
+	<field name="birthplace_1" class="models.District">
+		<fieldDescription><![CDATA[birthplace]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="educationHistoryList_1" class="java.util.List">
+		<fieldDescription><![CDATA[educationHistoryList]]></fieldDescription>
+	</field>
+	<field name="email_1" class="java.lang.String">
+		<fieldDescription><![CDATA[email]]></fieldDescription>
+	</field>
+	<field name="employeeAccessList_1" class="java.util.List">
+		<fieldDescription><![CDATA[employeeAccessList]]></fieldDescription>
+	</field>
+	<field name="employeeCertificationList_1" class="java.util.List">
+		<fieldDescription><![CDATA[employeeCertificationList]]></fieldDescription>
+	</field>
+	<field name="employeeLanguageList_1" class="java.util.List">
+		<fieldDescription><![CDATA[employeeLanguageList]]></fieldDescription>
+	</field>
+	<field name="employeeLockerList_1" class="java.util.List">
+		<fieldDescription><![CDATA[employeeLockerList]]></fieldDescription>
+	</field>
+	<field name="employeeRoleList_1" class="java.util.List">
+		<fieldDescription><![CDATA[employeeRoleList]]></fieldDescription>
+	</field>
+	<field name="employeeSkillList_1" class="java.util.List">
+		<fieldDescription><![CDATA[employeeSkillList]]></fieldDescription>
+	</field>
+	<field name="errorBankList_1" class="java.util.List">
+		<fieldDescription><![CDATA[errorBankList]]></fieldDescription>
+	</field>
+	<field name="evaluationList_1" class="java.util.List">
+		<fieldDescription><![CDATA[evaluationList]]></fieldDescription>
+	</field>
+	<field name="gender_1" class="java.lang.String">
+		<fieldDescription><![CDATA[gender]]></fieldDescription>
+	</field>
+	<field name="hiringlocation_1" class="models.District">
+		<fieldDescription><![CDATA[hiringlocation]]></fieldDescription>
+	</field>
+	<field name="id_1" class="java.lang.String">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="idCardList_1" class="java.util.List">
+		<fieldDescription><![CDATA[idCardList]]></fieldDescription>
+	</field>
+	<field name="isdeleted_1" class="java.lang.Short">
+		<fieldDescription><![CDATA[isdeleted]]></fieldDescription>
+	</field>
+	<field name="marriedstatus_1" class="java.lang.String">
+		<fieldDescription><![CDATA[marriedstatus]]></fieldDescription>
+	</field>
+	<field name="name_1" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="onboarddate_1" class="java.util.Date">
+		<fieldDescription><![CDATA[onboarddate]]></fieldDescription>
+	</field>
+	<field name="organizationList_1" class="java.util.List">
+		<fieldDescription><![CDATA[organizationList]]></fieldDescription>
+	</field>
+	<field name="participant_1" class="models.Participant">
+		<fieldDescription><![CDATA[participant]]></fieldDescription>
+	</field>
+	<field name="password_1" class="java.lang.String">
+		<fieldDescription><![CDATA[password]]></fieldDescription>
+	</field>
+	<field name="phone_1" class="java.lang.String">
+		<fieldDescription><![CDATA[phone]]></fieldDescription>
+	</field>
+	<field name="placementList_1" class="java.util.List">
+		<fieldDescription><![CDATA[placementList]]></fieldDescription>
+	</field>
+	<field name="religion_1" class="models.Religion">
+		<fieldDescription><![CDATA[religion]]></fieldDescription>
+	</field>
+	<field name="securityanswer_1" class="java.lang.String">
+		<fieldDescription><![CDATA[securityanswer]]></fieldDescription>
+	</field>
+	<field name="securityqestion_1" class="java.lang.String">
+		<fieldDescription><![CDATA[securityqestion]]></fieldDescription>
+	</field>
+	<field name="village_1" class="models.Village">
+		<fieldDescription><![CDATA[village]]></fieldDescription>
+	</field>
+	<field name="workExperienceList_1" class="java.util.List">
+		<fieldDescription><![CDATA[workExperienceList]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="33" width="451" height="45" uuid="203d7dc0-c777-42c1-842d-db3703a8bff0"/>
+				<textElement>
+					<font size="30"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="78" width="555" height="1" uuid="c5086e24-2d50-461d-a2b7-8b82ee364691"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="23" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="121" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="397" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
