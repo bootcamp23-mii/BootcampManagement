@@ -68,11 +68,12 @@ public class BootcampManagementView extends javax.swing.JFrame {
         mnCVWorkExperience = new javax.swing.JMenuItem();
         mnCVFoto = new javax.swing.JMenuItem();
         mnBCManagement = new javax.swing.JMenu();
-        mnParticipantView = new javax.swing.JMenuItem();
-        mnScoreView = new javax.swing.JMenuItem();
         mnBatchClassView = new javax.swing.JMenuItem();
+        mnParticipantView = new javax.swing.JMenuItem();
+        mnLessonView = new javax.swing.JMenuItem();
         mnErrorBankView = new javax.swing.JMenuItem();
         mnEvaluationView = new javax.swing.JMenuItem();
+        mnScoreView = new javax.swing.JMenuItem();
         mnEquipments = new javax.swing.JMenu();
         mnLocation = new javax.swing.JMenu();
 
@@ -155,13 +156,13 @@ public class BootcampManagementView extends javax.swing.JFrame {
         pnLoginLayout.setVerticalGroup(
             pnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnLoginLayout.createSequentialGroup()
-                .addContainerGap(123, Short.MAX_VALUE)
+                .addContainerGap(88, Short.MAX_VALUE)
                 .addGroup(pnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblLogoMII)
                     .addComponent(lblLogoMetrodata))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnLoginCard, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         pnBootcamp.add(pnLogin, java.awt.BorderLayout.CENTER);
@@ -251,6 +252,15 @@ public class BootcampManagementView extends javax.swing.JFrame {
         mnBCManagement.setText("Bootcamp Management");
         mnBCManagement.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        mnBatchClassView.setText("Batch Class");
+        mnBatchClassView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mnBatchClassView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnBatchClassViewActionPerformed(evt);
+            }
+        });
+        mnBCManagement.add(mnBatchClassView);
+
         mnParticipantView.setText("Participant");
         mnParticipantView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnParticipantView.addActionListener(new java.awt.event.ActionListener() {
@@ -260,23 +270,13 @@ public class BootcampManagementView extends javax.swing.JFrame {
         });
         mnBCManagement.add(mnParticipantView);
 
-        mnScoreView.setText("Score");
-        mnScoreView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        mnScoreView.addActionListener(new java.awt.event.ActionListener() {
+        mnLessonView.setText("Lesson");
+        mnLessonView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnScoreViewActionPerformed(evt);
+                mnLessonViewActionPerformed(evt);
             }
         });
-        mnBCManagement.add(mnScoreView);
-
-        mnBatchClassView.setText("Batch Class");
-        mnBatchClassView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        mnBatchClassView.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnBatchClassViewActionPerformed(evt);
-            }
-        });
-        mnBCManagement.add(mnBatchClassView);
+        mnBCManagement.add(mnLessonView);
 
         mnErrorBankView.setText("Error Bank");
         mnErrorBankView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -295,6 +295,14 @@ public class BootcampManagementView extends javax.swing.JFrame {
             }
         });
         mnBCManagement.add(mnEvaluationView);
+
+        mnScoreView.setText("Score");
+        mnScoreView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnScoreViewActionPerformed(evt);
+            }
+        });
+        mnBCManagement.add(mnScoreView);
 
         jMenuBar1.add(mnBCManagement);
 
@@ -316,30 +324,28 @@ public class BootcampManagementView extends javax.swing.JFrame {
     private void mnEvaluationViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnEvaluationViewActionPerformed
         EvaluationView ev = new EvaluationView();
         pnBootcamp.add(ev);
+        pnLogin.setVisible(false);
         ev.setVisible(true);
     }//GEN-LAST:event_mnEvaluationViewActionPerformed
 
     private void mnParticipantViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnParticipantViewActionPerformed
         ParticipantView ptv = new ParticipantView();
         pnBootcamp.add(ptv);
+        pnLogin.setVisible(false);
         ptv.setVisible(true);
     }//GEN-LAST:event_mnParticipantViewActionPerformed
-
-    private void mnScoreViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnScoreViewActionPerformed
-        ScoreView sv = new ScoreView();
-        pnBootcamp.add(sv);
-        sv.setVisible(true);
-    }//GEN-LAST:event_mnScoreViewActionPerformed
 
     private void mnBatchClassViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnBatchClassViewActionPerformed
         BatchClassView bcv = new BatchClassView();
         pnBootcamp.add(bcv);
+        pnLogin.setVisible(false);
         bcv.setVisible(true);
     }//GEN-LAST:event_mnBatchClassViewActionPerformed
 
     private void mnErrorBankViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnErrorBankViewActionPerformed
         ErrorBankView ebv = new ErrorBankView();
         pnBootcamp.add(ebv);
+        pnLogin.setVisible(false);
         ebv.setVisible(true);
     }//GEN-LAST:event_mnErrorBankViewActionPerformed
 
@@ -475,6 +481,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
     private javax.swing.JMenu mnEquipments;
     private javax.swing.JMenuItem mnErrorBankView;
     private javax.swing.JMenuItem mnEvaluationView;
+    private javax.swing.JMenuItem mnLessonView;
     private javax.swing.JMenu mnLocation;
     private javax.swing.JMenuItem mnParticipantView;
     private javax.swing.JMenuItem mnScoreView;

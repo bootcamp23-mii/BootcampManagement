@@ -27,7 +27,7 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblTitleErrorBank = new javax.swing.JLabel();
+        pnCenter = new javax.swing.JPanel();
         pnErrorBank = new javax.swing.JPanel();
         lblID = new javax.swing.JLabel();
         tfID = new javax.swing.JTextField();
@@ -37,50 +37,111 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         tfDescription = new javax.swing.JTextField();
         lblSolution = new javax.swing.JLabel();
         tfSolution = new javax.swing.JTextField();
-        lblClassType = new javax.swing.JLabel();
-        cbClassType = new javax.swing.JComboBox<>();
+        lblClasses = new javax.swing.JLabel();
+        cbClasses = new javax.swing.JComboBox<>();
         lblEmployee = new javax.swing.JLabel();
         cbEmployee = new javax.swing.JComboBox<>();
-        pnTable = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jTextField1 = new javax.swing.JTextField();
+        btInsert = new javax.swing.JButton();
+        chbGetById = new javax.swing.JCheckBox();
+        btDelete = new javax.swing.JButton();
+        btSearch = new javax.swing.JButton();
         scpErrorBank = new javax.swing.JScrollPane();
         tbErrorBank = new javax.swing.JTable();
 
         setClosable(true);
+        setTitle("Error Bank");
+        setMinimumSize(new java.awt.Dimension(750, 550));
+        setPreferredSize(new java.awt.Dimension(750, 550));
+        try {
+            setSelected(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        setVisible(true);
         getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
 
-        lblTitleErrorBank.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitleErrorBank.setText("ERROR BANK");
-        getContentPane().add(lblTitleErrorBank, java.awt.BorderLayout.PAGE_START);
+        pnCenter.setBackground(new java.awt.Color(153, 255, 153));
+        pnCenter.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        pnErrorBank.setLayout(new java.awt.GridLayout(6, 2, 5, 5));
+        pnErrorBank.setBackground(new java.awt.Color(153, 255, 153));
+        pnErrorBank.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblID.setText("ID");
-        pnErrorBank.add(lblID);
-        pnErrorBank.add(tfID);
+        pnErrorBank.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 70, 30));
+        pnErrorBank.add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 1, 180, 30));
 
         lblSubmitDate.setText("Submit Date");
-        pnErrorBank.add(lblSubmitDate);
-        pnErrorBank.add(tfSubmitDate);
+        pnErrorBank.add(lblSubmitDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 70, 30));
+        pnErrorBank.add(tfSubmitDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 40, 180, 30));
 
         lblDescription.setText("Description");
-        pnErrorBank.add(lblDescription);
-        pnErrorBank.add(tfDescription);
+        pnErrorBank.add(lblDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 79, 70, 30));
+        pnErrorBank.add(tfDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 79, 480, 30));
 
         lblSolution.setText("Solution");
-        pnErrorBank.add(lblSolution);
-        pnErrorBank.add(tfSolution);
+        pnErrorBank.add(lblSolution, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 118, 70, 30));
+        pnErrorBank.add(tfSolution, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 118, 480, 30));
 
-        lblClassType.setText("Class Type");
-        pnErrorBank.add(lblClassType);
+        lblClasses.setText("Class");
+        pnErrorBank.add(lblClasses, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 70, 30));
 
-        pnErrorBank.add(cbClassType);
+        cbClasses.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbClassesMouseClicked(evt);
+            }
+        });
+        pnErrorBank.add(cbClasses, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 180, 30));
 
         lblEmployee.setText("Employee");
-        pnErrorBank.add(lblEmployee);
+        pnErrorBank.add(lblEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 70, 30));
 
-        pnErrorBank.add(cbEmployee);
+        cbEmployee.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbEmployeeMouseClicked(evt);
+            }
+        });
+        pnErrorBank.add(cbEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 40, 180, 30));
+        pnErrorBank.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 560, 34));
+        pnErrorBank.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 210, 34));
 
-        getContentPane().add(pnErrorBank, java.awt.BorderLayout.CENTER);
+        btInsert.setText("Insert");
+        btInsert.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btInsert.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btInsertMouseClicked(evt);
+            }
+        });
+        pnErrorBank.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 70, 34));
+
+        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
+        chbGetById.setText("Get by ID");
+        chbGetById.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chbGetById.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chbGetByIdMouseClicked(evt);
+            }
+        });
+        pnErrorBank.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, 80, 34));
+
+        btDelete.setText("Delete");
+        btDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btDeleteMouseClicked(evt);
+            }
+        });
+        pnErrorBank.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 180, 70, 34));
+
+        btSearch.setText("Search");
+        btSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btSearchMouseClicked(evt);
+            }
+        });
+        pnErrorBank.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 70, 34));
 
         tbErrorBank.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,46 +151,76 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Submit Date", "Description", "Solution", "Class Type", "Employee"
+                "ID", "Submit Date", "Description", "Solution", "Class", "Employee"
             }
         ));
         scpErrorBank.setViewportView(tbErrorBank);
 
-        javax.swing.GroupLayout pnTableLayout = new javax.swing.GroupLayout(pnTable);
-        pnTable.setLayout(pnTableLayout);
-        pnTableLayout.setHorizontalGroup(
-            pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
-            .addGroup(pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(scpErrorBank, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+        javax.swing.GroupLayout pnCenterLayout = new javax.swing.GroupLayout(pnCenter);
+        pnCenter.setLayout(pnCenterLayout);
+        pnCenterLayout.setHorizontalGroup(
+            pnCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnCenterLayout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(pnErrorBank, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(57, Short.MAX_VALUE))
+            .addComponent(scpErrorBank)
         );
-        pnTableLayout.setVerticalGroup(
-            pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-            .addGroup(pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTableLayout.createSequentialGroup()
-                    .addComponent(scpErrorBank, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                    .addContainerGap()))
+        pnCenterLayout.setVerticalGroup(
+            pnCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnCenterLayout.createSequentialGroup()
+                .addComponent(pnErrorBank, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scpErrorBank, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE))
         );
 
-        getContentPane().add(pnTable, java.awt.BorderLayout.PAGE_END);
+        getContentPane().add(pnCenter, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void chbGetByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chbGetByIdMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chbGetByIdMouseClicked
+
+    private void btSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSearchMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btSearchMouseClicked
+
+    private void btInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btInsertMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btInsertMouseClicked
+
+    private void btDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDeleteMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btDeleteMouseClicked
+
+    private void cbClassesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbClassesMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbClassesMouseClicked
+
+    private void cbEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbEmployeeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbEmployeeMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cbClassType;
+    private javax.swing.JButton btDelete;
+    private javax.swing.JButton btInsert;
+    private javax.swing.JButton btSearch;
+    private javax.swing.JComboBox<String> cbClasses;
     private javax.swing.JComboBox<String> cbEmployee;
-    private javax.swing.JLabel lblClassType;
+    private javax.swing.JCheckBox chbGetById;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblClasses;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblEmployee;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblSolution;
     private javax.swing.JLabel lblSubmitDate;
-    private javax.swing.JLabel lblTitleErrorBank;
+    private javax.swing.JPanel pnCenter;
     private javax.swing.JPanel pnErrorBank;
-    private javax.swing.JPanel pnTable;
     private javax.swing.JScrollPane scpErrorBank;
     private javax.swing.JTable tbErrorBank;
     private javax.swing.JTextField tfDescription;

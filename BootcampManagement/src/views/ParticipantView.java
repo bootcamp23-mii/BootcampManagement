@@ -80,13 +80,25 @@ public class ParticipantView extends javax.swing.JInternalFrame {
         btSearch = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         chbGetById = new javax.swing.JCheckBox();
-        pnTable = new javax.swing.JPanel();
         scpParticipant = new javax.swing.JScrollPane();
         tbParticipant = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(153, 255, 153));
         setClosable(true);
         setTitle("Participant");
+        setMinimumSize(new java.awt.Dimension(750, 550));
+        setPreferredSize(new java.awt.Dimension(750, 550));
+        try {
+            setSelected(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        setVisible(true);
 
+        pnCenter.setBackground(new java.awt.Color(153, 255, 153));
+        pnCenter.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        pnParticipant.setBackground(new java.awt.Color(153, 255, 153));
         pnParticipant.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblID.setText("ID");
@@ -105,49 +117,47 @@ public class ParticipantView extends javax.swing.JInternalFrame {
                 cbBatchClassMouseClicked(evt);
             }
         });
-        cbBatchClass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbBatchClassActionPerformed(evt);
-            }
-        });
         pnParticipant.add(cbBatchClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 72, 240, 30));
         pnParticipant.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 107, 215, 30));
         pnParticipant.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 107, 215, 30));
         pnParticipant.add(tfSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 142, 290, 30));
 
         btInsert.setText("Insert");
+        btInsert.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btInsert.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btInsertMouseClicked(evt);
             }
         });
-        btInsert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btInsertActionPerformed(evt);
-            }
-        });
         pnParticipant.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 142, 130, 30));
 
         btSearch.setText("Search");
+        btSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btSearchMouseClicked(evt);
+            }
+        });
         pnParticipant.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 177, 190, 30));
 
         btDelete.setText("Delete");
-        btDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btDeleteActionPerformed(evt);
+        btDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btDeleteMouseClicked(evt);
             }
         });
         pnParticipant.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 177, 130, 30));
 
+        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
         chbGetById.setText("Get by ID");
-        chbGetById.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chbGetByIdActionPerformed(evt);
+        chbGetById.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chbGetById.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chbGetByIdMouseClicked(evt);
             }
         });
         pnParticipant.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 80, 30));
-
-        pnCenter.add(pnParticipant);
 
         tbParticipant.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -181,48 +191,32 @@ public class ParticipantView extends javax.swing.JInternalFrame {
             tbParticipant.getColumnModel().getColumn(2).setPreferredWidth(5);
         }
 
-        javax.swing.GroupLayout pnTableLayout = new javax.swing.GroupLayout(pnTable);
-        pnTable.setLayout(pnTableLayout);
-        pnTableLayout.setHorizontalGroup(
-            pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTableLayout.createSequentialGroup()
-                .addContainerGap(147, Short.MAX_VALUE)
-                .addComponent(scpParticipant, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(145, 145, 145))
-        );
-        pnTableLayout.setVerticalGroup(
-            pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnTableLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnCenterLayout = new javax.swing.GroupLayout(pnCenter);
+        pnCenter.setLayout(pnCenterLayout);
+        pnCenterLayout.setHorizontalGroup(
+            pnCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnCenterLayout.createSequentialGroup()
+                .addGap(131, 131, 131)
+                .addComponent(pnParticipant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(128, Short.MAX_VALUE))
+            .addGroup(pnCenterLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scpParticipant, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                .addGap(24, 24, 24))
+                .addComponent(scpParticipant)
+                .addContainerGap())
+        );
+        pnCenterLayout.setVerticalGroup(
+            pnCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnCenterLayout.createSequentialGroup()
+                .addComponent(pnParticipant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scpParticipant, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        pnCenter.add(pnTable);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pnCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pnCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        getContentPane().add(pnCenter, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void cbBatchClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBatchClassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbBatchClassActionPerformed
 
     private void tbParticipantMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbParticipantMouseClicked
         tfID.setText(tbParticipant.getValueAt(tbParticipant.getSelectedRow(), 1).toString());
@@ -235,18 +229,6 @@ public class ParticipantView extends javax.swing.JInternalFrame {
         tfID.setEnabled(false);
     }//GEN-LAST:event_tbParticipantMouseClicked
 
-    private void btInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btInsertActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btInsertActionPerformed
-
-    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btDeleteActionPerformed
-
-    private void chbGetByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbGetByIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chbGetByIdActionPerformed
-
     private void cbBatchClassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbBatchClassMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_cbBatchClassMouseClicked
@@ -254,6 +236,18 @@ public class ParticipantView extends javax.swing.JInternalFrame {
     private void btInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btInsertMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btInsertMouseClicked
+
+    private void chbGetByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chbGetByIdMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chbGetByIdMouseClicked
+
+    private void btSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSearchMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btSearchMouseClicked
+
+    private void btDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDeleteMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btDeleteMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -269,7 +263,6 @@ public class ParticipantView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblID;
     private javax.swing.JPanel pnCenter;
     private javax.swing.JPanel pnParticipant;
-    private javax.swing.JPanel pnTable;
     private javax.swing.JScrollPane scpParticipant;
     private javax.swing.JTable tbParticipant;
     private javax.swing.JTextField tfGrade;

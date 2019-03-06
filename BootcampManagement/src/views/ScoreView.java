@@ -27,7 +27,7 @@ public class ScoreView extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblTitleScore = new javax.swing.JLabel();
+        pnCenter = new javax.swing.JPanel();
         pnScore = new javax.swing.JPanel();
         lblID = new javax.swing.JLabel();
         tfID = new javax.swing.JTextField();
@@ -37,90 +37,131 @@ public class ScoreView extends javax.swing.JInternalFrame {
         cbEvaluation = new javax.swing.JComboBox<>();
         lblAspect = new javax.swing.JLabel();
         cbAspect = new javax.swing.JComboBox<>();
-        pnTable = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
+        tfKeyword = new javax.swing.JTextField();
+        btInsert = new javax.swing.JButton();
+        chbGetById = new javax.swing.JCheckBox();
+        btDelete = new javax.swing.JButton();
+        btSearch = new javax.swing.JButton();
         scpScore = new javax.swing.JScrollPane();
         tbScore = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(153, 255, 153));
         setClosable(true);
+        setTitle("Score");
+        setMinimumSize(new java.awt.Dimension(750, 550));
+        setPreferredSize(new java.awt.Dimension(750, 550));
+        try {
+            setSelected(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        setVisible(true);
         getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
 
-        lblTitleScore.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitleScore.setText("SCORE");
-        getContentPane().add(lblTitleScore, java.awt.BorderLayout.PAGE_START);
+        pnCenter.setBackground(new java.awt.Color(153, 255, 153));
+        pnCenter.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        pnScore.setLayout(new java.awt.GridLayout(4, 2, 5, 5));
+        pnScore.setBackground(new java.awt.Color(153, 255, 153));
+        pnScore.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblID.setText("ID");
-        pnScore.add(lblID);
-        pnScore.add(tfID);
+        pnScore.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 34));
+        pnScore.add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 0, 560, 34));
 
         lblRating.setText("Rating");
-        pnScore.add(lblRating);
+        pnScore.add(lblRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 39, 60, 34));
 
-        pnScore.add(cbRating);
+        pnScore.add(cbRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 39, 560, 34));
 
         lblEvaluation.setText("Evaluation");
-        pnScore.add(lblEvaluation);
+        pnScore.add(lblEvaluation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 78, 60, 34));
 
-        pnScore.add(cbEvaluation);
+        pnScore.add(cbEvaluation, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 78, 560, 34));
 
         lblAspect.setText("Aspect");
-        pnScore.add(lblAspect);
+        pnScore.add(lblAspect, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 117, 60, 34));
 
-        pnScore.add(cbAspect);
+        pnScore.add(cbAspect, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 117, 560, 34));
+        pnScore.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 630, 34));
+        pnScore.add(tfKeyword, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 208, 34));
 
-        getContentPane().add(pnScore, java.awt.BorderLayout.CENTER);
+        btInsert.setText("Insert");
+        pnScore.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 180, 80, 34));
+
+        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
+        chbGetById.setText("Get by ID");
+        pnScore.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, 80, 34));
+
+        btDelete.setText("Delete");
+        pnScore.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, 80, 34));
+
+        btSearch.setText("Search");
+        pnScore.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 80, 34));
 
         tbScore.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Rating", "Evaluation", "Aspect"
+                "No.", "ID", "Rating", "Evaluation", "Aspect"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         scpScore.setViewportView(tbScore);
 
-        javax.swing.GroupLayout pnTableLayout = new javax.swing.GroupLayout(pnTable);
-        pnTable.setLayout(pnTableLayout);
-        pnTableLayout.setHorizontalGroup(
-            pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
-            .addGroup(pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(scpScore, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+        javax.swing.GroupLayout pnCenterLayout = new javax.swing.GroupLayout(pnCenter);
+        pnCenter.setLayout(pnCenterLayout);
+        pnCenterLayout.setHorizontalGroup(
+            pnCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scpScore)
+            .addGroup(pnCenterLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(pnScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
-        pnTableLayout.setVerticalGroup(
-            pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 122, Short.MAX_VALUE)
-            .addGroup(pnTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTableLayout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(scpScore, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        pnCenterLayout.setVerticalGroup(
+            pnCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnCenterLayout.createSequentialGroup()
+                .addComponent(pnScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(scpScore, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
         );
 
-        getContentPane().add(pnTable, java.awt.BorderLayout.PAGE_END);
+        getContentPane().add(pnCenter, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btDelete;
+    private javax.swing.JButton btInsert;
+    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbAspect;
     private javax.swing.JComboBox<String> cbEvaluation;
     private javax.swing.JComboBox<String> cbRating;
+    private javax.swing.JCheckBox chbGetById;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAspect;
     private javax.swing.JLabel lblEvaluation;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblRating;
-    private javax.swing.JLabel lblTitleScore;
+    private javax.swing.JPanel pnCenter;
     private javax.swing.JPanel pnScore;
-    private javax.swing.JPanel pnTable;
     private javax.swing.JScrollPane scpScore;
     private javax.swing.JTable tbScore;
     private javax.swing.JTextField tfID;
+    private javax.swing.JTextField tfKeyword;
     // End of variables declaration//GEN-END:variables
 }
