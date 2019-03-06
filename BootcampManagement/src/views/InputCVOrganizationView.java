@@ -68,6 +68,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         pnMTRC2 = new javax.swing.JPanel();
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
         spcOrganization = new javax.swing.JScrollPane();
         tbOrganization = new javax.swing.JTable();
@@ -133,10 +134,28 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         pnMTRC2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
         pnMTRC2.add(btSave);
 
         btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
         pnMTRC2.add(btDelete);
+
+        btClear.setText("Clear");
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnMTRC2.add(btClear);
 
         pnMTRCenter.add(pnMTRC2);
 
@@ -235,8 +254,21 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         tfOrganization.setText(tbOrganization.getValueAt(tbOrganization.getSelectedRow(), 1).toString());
     }//GEN-LAST:event_tbOrganizationMouseClicked
 
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        c.save("", tfOrganization.getText(), Session.getSession());
+    }//GEN-LAST:event_btSaveActionPerformed
+
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        tfOrganization.setText("");
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        c.deleteSoft("", tfOrganization.getText(), Session.getSession());
+    }//GEN-LAST:event_btDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;

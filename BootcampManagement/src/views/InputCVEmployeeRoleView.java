@@ -103,11 +103,12 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         lblRole2 = new javax.swing.JLabel();
         lblRole3 = new javax.swing.JLabel();
         btDelete = new javax.swing.JButton();
-        btSave = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         dcStartDate = new datechooser.beans.DateChooserCombo();
         dcEndDate = new datechooser.beans.DateChooserCombo();
         tfEndDate = new javax.swing.JTextField();
         tfStartDate = new javax.swing.JTextField();
+        btSave = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
         scpEmployeeRole = new javax.swing.JScrollPane();
         tbEmployeeRole = new javax.swing.JTable();
@@ -145,7 +146,7 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         pnMTop.setLayout(pnMTopLayout);
         pnMTopLayout.setHorizontalGroup(
             pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 691, Short.MAX_VALUE)
             .addGroup(pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnMTopLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -207,8 +208,13 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         });
         pnMTRC2.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, -1, 25));
 
-        btSave.setText("Save");
-        pnMTRC2.add(btSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 40, -1, 25));
+        btClear.setText("Clear");
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnMTRC2.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, -1, 25));
 
         dcStartDate.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
@@ -324,6 +330,14 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     pnMTRC2.add(tfEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 120, 30));
     pnMTRC2.add(tfStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 120, 30));
 
+    btSave.setText("Save");
+    btSave.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btSaveActionPerformed(evt);
+        }
+    });
+    pnMTRC2.add(btSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 40, -1, 25));
+
     pnMTRCenter.add(pnMTRC2);
 
     pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 150));
@@ -386,7 +400,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     );
     pnMTRightLayout.setVerticalGroup(
         pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 380, Short.MAX_VALUE)
+        .addGap(0, 377, Short.MAX_VALUE)
     );
 
     pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -402,7 +416,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     );
     pnMTLeftLayout.setVerticalGroup(
         pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 380, Short.MAX_VALUE)
+        .addGap(0, 377, Short.MAX_VALUE)
     );
 
     pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -411,11 +425,11 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
     );
 
     pack();
@@ -426,7 +440,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     }//GEN-LAST:event_btOkeActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        // TODO add your handling code here:
+        c.deleteSoft("", tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), cbEmpRole.getSelectedItem().toString().split(" - ")[0]);
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void dcStartDateOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dcStartDateOnSelectionChange
@@ -458,8 +472,19 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
         tfEndDate.setText(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 3).toString());
     }//GEN-LAST:event_tbEmployeeRoleMouseClicked
 
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        cbEmpRole.setSelectedIndex(0);
+        tfEndDate.setText("");
+        tfStartDate.setText("");
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        c.save("", tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), cbEmpRole.getSelectedItem().toString().split(" - ")[0]);
+    }//GEN-LAST:event_btSaveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;

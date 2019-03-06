@@ -178,9 +178,19 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         pnMTRC2.add(btClear);
 
         btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
         pnMTRC2.add(btSave);
 
         btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
         pnMTRC2.add(btDelete);
 
         pnMTRCenter.add(pnMTRC2);
@@ -277,7 +287,8 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btOkeActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
-        // TODO add your handling code here:
+        tfEducationHisGPA.setText("");
+        cbEducationHis.setSelectedIndex(0);
     }//GEN-LAST:event_btClearActionPerformed
 
     private void tbEducationHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEducationHistoryMouseClicked
@@ -294,6 +305,14 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         }
         tfEducationHisGPA.setText(tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 1).toString());
     }//GEN-LAST:event_tbEducationHistoryMouseClicked
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        c.save("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+    }//GEN-LAST:event_btSaveActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        c.deleteSoft("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+    }//GEN-LAST:event_btDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

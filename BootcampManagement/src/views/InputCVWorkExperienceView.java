@@ -93,6 +93,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         pnMTRC3 = new javax.swing.JPanel();
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         pnMTRC4 = new javax.swing.JPanel();
         scpWorkExperience = new javax.swing.JScrollPane();
         tbWorkExperience = new javax.swing.JTable();
@@ -212,10 +213,28 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         pnMTRC3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
         pnMTRC3.add(btSave);
 
         btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
         pnMTRC3.add(btDelete);
+
+        btClear.setText("Clear");
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnMTRC3.add(btClear);
 
         pnMTRCenter.add(pnMTRC3);
 
@@ -336,8 +355,24 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         tfDescription.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 4).toString());
     }//GEN-LAST:event_tbWorkExperienceMouseClicked
 
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        c.save("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
+    }//GEN-LAST:event_btSaveActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        c.deleteSoft("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        tfDescription.setText("");
+        tfStartDate.setText("");
+        tfEndDate.setText("");
+        tfName.setText("");
+    }//GEN-LAST:event_btClearActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;

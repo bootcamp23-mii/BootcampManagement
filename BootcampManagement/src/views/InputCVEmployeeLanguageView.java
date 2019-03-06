@@ -152,9 +152,19 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         pnMTRC2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
         pnMTRC2.add(btSave);
 
         btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
         pnMTRC2.add(btDelete);
 
         pnMTRCenter.add(pnMTRC2);
@@ -260,6 +270,14 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
             cbEmployeeLanguage.setSelectedIndex(i);
         }
     }//GEN-LAST:event_tbEmpLanguageMouseClicked
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        c.deleteSoft("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        c.save("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
+    }//GEN-LAST:event_btSaveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

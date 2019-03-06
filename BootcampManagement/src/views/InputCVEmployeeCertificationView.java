@@ -98,6 +98,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTRC3 = new javax.swing.JPanel();
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         pnMTRC4 = new javax.swing.JPanel();
         scpEmpCertification = new javax.swing.JScrollPane();
         tbEmpCertification = new javax.swing.JTable();
@@ -207,10 +208,28 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         pnMTRC3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
         pnMTRC3.add(btSave);
 
         btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
         pnMTRC3.add(btDelete);
+
+        btClear.setText("Clear");
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnMTRC3.add(btClear);
 
         pnMTRCenter.add(pnMTRC3);
 
@@ -341,8 +360,24 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         tfCertificateNumber.setText(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 3).toString());
     }//GEN-LAST:event_tbEmpCertificationMouseClicked
 
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        cbEmpCertification.setSelectedIndex(0);
+        tfCertificateDate.setText("");
+        tfCertificateNumber.setText("");
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        c.deleteSoft("", tfCertificateDate.getText(), tfCertificateNumber.getText(), cbEmpCertification.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+                
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        c.save("", tfCertificateDate.getText(), tfCertificateNumber.getText(), cbEmpCertification.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+    }//GEN-LAST:event_btSaveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
