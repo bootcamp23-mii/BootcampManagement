@@ -247,7 +247,7 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btOkeActionPerformed
 
     private void btUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUploadActionPerformed
@@ -260,21 +260,12 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
     private javax.swing.JButton btUpload;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblImage;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblTitle1;
-    private javax.swing.JLabel lblTitle2;
     private javax.swing.JLabel lblTitle3;
     private javax.swing.JPanel pn;
     private javax.swing.JPanel pnMTBottom;
     private javax.swing.JPanel pnMTLeft;
     private javax.swing.JPanel pnMTRCenter;
     private javax.swing.JPanel pnMTRight;
-    private javax.swing.JPanel pnMTop;
-    private javax.swing.JPanel pnMTop1;
-    private javax.swing.JPanel pnMTop2;
     private javax.swing.JPanel pnMTop3;
-    private javax.swing.JPanel pnMain;
-    private javax.swing.JPanel pnMain1;
-    private javax.swing.JPanel pnMain2;
     // End of variables declaration//GEN-END:variables
 }

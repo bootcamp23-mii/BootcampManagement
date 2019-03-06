@@ -283,7 +283,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btOkeActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
