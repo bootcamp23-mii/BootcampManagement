@@ -31,7 +31,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
     }
 
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
     }
 
     private void showAllTable(List<Achievement> dataList){
@@ -261,10 +261,12 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfAchievement.getText(), Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfAchievement.getText(), Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
 

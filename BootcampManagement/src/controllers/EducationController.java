@@ -45,7 +45,7 @@ public class EducationController implements EducationControllerInterface {
 
     @Override
     public String save(String id, String degree, String major, String university) {
-        if (dao.saveOrDelete(new Education("", new Short("0"), new Degree(degree), new Major(major), new University(university)), true)) {
+        if (dao.saveOrDelete(new Education(id, new Short("0"), new Degree(degree), new Major(major), new University(university)), true)) {
             return "Save Data Success!";
         } else {
             return "Save Failed!";
@@ -54,7 +54,7 @@ public class EducationController implements EducationControllerInterface {
 
     @Override
     public String delete(String id, String degree, String major, String university) {
-        if (dao.saveOrDelete(new Education("", new Short("0"), new Degree(degree), new Major(major), new University(university)), false)) {
+        if (dao.saveOrDelete(new Education(id, new Short("0"), new Degree(degree), new Major(major), new University(university)), false)) {
             return "Delete Data Success!";
         } else {
             return "Delete Failed!";

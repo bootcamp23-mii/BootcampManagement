@@ -35,7 +35,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
     }
 
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
         getLanguageList();
         setComboBox();
     }
@@ -273,10 +273,12 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
+        setDefaultCondition();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
 

@@ -36,7 +36,7 @@ public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
     }
 
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
         getSkillList();
         setComboBox();
     }
@@ -278,10 +278,12 @@ public class InputCVEmployeeSkillView extends javax.swing.JInternalFrame {
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", Session.getSession(), cbEmployeeSkill.getSelectedItem().toString().split(" - ")[0]);
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", Session.getSession(), cbEmployeeSkill.getSelectedItem().toString().split(" - ")[0]);
+        setDefaultCondition();
     }//GEN-LAST:event_btDeleteActionPerformed
 
 

@@ -14,7 +14,7 @@ import org.hibernate.SessionFactory;
 
 /**
  *
- * @author Pandu
+ * @author FES
  */
 public class EmployeeLanguageController implements EmployeeLanguageControllerInterface {
 

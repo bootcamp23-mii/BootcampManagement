@@ -108,18 +108,18 @@ public class GeneralDAO<T> implements DAOInterface<T>{
         return result;
     }
 
-    private String getQueryWD(String keyword, int isdeleted) {
+    private String getQueryWD(String keyword, String isDeleted) {
         String query = "From " + t.getClass().getSimpleName();
         if (!keyword.equals("")) {
-            query += " where ";
+            query += " where (";
             for (Field field : t.getClass().getDeclaredFields()) {
-                if (!field.getName().contains("UID") && !field.getName().contains("List")) {
+                if (!field.getName().contains("UID") && !field.getName().contains("List")&& !field.getName().contains("isdeleted")) {
                     query += field.getName() + " like '%" + keyword + "%' OR ";
                 }
             }
-            query = query.substring(0, query.lastIndexOf("OR"));
+            query = query.substring(0, query.lastIndexOf(" OR "));
         }
-        return query + " and isdeleted="+isdeleted+" order by 1";
+        return query + ") AND isdeleted = 0 order by 1";
     }
     
     @Override
@@ -128,7 +128,9 @@ public class GeneralDAO<T> implements DAOInterface<T>{
         session = this.factory.openSession();
         transaction = session.beginTransaction();
         try {
-            obj = session.createQuery(getQueryWD(keyword + "",isDeleted)).list();
+            String temp = getQueryWD(keyword + "",String.valueOf(keyword));
+            System.out.println(temp);
+            obj = session.createQuery(temp).list();
         } catch (Exception e) {
             e.printStackTrace();
             if (transaction != null) {

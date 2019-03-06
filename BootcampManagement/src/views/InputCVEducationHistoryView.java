@@ -308,10 +308,12 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btDeleteActionPerformed
 
 

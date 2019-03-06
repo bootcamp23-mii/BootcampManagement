@@ -38,7 +38,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
     }
     
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
         dcStartDate.setDateFormat(dateFormatOut);
         dcEndDate.setDateFormat(dateFormatOut);
         tfStartDate.setEnabled(false);
@@ -357,10 +357,12 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed

@@ -31,7 +31,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
     }
 
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
     }
 
     private void showAllTable(List<Organization> dataList){
@@ -256,6 +256,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfOrganization.getText(), Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
@@ -264,6 +265,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfOrganization.getText(), Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btDeleteActionPerformed
 
 

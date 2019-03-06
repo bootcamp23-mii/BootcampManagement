@@ -37,7 +37,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
     }
 
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
         dcEmployeeCertification.setDateFormat(dateFormatOut);
         tfCertificateDate.setEnabled(false);
         getRoleList();
@@ -368,11 +368,13 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfCertificateDate.getText(), tfCertificateNumber.getText(), cbEmpCertification.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+        setDefaultCondition();
                 
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfCertificateDate.getText(), tfCertificateNumber.getText(), cbEmpCertification.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
 

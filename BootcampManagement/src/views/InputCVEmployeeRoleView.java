@@ -44,7 +44,7 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
     }
     
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
         dcStartDate.setDateFormat(dateFormatOut);
         dcEndDate.setDateFormat(dateFormatOut);
         tfStartDate.setEnabled(false);
@@ -441,6 +441,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), cbEmpRole.getSelectedItem().toString().split(" - ")[0]);
+        setDefaultCondition();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void dcStartDateOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dcStartDateOnSelectionChange
@@ -480,6 +481,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), cbEmpRole.getSelectedItem().toString().split(" - ")[0]);
+        setDefaultCondition();
     }//GEN-LAST:event_btSaveActionPerformed
 
 

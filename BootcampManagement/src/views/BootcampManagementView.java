@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
+import views.*;
 
 /**
  *
@@ -57,6 +58,15 @@ public class BootcampManagementView extends javax.swing.JFrame {
         lblLogoMetrodata = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnEditCV = new javax.swing.JMenu();
+        mnCVEmployeeRole = new javax.swing.JMenuItem();
+        mnCVEducationHistory = new javax.swing.JMenuItem();
+        mnCVEmployeeLanguage = new javax.swing.JMenuItem();
+        mnCVEmployeeSkill = new javax.swing.JMenuItem();
+        mnCVOrganization = new javax.swing.JMenuItem();
+        mnCVAchievement = new javax.swing.JMenuItem();
+        mnCVEmployeeCertification = new javax.swing.JMenuItem();
+        mnCVWorkExperience = new javax.swing.JMenuItem();
+        mnCVFoto = new javax.swing.JMenuItem();
         mnBCManagement = new javax.swing.JMenu();
         mnParticipantView = new javax.swing.JMenuItem();
         mnScoreView = new javax.swing.JMenuItem();
@@ -163,6 +173,79 @@ public class BootcampManagementView extends javax.swing.JFrame {
         jMenuBar1.setPreferredSize(new java.awt.Dimension(310, 30));
 
         mnEditCV.setText("Edit CV");
+
+        mnCVEmployeeRole.setText("Employee Role");
+        mnCVEmployeeRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVEmployeeRoleActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVEmployeeRole);
+
+        mnCVEducationHistory.setText("Education History");
+        mnCVEducationHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVEducationHistoryActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVEducationHistory);
+
+        mnCVEmployeeLanguage.setText("Employee Language");
+        mnCVEmployeeLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVEmployeeLanguageActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVEmployeeLanguage);
+
+        mnCVEmployeeSkill.setText("Employee Skill");
+        mnCVEmployeeSkill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVEmployeeSkillActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVEmployeeSkill);
+
+        mnCVOrganization.setText("Organization");
+        mnCVOrganization.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVOrganizationActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVOrganization);
+
+        mnCVAchievement.setText("Achievement");
+        mnCVAchievement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVAchievementActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVAchievement);
+
+        mnCVEmployeeCertification.setText("Employee Certification");
+        mnCVEmployeeCertification.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVEmployeeCertificationActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVEmployeeCertification);
+
+        mnCVWorkExperience.setText("Work Experience");
+        mnCVWorkExperience.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVWorkExperienceActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVWorkExperience);
+
+        mnCVFoto.setText("Photo");
+        mnCVFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVFotoActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVFoto);
+
         jMenuBar1.add(mnEditCV);
 
         mnBCManagement.setText("Bootcamp Management");
@@ -260,6 +343,78 @@ public class BootcampManagementView extends javax.swing.JFrame {
         ebv.setVisible(true);
     }//GEN-LAST:event_mnErrorBankViewActionPerformed
 
+    private void mnCVEmployeeRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeRoleActionPerformed
+        InputCVEmployeeRoleView view = new InputCVEmployeeRoleView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVEmployeeRoleActionPerformed
+
+    private void mnCVEducationHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEducationHistoryActionPerformed
+        InputCVEducationHistoryView view = new InputCVEducationHistoryView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVEducationHistoryActionPerformed
+
+    private void mnCVEmployeeLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeLanguageActionPerformed
+        InputCVEmployeeLanguageView view = new InputCVEmployeeLanguageView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVEmployeeLanguageActionPerformed
+
+    private void mnCVEmployeeSkillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeSkillActionPerformed
+        InputCVEmployeeSkillView view = new InputCVEmployeeSkillView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVEmployeeSkillActionPerformed
+
+    private void mnCVOrganizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVOrganizationActionPerformed
+        InputCVOrganizationView view = new InputCVOrganizationView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVOrganizationActionPerformed
+
+    private void mnCVAchievementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVAchievementActionPerformed
+        InputCVAchievementView view = new InputCVAchievementView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVAchievementActionPerformed
+
+    private void mnCVEmployeeCertificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeCertificationActionPerformed
+        InputCVEmployeeCertificationView view = new InputCVEmployeeCertificationView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVEmployeeCertificationActionPerformed
+
+    private void mnCVWorkExperienceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVWorkExperienceActionPerformed
+        InputCVWorkExperienceView view = new InputCVWorkExperienceView();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVWorkExperienceActionPerformed
+
+    private void mnCVFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVFotoActionPerformed
+        InputCVFoto view = new InputCVFoto();
+        pnBootcamp.removeAll();
+        pnBootcamp.add(view);
+        view.setVisible(true);
+        view.revalidate();
+    }//GEN-LAST:event_mnCVFotoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -307,6 +462,15 @@ public class BootcampManagementView extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsername;
     private javax.swing.JMenu mnBCManagement;
     private javax.swing.JMenuItem mnBatchClassView;
+    private javax.swing.JMenuItem mnCVAchievement;
+    private javax.swing.JMenuItem mnCVEducationHistory;
+    private javax.swing.JMenuItem mnCVEmployeeCertification;
+    private javax.swing.JMenuItem mnCVEmployeeLanguage;
+    private javax.swing.JMenuItem mnCVEmployeeRole;
+    private javax.swing.JMenuItem mnCVEmployeeSkill;
+    private javax.swing.JMenuItem mnCVFoto;
+    private javax.swing.JMenuItem mnCVOrganization;
+    private javax.swing.JMenuItem mnCVWorkExperience;
     private javax.swing.JMenu mnEditCV;
     private javax.swing.JMenu mnEquipments;
     private javax.swing.JMenuItem mnErrorBankView;
