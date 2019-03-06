@@ -76,11 +76,11 @@ public class BootcampManagementView extends javax.swing.JFrame {
         setName("loginView"); // NOI18N
         setPreferredSize(new java.awt.Dimension(800, 600));
         setSize(new java.awt.Dimension(800, 600));
-        getContentPane().setLayout(new javax.swing.OverlayLayout(getContentPane()));
+        getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
 
         pnBootcamp.setBackground(new java.awt.Color(0, 169, 255));
         pnBootcamp.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bootcamp Management", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 24))); // NOI18N
-        pnBootcamp.setLayout(new javax.swing.OverlayLayout(pnBootcamp));
+        pnBootcamp.setLayout(new java.awt.BorderLayout());
 
         pnLogin.setBackground(new java.awt.Color(204, 255, 255));
 
@@ -133,30 +133,30 @@ public class BootcampManagementView extends javax.swing.JFrame {
         pnLoginLayout.setHorizontalGroup(
             pnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnLoginLayout.createSequentialGroup()
-                .addContainerGap(192, Short.MAX_VALUE)
+                .addContainerGap(186, Short.MAX_VALUE)
                 .addGroup(pnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnLoginLayout.createSequentialGroup()
                         .addComponent(lblLogoMII)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblLogoMetrodata))
                     .addComponent(pnLoginCard, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(198, Short.MAX_VALUE))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
         pnLoginLayout.setVerticalGroup(
             pnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnLoginLayout.createSequentialGroup()
-                .addContainerGap(107, Short.MAX_VALUE)
+                .addContainerGap(123, Short.MAX_VALUE)
                 .addGroup(pnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblLogoMII)
                     .addComponent(lblLogoMetrodata))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnLoginCard, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
-        pnBootcamp.add(pnLogin);
+        pnBootcamp.add(pnLogin, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(pnBootcamp);
+        getContentPane().add(pnBootcamp, java.awt.BorderLayout.CENTER);
 
         jMenuBar1.setBackground(new java.awt.Color(0, 169, 255));
         jMenuBar1.setName(""); // NOI18N
