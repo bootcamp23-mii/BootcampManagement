@@ -5,10 +5,12 @@
  */
 package views;
 
+import controllers.LoginController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
+import tools.Session;
 import views.*;
 
 /**
@@ -17,7 +19,8 @@ import views.*;
  */
 public class BootcampManagementView extends javax.swing.JFrame {
     
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private LoginController c = new LoginController(factory);
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 //    UserController uc = new UserController(sessionFactory);
 
@@ -26,7 +29,13 @@ public class BootcampManagementView extends javax.swing.JFrame {
      */
     public BootcampManagementView() {
         initComponents();
+        setDefaultCondition();
+    }
+    
+    private void setDefaultCondition(){
         getMiddle();
+        jMenuBar1.setEnabled(false);
+        
     }
     
     private void getMiddle() {
@@ -318,7 +327,12 @@ public class BootcampManagementView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoginActionPerformed
-        // TODO add your handling code here:
+        if (c.login(tfUsername.getText(), pfPassword.getText())) {
+            jMenuBar1.setEnabled(true);
+            Session.setSession(tfUsername.getText());
+            pnBootcamp.removeAll();
+            pnBootcamp.revalidate();
+        }
     }//GEN-LAST:event_btLoginActionPerformed
 
     private void mnEvaluationViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnEvaluationViewActionPerformed

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import models.Employee;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -129,7 +130,7 @@ public class GeneralDAO<T> implements DAOInterface<T>{
         transaction = session.beginTransaction();
         try {
             String temp = getQueryWD(keyword + "",String.valueOf(keyword));
-            System.out.println(temp);
+//            System.out.println(temp);
             obj = session.createQuery(temp).list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,5 +139,24 @@ public class GeneralDAO<T> implements DAOInterface<T>{
             }
         }
         return obj;
+    }
+    
+    public List<T> login(Object id) {
+        List<T> users = new ArrayList<>();
+        session = this.factory.openSession();
+        transaction = session.beginTransaction();
+        try {
+            users = session.createQuery("FROM Employee WHERE id = '"+id+"'").list();
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        
+        return users;
     }
 }

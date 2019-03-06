@@ -16,4 +16,5 @@ public interface DAOInterface<T> {
     public List<T> getData(Object keyword);
     public List<T> getDataWD(Object keyword, int isDeleted);
     public T getById(Object id);
+    public List<T> login(Object id);
 }
