@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CV" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="7d0148b3-ddc0-46c9-bb0c-6b565fc67459">
 	<property name="ireport.zoom" value="1.2745232708414274"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="288"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -109,7 +109,7 @@ where e.id = $P{setID}]]>
 	<field name="BIRTHPLACE" class="java.lang.String"/>
 	<field name="RELIGION" class="java.lang.String"/>
 	<field name="VILLAGE" class="java.lang.String"/>
-	<field name="PHOTO" class="oracle.jdbc.OracleBlob"/>
+	<field name="PHOTO" class="java.awt.Image"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -242,6 +242,10 @@ where e.id = $P{setID}]]>
 				</textElement>
 				<text><![CDATA[PERSONAL DATA]]></text>
 			</staticText>
+			<image>
+				<reportElement x="455" y="0" width="100" height="132" uuid="14167b20-4a8d-444c-909d-1aec6ba4e3be"/>
+				<imageExpression><![CDATA[$F{PHOTO}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
