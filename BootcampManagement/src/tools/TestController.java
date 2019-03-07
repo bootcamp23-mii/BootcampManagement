@@ -16,6 +16,7 @@ import java.io.ObjectInputStream;
 
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import models.*;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -35,14 +36,15 @@ public class TestController {
         SessionFactory factory = HibernateUtil.getSessionFactory();
         EducationHistoryControllerInterface eh = new EducationHistoryController(factory);
         EmployeeController emp = new EmployeeController(factory);
-        UploadController up = new UploadController(factory);
-//        byte temp = (byte) up.getById("14303").getPhoto();
-        FileInputStream file = new FileInputStream(up.getById("14303").getPhoto().toString()); 
-        ObjectInputStream in = new ObjectInputStream(file); 
-        System.out.println(in);
+        List<Employee> empList = emp.getAll();
+//        UploadController up = new UploadController(factory);
+////        byte temp = (byte) up.getById("14303").getPhoto();
+//        FileInputStream file = new FileInputStream(up.getById("14303").getPhoto().toString()); 
+//        ObjectInputStream in = new ObjectInputStream(file); 
+//        System.out.println(in);
 //        System.out.println(eh.save("", "4.0", "CVE1", "14303"));
 //        System.out.println(eh.getByid("CVEH1").getEmployee().getName());
-        System.out.println();
+//        System.out.println();
 //        try {
 //            String fileName = "./src/reports/CV.jrxml";
 //            String filetoFill = "./src/reports/CV.jasper";
@@ -60,5 +62,10 @@ public class TestController {
 //            ex.printStackTrace();
 //            System.out.println(ex.toString());
 //        }
+        for (Employee employee : empList) {
+            for (BatchClass batchClass : employee.getBatchClassList()) {
+                System.out.println(batchClass.getTrainer().getName());
+            }
+        }
     }
 }

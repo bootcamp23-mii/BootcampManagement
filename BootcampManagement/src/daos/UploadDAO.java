@@ -61,8 +61,8 @@ public class UploadDAO {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, d.getId());
-            preparedStatement.setBlob(2, d.getPhoto());
+            preparedStatement.setBlob(1, d.getPhoto());
+            preparedStatement.setString(2, d.getId());
             preparedStatement.executeQuery();
             result = true;
         } catch (Exception e) {
