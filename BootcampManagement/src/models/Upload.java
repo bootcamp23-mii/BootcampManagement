@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.awt.Image;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import oracle.sql.BLOB;
 
 /**
  *
@@ -34,7 +36,7 @@ public class Upload implements Serializable {
     @Column(name = "ID")
     private String id;
     @Column(name = "PHOTO")
-    private byte photo;
+    private byte[] photo;
 
     public Upload() {
     }
@@ -43,7 +45,7 @@ public class Upload implements Serializable {
         this.id = id;
     }
 
-    public Upload(String id, byte photo) {
+    public Upload(String id, byte[] photo) {
         this.id = id;
         this.photo = photo;
     }
@@ -56,11 +58,11 @@ public class Upload implements Serializable {
         this.id = id;
     }
 
-    public byte getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 

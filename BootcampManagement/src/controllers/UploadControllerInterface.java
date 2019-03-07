@@ -5,10 +5,13 @@
  */
 package controllers;
 
+import java.awt.Image;
+import java.io.Serializable;
 import java.util.List;
 import models.Subdistrict;
 import models.Upload;
 import models.Village;
+import oracle.sql.BLOB;
 
 /**
  *
@@ -18,6 +21,6 @@ import models.Village;
     public Upload getById (String id);
     public List<Upload> getAll();
     public List<Upload> search (Object keyword);
-    public String save (String id, byte photo);
-    public String delete (String id, byte photo);
+    public String save (String id, byte[] photo);
+    public String delete (String id, byte[] photo);
 }

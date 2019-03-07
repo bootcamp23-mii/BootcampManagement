@@ -7,10 +7,13 @@ package controllers;
 
 import daos.DAOInterface;
 import daos.GeneralDAO;
+import java.awt.Image;
+import java.io.Serializable;
 import java.util.List;
 import models.Subdistrict;
 import models.Upload;
 import models.Village;
+import oracle.sql.BLOB;
 import org.hibernate.SessionFactory;
 
 /**
@@ -40,7 +43,7 @@ public class UploadController implements UploadControllerInterface{
     }
 
     @Override
-    public String save(String id, byte photo) {
+    public String save(String id, byte[] photo) {
         if (dao.saveOrDelete(new Upload(id, photo), true)) {
             return "Save Data Success";
         } else {
@@ -49,7 +52,7 @@ public class UploadController implements UploadControllerInterface{
     }
 
     @Override
-    public String delete(String id, byte photo) {
+    public String delete(String id, byte[] photo) {
         if (dao.saveOrDelete(new Upload(id, photo), false)) {
             return "Delete Data Success";
         } else {

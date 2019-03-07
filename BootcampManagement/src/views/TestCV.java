@@ -28,7 +28,8 @@ public class TestCV extends javax.swing.JFrame {
 //        views.InputCVOrganizationView view = new views.InputCVOrganizationView();
 //        views.InputCVAchievementView view = new views.InputCVAchievementView();
 //        views.InputCVEmployeeCertificationView view = new views.InputCVEmployeeCertificationView();
-        views.InputCVWorkExperienceView view = new views.InputCVWorkExperienceView();
+//        views.InputCVWorkExperienceView view = new views.InputCVWorkExperienceView();
+        views.InputCVFoto view = new views.InputCVFoto();
         jPanel1.add(view);
         view.setVisible(true);
         getMiddle();
