@@ -8,7 +8,15 @@ package views;
 import controllers.LoginController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import org.hibernate.SessionFactory;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import tools.HibernateUtil;
 import tools.Session;
 import views.*;
@@ -34,7 +42,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
     
     private void setDefaultCondition(){
         getMiddle();
-        jMenuBar1.setEnabled(false);
+        jMenuBar1.setVisible(false);
         
     }
     
@@ -76,6 +84,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
         mnCVEmployeeCertification = new javax.swing.JMenuItem();
         mnCVWorkExperience = new javax.swing.JMenuItem();
         mnCVFoto = new javax.swing.JMenuItem();
+        mnCVGenerate = new javax.swing.JMenuItem();
         mnBCManagement = new javax.swing.JMenu();
         mnBatchClassView = new javax.swing.JMenuItem();
         mnParticipantView = new javax.swing.JMenuItem();
@@ -256,6 +265,14 @@ public class BootcampManagementView extends javax.swing.JFrame {
         });
         mnEditCV.add(mnCVFoto);
 
+        mnCVGenerate.setText("CV Generate");
+        mnCVGenerate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCVGenerateActionPerformed(evt);
+            }
+        });
+        mnEditCV.add(mnCVGenerate);
+
         jMenuBar1.add(mnEditCV);
 
         mnBCManagement.setText("Bootcamp Management");
@@ -328,10 +345,10 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void btLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoginActionPerformed
         if (c.login(tfUsername.getText(), pfPassword.getText())) {
-            jMenuBar1.setEnabled(true);
+            jMenuBar1.setVisible(true);
             Session.setSession(tfUsername.getText());
             pnBootcamp.removeAll();
-            pnBootcamp.revalidate();
+            this.revalidate();
         }
     }//GEN-LAST:event_btLoginActionPerformed
 
@@ -449,6 +466,22 @@ public class BootcampManagementView extends javax.swing.JFrame {
         sv.setVisible(true);
     }//GEN-LAST:event_mnScoreViewActionPerformed
 
+    private void mnCVGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVGenerateActionPerformed
+        try {
+            String fileName = "./src/reports/CV.jrxml";
+            String filetoFill = "./src/reports/CV.jasper";
+            JasperCompileManager.compileReport(fileName);
+            Map param = new HashMap();
+            param.put("setID", Session.getSession());
+            Connection conn = factory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class).getConnection();
+            JasperFillManager.fillReport(filetoFill, param,conn);
+            JasperPrint jp = JasperFillManager.fillReport(filetoFill, param, conn);
+            JasperViewer.viewReport(jp, false);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+}
+    }//GEN-LAST:event_mnCVGenerateActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -503,6 +536,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnCVEmployeeRole;
     private javax.swing.JMenuItem mnCVEmployeeSkill;
     private javax.swing.JMenuItem mnCVFoto;
+    private javax.swing.JMenuItem mnCVGenerate;
     private javax.swing.JMenuItem mnCVOrganization;
     private javax.swing.JMenuItem mnCVWorkExperience;
     private javax.swing.JMenu mnEditCV;
