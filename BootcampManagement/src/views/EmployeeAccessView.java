@@ -5,19 +5,116 @@
  */
 package views;
 
+import controllers.AccessCardController;
+import controllers.AccessCardControllerInterface;
+import controllers.EmployeeAccessController;
+import controllers.EmployeeAccessControllerInterface;
+import controllers.EmployeeController;
+import controllers.EmployeeControllerInterface;
+import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import models.AccessCard;
+import models.Employee;
+import models.EmployeeAccess;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
+
 /**
  *
  * @author Firsta
  */
 public class EmployeeAccessView extends javax.swing.JInternalFrame {
-
+       SessionFactory factory = HibernateUtil.getSessionFactory();
+       DefaultTableModel model = new DefaultTableModel();
+       
+       EmployeeControllerInterface eci = new EmployeeController(factory);
+       AccessCardControllerInterface acci= new AccessCardController(factory);
+       EmployeeAccessControllerInterface eaci = new EmployeeAccessController(factory);
+       
+       private SimpleDateFormat dateFormatIn = new SimpleDateFormat("MM/dd/yy");
+       private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
+       private List<models.Employee> employeelList= new ArrayList<>();
+       private List<models.AccessCard> idcardList = new ArrayList<>();
     /**
      * Creates new form EmployeeAccessView
      */
     public EmployeeAccessView() {
         initComponents();
+        tableData(eaci.getAll());
+        initUserConf();
+        initUserConf2();
     }
+   
+     private void initUserConf(){
+        for (Employee employee : eci.getAll()) {
+            cbEmployee.addItem(employee.getId()+" - "+employee.getName());
+        }
 
+    }
+    
+     private void initUserConf2(){
+         for (AccessCard accessCard : acci.getAll()) {
+             cbAccessNumber.addItem(accessCard.getId()+" - "+accessCard.getAccessnumber());
+    }
+ }
+     
+    private boolean confirm(){
+        if (tfId.getText().equals("") || cbEmployee.getSelectedIndex()==0 || cbAccessNumber.getSelectedIndex()==0 ||
+            tfReceiveDate.getText().equals("") ||
+            tfReturnDate.getText().equals("") || tfNote.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+            return false;
+        }
+        return true;
+    }
+    
+    private void filterhuruf(KeyEvent a) {
+        if (Character.isAlphabetic(a.getKeyChar())) {
+            a.consume();
+            JOptionPane.showMessageDialog(null, "Hanya Bisa Memasukan Karakter Angka");
+        }
+    }
+    
+    private void clearing() {
+        tfId.setEnabled(true);
+        tfId.setEditable(true);
+        tfId.setText("");
+        tfReceiveDate.setText("");
+        tfReturnDate.setText("");
+        tfSearch.setText("");
+        cbEmployee.setSelectedIndex(0);
+        cbAccessNumber.setSelectedIndex(0);
+        tfNote.setText("");
+    }  
+    
+    private boolean isEmpty(){
+        if(eaci.search(tfId.getText()).isEmpty()){
+            return true;
+        }
+        return false;
+    }
+    
+    private void tableData(List<EmployeeAccess> list){
+        Object[] columnNames = {"No","ID","Name","Access Number","Receive Date","Return Date","Note"};
+        Object[][] data = new Object[list.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            Object[] objects = data[i];
+            data[i][0] = (i+1);
+            data[i][1] = list.get(i).getId();
+            data[i][2] = list.get(i).getEmployee().getName();
+            data[i][3] = list.get(i).getAccesscard().getAccessnumber();
+            data[i][4] = dateFormatOut.format(list.get(i).getReceivedate());
+            data[i][5] = dateFormatOut.format(list.get(i).getReturndate());
+            data[i][6] = list.get(i).getNotes();
+            
+            model = new DefaultTableModel(data, columnNames);
+            tbEmployeeAccess.setModel(model);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,59 +125,120 @@ public class EmployeeAccessView extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        lblId = new javax.swing.JLabel();
+        tfId = new javax.swing.JTextField();
+        lblReceiveDate = new javax.swing.JLabel();
+        tfNote = new javax.swing.JTextField();
+        lblreturnDate = new javax.swing.JLabel();
+        tfReturnDate = new javax.swing.JTextField();
+        lblNote = new javax.swing.JLabel();
+        tfReceiveDate = new javax.swing.JTextField();
+        lblAccessNumber = new javax.swing.JLabel();
+        cbAccessNumber = new javax.swing.JComboBox<>();
+        lblname = new javax.swing.JLabel();
+        cbEmployee = new javax.swing.JComboBox<>();
+        lblSearch = new javax.swing.JLabel();
+        tfSearch = new javax.swing.JTextField();
+        cbSearch = new javax.swing.JComboBox<>();
+        btSave = new javax.swing.JButton();
+        btReset = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbEmployeeAccess = new javax.swing.JTable();
 
+        setClosable(true);
+        try {
+            setSelected(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        setVisible(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("EMPLOYEE ACCESS");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(299, 25, -1, -1));
 
-        jLabel2.setText("ID");
+        lblId.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblId.setText("ID");
+        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 102, -1, -1));
+        getContentPane().add(tfId, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 92, 194, 25));
 
-        jLabel3.setText("Receive Date");
+        lblReceiveDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblReceiveDate.setText("Receive Date");
+        getContentPane().add(lblReceiveDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 96, -1, -1));
+        getContentPane().add(tfNote, new org.netbeans.lib.awtextra.AbsoluteConstraints(509, 164, 194, 25));
 
-        jLabel4.setText("Return Date");
+        lblreturnDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblreturnDate.setText("Return Date");
+        getContentPane().add(lblreturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 132, -1, -1));
+        getContentPane().add(tfReturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(509, 128, 194, 25));
 
-        jLabel5.setText("Note");
+        lblNote.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblNote.setText("Note");
+        getContentPane().add(lblNote, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 168, -1, -1));
+        getContentPane().add(tfReceiveDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(509, 92, 194, 25));
 
-        jLabel6.setText("Access Number");
+        lblAccessNumber.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblAccessNumber.setText("Access Number");
+        getContentPane().add(lblAccessNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 168, -1, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(cbAccessNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 164, 194, 25));
 
-        jLabel7.setText("Name");
+        lblname.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblname.setText("Name");
+        getContentPane().add(lblname, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 132, -1, -1));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbEmployeeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cbEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 128, 194, 25));
 
-        jLabel8.setText("Search");
+        lblSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSearch.setText("Search");
+        getContentPane().add(lblSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 200, -1, -1));
+        getContentPane().add(tfSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(509, 200, 194, 25));
 
-        jButton1.setText("Search");
+        cbSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cbSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Search", "Search By Id", "Search All" }));
+        cbSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSearchActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cbSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(509, 243, 194, 25));
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Search", "By Id" }));
+        btSave.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(457, 295, -1, 25));
 
-        jButton2.setText("Save");
+        btReset.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btReset.setText("Reset");
+        btReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btResetActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(545, 295, -1, 25));
 
-        jButton3.setText("Reset");
+        btDelete.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(634, 295, -1, 25));
 
-        jButton4.setText("Delete");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbEmployeeAccess.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -91,127 +249,131 @@ public class EmployeeAccessView extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tbEmployeeAccess.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbEmployeeAccessMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbEmployeeAccess);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(248, 248, 248))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel7)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(184, 184, 184)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel8)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
-                                .addGap(31, 31, 31)))
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4)
-                            .addComponent(jButton1)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
-                .addContainerGap(46, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
-                .addGap(34, 34, 34)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(168, Short.MAX_VALUE))
-        );
+        jScrollPane2.setViewportView(jScrollPane1);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(66, 338, 637, 149));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSearchActionPerformed
+        String cari = tfSearch.getText().toString();
+
+        if(cari !="" && cbSearch.getSelectedItem()== "Search By Id"){
+
+            EmployeeAccess tampungan = eaci.getById(cari);
+            tfId.setText(tampungan.getId()+ "");
+            cbEmployee.setSelectedItem(tampungan.getEmployee());
+            cbAccessNumber.setSelectedItem(tampungan.getAccesscard());
+            tfReceiveDate.setText(tampungan.getReceivedate().toString());
+            tfReturnDate.setText(tampungan.getReturndate().toString());
+            tfNote.setText(tampungan.getNotes());
+
+        }else if(cari != "" && cbSearch.getSelectedItem() == "Search"){
+            tableData(eaci.search(cari));
+        } else {
+            tableData(eaci.getAll());
+        }
+    }//GEN-LAST:event_cbSearchActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        String id = tfId.getText();
+        if(id.equals("")){
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+        }else{
+            try {
+                int reply = JOptionPane.showConfirmDialog(null,
+                "Anda yakin akan menghapus data?","Konfirmasi" ,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(reply == JOptionPane.YES_OPTION){
+                    JOptionPane.showMessageDialog(null, eaci.delete(tfId.getText(), tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(), cbAccessNumber.getSelectedItem().toString().split(" - ")[0], cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+                    clearing();
+                } 
+            }catch (Exception e) {
+             e.printStackTrace();
+            }
+        }
+        tableData(eaci.getAll());
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResetActionPerformed
+        clearing();
+    }//GEN-LAST:event_btResetActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        if (isEmpty()) {
+            JOptionPane.showMessageDialog(null, eaci.save(tfId.getText(), tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(), cbAccessNumber.getSelectedItem().toString().split(" - ")[0], cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+        }else{
+            try {
+                int reply = JOptionPane.showConfirmDialog(null, "Anda yakin akan melakukan perubahan data?",
+                    "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(reply == JOptionPane.YES_OPTION){
+                    JOptionPane.showMessageDialog(null, eaci.save(tfId.getText(), tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(), cbAccessNumber.getSelectedItem().toString().split(" - ")[0], cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+
+                clearing();
+                tableData(eaci.getAll());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        }
+        clearing();
+        tableData(eaci.getAll());
+    }//GEN-LAST:event_btSaveActionPerformed
+
+    private void tbEmployeeAccessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmployeeAccessMouseClicked
+        tfId.setText(tbEmployeeAccess.getValueAt(tbEmployeeAccess.getSelectedRow(), 1).toString());
+
+        for (int i = 0; i < cbEmployee.getItemCount(); i++) {
+            if (cbEmployee.getItemAt(i).split(" - ")[0].equals(tbEmployeeAccess.getValueAt(tbEmployeeAccess.getSelectedRow(), 2).toString()))
+            cbEmployee.setSelectedIndex(i);
+        }
+
+        for (int i = 0; i < cbAccessNumber.getItemCount(); i++) {
+            if (cbAccessNumber.getItemAt(i).split(" - ")[0].equals(tbEmployeeAccess.getValueAt(tbEmployeeAccess.getSelectedRow(), 3).toString()))
+            cbAccessNumber.setSelectedIndex(i);
+        }
+        tfReceiveDate.setText(tbEmployeeAccess.getValueAt(tbEmployeeAccess.getSelectedRow(), 4).toString());
+        tfReturnDate.setText(tbEmployeeAccess.getValueAt(tbEmployeeAccess.getSelectedRow(), 5).toString());
+        tfNote.setText(tbEmployeeAccess.getValueAt(tbEmployeeAccess.getSelectedRow(), 6).toString());
+
+        tfId.setEnabled(false);
+        btDelete.setEnabled(true);
+    }//GEN-LAST:event_tbEmployeeAccessMouseClicked
+
+    private void cbEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEmployeeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbEmployeeActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JButton btDelete;
+    private javax.swing.JButton btReset;
+    private javax.swing.JButton btSave;
+    private javax.swing.JComboBox<String> cbAccessNumber;
+    private javax.swing.JComboBox<String> cbEmployee;
+    private javax.swing.JComboBox<String> cbSearch;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAccessNumber;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblNote;
+    private javax.swing.JLabel lblReceiveDate;
+    private javax.swing.JLabel lblSearch;
+    private javax.swing.JLabel lblname;
+    private javax.swing.JLabel lblreturnDate;
+    private javax.swing.JTable tbEmployeeAccess;
+    private javax.swing.JTextField tfId;
+    private javax.swing.JTextField tfNote;
+    private javax.swing.JTextField tfReceiveDate;
+    private javax.swing.JTextField tfReturnDate;
+    private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,8 +7,12 @@ package controllers;
 
 import daos.DAOInterface;
 import daos.GeneralDAO;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Employee;
 import models.EmployeeLocker;
 import models.Locker;
@@ -20,6 +24,7 @@ import org.hibernate.SessionFactory;
  */
 public class EmployeeLockerController implements EmployeeLockerControllerInterface{
     private DAOInterface <EmployeeLocker> dao;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     
     public EmployeeLockerController (SessionFactory factory){
         dao = new GeneralDAO<>(factory, EmployeeLocker.class);
@@ -41,20 +46,26 @@ public class EmployeeLockerController implements EmployeeLockerControllerInterfa
     }
 
     @Override
-    public String save(String id, Date receivedate, Date returndate, String notes, String employee, String locker) {
-        if (dao.saveOrDelete(new EmployeeLocker(id, receivedate, returndate, notes, new Employee(employee), new Locker(locker)), true)) {
-            return "Save Data Success";
-        } else {
-            return "Save Failed";
+    public String save(String id, String receivedate, String returndate, String notes, String employee, String locker) {
+        try {
+            if(dao.saveOrDelete(new EmployeeLocker(id, dateFormat.parse(receivedate), dateFormat.parse(returndate), notes, new Employee(employee), new Locker(locker)), true)){
+                return "Save Data Success";
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(EmployeeAccessController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "Save Failed";
     }
-
+    
     @Override
-    public String delete(String id, Date receivedate, Date returndate, String notes, String employee, String locker) {
-        if (dao.saveOrDelete(new EmployeeLocker(id, receivedate, returndate, notes, new Employee(employee), new Locker(locker)), false)) {
-            return "Delete Data Success";
-        } else {
-            return "Delete Failed";
+    public String delete(String id, String receivedate, String returndate, String notes, String employee, String locker) {
+        try {
+            if(dao.saveOrDelete(new EmployeeLocker(id, dateFormat.parse(receivedate), dateFormat.parse(returndate), notes, new Employee(employee), new Locker(locker)), false)){
+                return "Delete Data Success";
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(EmployeeAccessController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "Delete Failed";
     }
 }

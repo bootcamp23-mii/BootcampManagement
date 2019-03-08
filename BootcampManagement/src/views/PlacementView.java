@@ -5,19 +5,124 @@
  */
 package views;
 
+import controllers.CompanyController;
+import controllers.CompanyControllerInterface;
+import controllers.EmployeeController;
+import controllers.EmployeeControllerInterface;
+import controllers.PlacementController;
+import controllers.PlacementControllerInterface;
+import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import models.Company;
+import models.Employee;
+import models.Placement;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
+
 /**
  *
  * @author Firsta
  */
 public class PlacementView extends javax.swing.JInternalFrame {
-
+       SessionFactory factory = HibernateUtil.getSessionFactory();
+       EmployeeControllerInterface eci = new EmployeeController(factory);
+       CompanyControllerInterface cci = new CompanyController(factory);
+       PlacementControllerInterface pci = new PlacementController(factory);
+       
+       
+       DefaultTableModel model = new DefaultTableModel();
+       private SimpleDateFormat dateFormatIn = new SimpleDateFormat("MM/dd/yy");
+       private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
+       
+       private List<models.Employee> employeelList= new ArrayList<>();
+       private List<models.Company> idcardList = new ArrayList<>();
+       private List<models.Placement> placementList = new ArrayList<>();
     /**
      * Creates new form PlacementView
      */
     public PlacementView() {
         initComponents();
+        tableData(pci.getAll());
+        initUserConf();
+        initUserConf2();
     }
+    
+    private void initUserConf(){
+        for (Employee employee : eci.getAll()) {
+            cbEmployee.addItem(employee.getId()+" - "+employee.getName());
+        }
 
+    }
+    
+    private void initUserConf2(){
+        for (Company company : cci.getAll()) {
+            cbCompany.addItem(company.getId()+" - "+company.getName());
+        }
+    }
+    
+    private boolean confirm(){
+        if (tfId.getText().equals("") || cbEmployee.getSelectedIndex()==0 || 
+            tfStartDate.getText().equals("") ||
+            tfFinishDate.getText().equals("") || tfAddress.getText().equals("")||cbCompany.getSelectedIndex()==0||
+            tfDepartment.getText().equals("") || tfDescription.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+            return false;
+        }
+        return true;
+    }
+    
+    private void filterhuruf(KeyEvent a) {
+        if (Character.isAlphabetic(a.getKeyChar())) {
+            a.consume();
+            JOptionPane.showMessageDialog(null, "Hanya Bisa Memasukan Karakter Angka");
+        }
+    }
+    
+    private void clearing() {
+        tfId.setEnabled(true);
+        tfId.setEditable(true);
+        tfId.setText("");
+        tfStartDate.setText("");
+        tfFinishDate.setText("");
+        tfDepartment.setText("");
+        tfDescription.setText("");
+        tfAddress.setText("");
+        tfSearch.setText("");
+        cbEmployee.setSelectedIndex(0);
+        cbCompany.setSelectedIndex(0);
+    }                                     
+    
+    private boolean isEmpty(){
+        if(pci.search(tfId.getText()).isEmpty()){
+            return true;
+        }
+        return false;
+    }
+    
+    private void tableData(List<Placement> list){
+        Object[] columnNames = {"No","ID","Name","Start Date","Finish Date","Company","Address","Department","Daescription"};
+        Object[][] data = new Object[list.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            Object[] objects = data[i];
+            data[i][0] = (i+1);
+            data[i][1] = list.get(i).getId();
+            data[i][2] = list.get(i).getEmployee().getName();
+            data[i][3] = dateFormatOut.format(list.get(i).getStartdate());
+            data[i][4] = dateFormatOut.format(list.get(i).getFinishdate());
+            data[i][5] = list.get(i).getAddress();
+            data[i][6] = list.get(i).getCompany().getName();
+            data[i][7] = list.get(i).getDepartment();
+            data[i][8] = list.get(i).getDescription();
+            
+            
+            model = new DefaultTableModel(data, columnNames);
+            tbPlacement.setModel(model);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,101 +132,287 @@ public class PlacementView extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        lblid = new javax.swing.JLabel();
+        tfId = new javax.swing.JTextField();
+        lblName = new javax.swing.JLabel();
+        cbEmployee = new javax.swing.JComboBox<>();
+        lblStartDate = new javax.swing.JLabel();
+        cbCompany = new javax.swing.JComboBox<>();
+        lblFinishDate = new javax.swing.JLabel();
+        tfFinishDate = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        tfStartDate = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        tfDepartment = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        tfDescription = new javax.swing.JTextField();
+        tfSearch = new javax.swing.JTextField();
+        cbSearch = new javax.swing.JComboBox<>();
+        btSave = new javax.swing.JButton();
+        btReset = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        lblAddress = new javax.swing.JLabel();
+        tfAddress = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbPlacement = new javax.swing.JTable();
 
+        jLabel2.setText("jLabel2");
+
+        setClosable(true);
+        try {
+            setSelected(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        setVisible(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("PLACEMENT");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 23, -1, -1));
 
-        jLabel2.setText("ID");
+        lblid.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblid.setText("ID");
+        getContentPane().add(lblid, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 75, -1, -1));
 
-        jLabel3.setText("Name");
+        tfId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfIdActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tfId, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 73, 194, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        lblName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblName.setText("Name");
+        getContentPane().add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 113, -1, -1));
 
-        jLabel4.setText("Company");
+        getContentPane().add(cbEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 111, 194, -1));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        lblStartDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblStartDate.setText("Start Date");
+        getContentPane().add(lblStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 151, -1, -1));
 
-        jLabel5.setText("Description");
+        getContentPane().add(cbCompany, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 111, 194, -1));
 
-        jLabel6.setText("jLabel6");
+        lblFinishDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblFinishDate.setText("Finish Date");
+        getContentPane().add(lblFinishDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 187, -1, -1));
+        getContentPane().add(tfFinishDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 187, 194, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54)
-                                .addComponent(jLabel6))
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(224, 224, 224)
-                        .addComponent(jLabel1)))
-                .addContainerGap(185, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(205, Short.MAX_VALUE))
-        );
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setText("Company");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 113, -1, -1));
+        getContentPane().add(tfStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 149, 194, -1));
 
-        jLabel3.getAccessibleContext().setAccessibleName("Name");
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel7.setText("Department");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 151, -1, -1));
+        getContentPane().add(tfDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 149, 194, -1));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setText("Description");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 189, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel9.setText("Search");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 225, -1, -1));
+        getContentPane().add(tfDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 187, 194, -1));
+        getContentPane().add(tfSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 221, 194, -1));
+
+        cbSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cbSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Search", "By Id", "Search All" }));
+        cbSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSearchActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cbSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 252, 194, -1));
+
+        btSave.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(498, 291, -1, -1));
+
+        btReset.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btReset.setText("Reset");
+        btReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btResetActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(567, 291, -1, -1));
+
+        btDelete.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btDelete.setText("Delete");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 291, -1, -1));
+
+        lblAddress.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblAddress.setText("Address");
+        getContentPane().add(lblAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 75, -1, -1));
+        getContentPane().add(tfAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 73, 194, -1));
+
+        tbPlacement.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbPlacement.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbPlacementMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbPlacement);
+
+        jScrollPane2.setViewportView(jScrollPane1);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 345, 630, 151));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+         String id = tfId.getText();
+        if (id.equals("")) {
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+        } else {
+            try {
+                int reply = JOptionPane.showConfirmDialog(null,
+                    "Anda yakin akan menghapus data?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE
+                );
+                if (reply == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, pci.deleteSoft("", tfDescription.getText(), tfAddress.getText(), tfDepartment.getText(), tfStartDate.getText(), tfFinishDate.getText(), cbCompany.getSelectedItem().toString().split(" - ")[0], cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+                    clearing();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tableData(pci.getAll());
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+       if (isEmpty()) {
+            JOptionPane.showMessageDialog(null, pci.save(tfId.getText(), tfDescription.getText(), tfAddress.getText(), tfDepartment.getText(), tfStartDate.getText(), tfFinishDate.getText(), cbCompany.getSelectedItem().toString().split(" - ")[0], cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+        }else{
+            try {
+                int reply = JOptionPane.showConfirmDialog(null,
+                    "Anda yakin akan melakukan perubahan data?","Konfirmasi",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(reply == JOptionPane.YES_OPTION){
+                    JOptionPane.showMessageDialog(null, pci.save(tfId.getText(), tfDescription.getText(), tfAddress.getText(), tfDepartment.getText(), tfStartDate.getText(), tfFinishDate.getText(), cbCompany.getSelectedItem().toString().split(" - ")[0], cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+
+                clearing();
+                tableData(pci.getAll());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+       }
+        clearing();
+        tableData(pci.getAll());
+    }//GEN-LAST:event_btSaveActionPerformed
+
+    private void btResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResetActionPerformed
+        clearing();
+    }//GEN-LAST:event_btResetActionPerformed
+
+    private void cbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSearchActionPerformed
+         String cari = tfSearch.getText().toString();
+
+        if (cari != "" && cbSearch.getSelectedItem() == "Search By Id") {
+
+            Placement tampungan = pci.getById(cari);
+            tfId.setText(tampungan.getId()+"");
+            cbEmployee.setSelectedItem(tampungan.getEmployee());
+            tfStartDate.setText(tampungan.getStartdate().toString());
+            tfFinishDate.setText(tampungan.getFinishdate().toString());
+            tfAddress.setText(tampungan.getAddress());
+            cbCompany.setSelectedItem(tampungan.getCompany());
+            tfDepartment.setText(tampungan.getDepartment());
+            tfDescription.setText(tampungan.getDescription());
+
+        } else if (cari != "" && cbSearch.getSelectedItem() == "Search") {
+            tableData(pci.search(cari));
+        } else {
+            tableData(pci.getAll());
+        }
+    }//GEN-LAST:event_cbSearchActionPerformed
+
+    private void tbPlacementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPlacementMouseClicked
+        tfId.setText(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 1).toString());
+
+        for (int i = 0; i < cbEmployee.getItemCount(); i++) {
+            if (cbEmployee.getItemAt(i).split(" - ")[0].equals(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 2).toString()))
+            cbEmployee.setSelectedIndex(i);
+        }
+        tfStartDate.setText(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 3).toString());
+        tfFinishDate.setText(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 4).toString());
+        tfAddress.setText(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 5).toString());
+        
+        for (int i = 0; i < cbCompany.getItemCount(); i++) {
+            if (cbCompany.getItemAt(i).split(" - ")[0].equals(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 6).toString()))
+            cbCompany.setSelectedIndex(i);
+        }
+        
+        tfDepartment.setText(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 7).toString());
+        tfDescription.setText(tbPlacement.getValueAt(tbPlacement.getSelectedRow(), 8).toString());
+        
+        tfId.setEnabled(false);
+        btDelete.setEnabled(true);
+    }//GEN-LAST:event_tbPlacementMouseClicked
+
+    private void tfIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfIdActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton btDelete;
+    private javax.swing.JButton btReset;
+    private javax.swing.JButton btSave;
+    private javax.swing.JComboBox<String> cbCompany;
+    private javax.swing.JComboBox<String> cbEmployee;
+    private javax.swing.JComboBox<String> cbSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAddress;
+    private javax.swing.JLabel lblFinishDate;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblStartDate;
+    private javax.swing.JLabel lblid;
+    private javax.swing.JTable tbPlacement;
+    private javax.swing.JTextField tfAddress;
+    private javax.swing.JTextField tfDepartment;
+    private javax.swing.JTextField tfDescription;
+    private javax.swing.JTextField tfFinishDate;
+    private javax.swing.JTextField tfId;
+    private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfStartDate;
     // End of variables declaration//GEN-END:variables
 }

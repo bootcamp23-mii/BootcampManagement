@@ -19,6 +19,6 @@ import models.EmployeeAccess;
     public EmployeeAccess getById (String id);
     public List<EmployeeAccess> getAll();
     public List<EmployeeAccess> search (Object keyword);
-    public String save(String id, Date receivedate, Date returndate, String notes, String accesscard, String employee);
-    public String delete(String id, Date receivedate, Date returndate, String notes, String accesscard, String employee);
+    public String save(String id, String receivedate,String returndate, String notes, String accesscard, String employee);
+    public String delete(String id, String receivedate,String returndate, String notes, String accesscard, String employee);
 }

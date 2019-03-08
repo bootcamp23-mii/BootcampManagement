@@ -6,8 +6,11 @@
 package views;
 
 import controllers.EmployeeController;
+import controllers.EmployeeControllerInterface;
 import controllers.IdCardController;
+import controllers.IdCardControllerInterface;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -16,6 +19,7 @@ import models.Employee;
 import models.IdCard;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
+import tools.Session;
 
 /**
  *
@@ -23,22 +27,27 @@ import tools.HibernateUtil;
  */
 public class IdCardView extends javax.swing.JInternalFrame {
        SessionFactory factory = HibernateUtil.getSessionFactory();
+       EmployeeControllerInterface eci = new EmployeeController(factory);
+       IdCardControllerInterface icci = new IdCardController(factory);
+       
+       
        DefaultTableModel model = new DefaultTableModel();
-       IdCardController icc = new IdCardController(factory);
-       EmployeeController ec = new EmployeeController(factory);
+       private SimpleDateFormat dateFormatIn = new SimpleDateFormat("MM/dd/yy");
+       private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
        
        private List<models.Employee> employeelList= new ArrayList<>();
        private List<models.IdCard> idcardList = new ArrayList<>();
        
     public IdCardView() {
         initComponents();
-        tableData(icc.getAll());
+        tableData(icci.getAll());
         initUserConf();
+       
        
     }
     
     private void initUserConf(){
-        for (Employee employee : ec.getAll()) {
+        for (Employee employee : eci.getAll()) {
             cbEmployee.addItem(employee.getId()+" - "+employee.getName());
         }
 
@@ -68,11 +77,12 @@ public class IdCardView extends javax.swing.JInternalFrame {
         tfReceiveDate.setText("");
         tfReturnDate.setText("");
         tfSearch.setText("");
+        tfNote.setText("");
         cbEmployee.setSelectedIndex(0);
     }                                     
     
     private boolean isEmpty(){
-        if(icc.search(tfId.getText()).isEmpty()){
+        if(icci.search(tfId.getText()).isEmpty()){
             return true;
         }
         return false;
@@ -93,8 +103,8 @@ public class IdCardView extends javax.swing.JInternalFrame {
             data[i][0] = (i+1);
             data[i][1] = cards.get(i).getId();
             data[i][2] = cards.get(i).getEmployee().getName();
-            data[i][3] = cards.get(i).getReceivedate();
-            data[i][4] = cards.get(i).getReturndate();
+            data[i][3] = dateFormatOut.format(cards.get(i).getReceivedate());
+            data[i][4] = dateFormatOut.format(cards.get(i).getReturndate());
             data[i][5] = cards.get(i).getNote();
             
             model = new DefaultTableModel(data, columnNames);
@@ -120,8 +130,6 @@ public class IdCardView extends javax.swing.JInternalFrame {
         lblEmployee = new javax.swing.JLabel();
         cbEmployee = new javax.swing.JComboBox<>();
         btSave = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbIdCard = new javax.swing.JTable();
         lblSearch = new javax.swing.JLabel();
         tfSearch = new javax.swing.JTextField();
         btReset = new javax.swing.JButton();
@@ -131,8 +139,10 @@ public class IdCardView extends javax.swing.JInternalFrame {
         lblNote = new javax.swing.JLabel();
         tfReturnDate = new javax.swing.JTextField();
         tfNote = new javax.swing.JTextField();
-        chbSearch = new javax.swing.JCheckBox();
-        btSearch = new javax.swing.JButton();
+        cbSearch = new javax.swing.JComboBox<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbIdCard = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -147,260 +157,254 @@ public class IdCardView extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        setClosable(true);
+        setMaximizable(true);
+        setMaximumSize(new java.awt.Dimension(32767, 32767));
+        setMinimumSize(new java.awt.Dimension(750, 550));
+        setPreferredSize(new java.awt.Dimension(750, 550));
+        try {
+            setSelected(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        setVisible(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("ID CARD");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, -1, -1));
 
+        lblId.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblId.setText("ID");
+        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 99, -1, -1));
 
+        lblReceiveDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblReceiveDate.setText("Receive Date");
+        getContentPane().add(lblReceiveDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 176, -1, -1));
 
         tfReceiveDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfReceiveDateActionPerformed(evt);
             }
         });
+        getContentPane().add(tfReceiveDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 174, 195, -1));
 
+        lblEmployee.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblEmployee.setText("Name");
+        getContentPane().add(lblEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 137, -1, -1));
 
         cbEmployee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbEmployeeActionPerformed(evt);
             }
         });
+        getContentPane().add(cbEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(123, 135, 194, -1));
 
+        btSave.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btSave.setText("Save");
         btSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btSaveActionPerformed(evt);
             }
         });
+        getContentPane().add(btSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(457, 212, -1, -1));
 
-        tbIdCard.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(tbIdCard);
-
+        lblSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblSearch.setText("Search");
+        getContentPane().add(lblSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(417, 137, -1, -1));
+        getContentPane().add(tfSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(514, 135, 194, -1));
 
+        btReset.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btReset.setText("Reset");
         btReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btResetActionPerformed(evt);
             }
         });
+        getContentPane().add(btReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(645, 212, -1, -1));
 
+        btDelete.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btDelete.setText("Delete");
         btDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btDeleteActionPerformed(evt);
             }
         });
+        getContentPane().add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 212, -1, -1));
 
         tfId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfIdActionPerformed(evt);
             }
         });
+        getContentPane().add(tfId, new org.netbeans.lib.awtextra.AbsoluteConstraints(123, 97, 194, -1));
 
+        lblReturnDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblReturnDate.setText("Return Date");
+        getContentPane().add(lblReturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 216, -1, -1));
 
+        lblNote.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblNote.setText("Note");
+        getContentPane().add(lblNote, new org.netbeans.lib.awtextra.AbsoluteConstraints(417, 99, -1, -1));
 
-        chbSearch.setText("By id");
-        chbSearch.addActionListener(new java.awt.event.ActionListener() {
+        tfReturnDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chbSearchActionPerformed(evt);
+                tfReturnDateActionPerformed(evt);
             }
         });
+        getContentPane().add(tfReturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 214, 195, -1));
+        getContentPane().add(tfNote, new org.netbeans.lib.awtextra.AbsoluteConstraints(514, 97, 194, -1));
 
-        btSearch.setText("Search");
-        btSearch.addActionListener(new java.awt.event.ActionListener() {
+        cbSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cbSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Search", "Search By Id", "Search All" }));
+        cbSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSearchActionPerformed(evt);
+                cbSearchActionPerformed(evt);
             }
         });
+        getContentPane().add(cbSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(514, 173, 194, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblReceiveDate)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblId)
-                            .addComponent(lblEmployee))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(tfReceiveDate, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(tfId, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(45, 45, 45)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNote)
-                                    .addComponent(lblReturnDate)
-                                    .addComponent(lblSearch))
-                                .addGap(15, 15, 15)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(tfReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfNote, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(chbSearch)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btSave)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btReset)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btDelete)
-                                    .addComponent(btSearch)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
-                                .addGap(2, 2, 2)))
-                        .addGap(0, 50, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(218, 218, 218)
-                .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblId)
-                    .addComponent(lblReturnDate)
-                    .addComponent(tfReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEmployee)
-                    .addComponent(cbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNote)
-                    .addComponent(tfNote, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfReceiveDate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblReceiveDate)
-                        .addComponent(lblSearch)
-                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chbSearch)
-                    .addComponent(btSearch))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btSave)
-                    .addComponent(btReset)
-                    .addComponent(btDelete))
-                .addGap(29, 29, 29)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        tbIdCard.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "No", "Name", "Receive Date", "Return Date", "Note"
+            }
+        ));
+        tbIdCard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbIdCardMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbIdCard);
+
+        jScrollPane3.setViewportView(jScrollPane2);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 269, 663, 223));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        if (confirm()) {
-            if (isEmpty()) JOptionPane.showMessageDialog(null, icc.save(tfId.getText(), 
-               tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(),
-               cbEmployee.getSelectedItem().toString().split(" - ")[0])); 
-            else 
-            {
-                try {
-                    int reply = JOptionPane.showConfirmDialog(null,
-                    "Anda yakin akan melakukan perubahan data?","Konfirmasi", 
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if(reply == JOptionPane.YES_OPTION){
-                        JOptionPane.showMessageDialog(null, icc.save(tfId.getText(), 
-                        tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(), 
-                        cbEmployee.getSelectedItem().toString().split(" - ")[0] ));
-                        tableData(icc.getAll());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            tableData(icc.getAll());
-        }
-    }//GEN-LAST:event_btSaveActionPerformed
+    private void tfReceiveDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfReceiveDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfReceiveDateActionPerformed
 
     private void cbEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEmployeeActionPerformed
 
     }//GEN-LAST:event_cbEmployeeActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+
+        if (isEmpty()) {
+            JOptionPane.showMessageDialog(null, icci.save(tfId.getText(),
+                tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(),
+                cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+        }else{
+            try {
+                int reply = JOptionPane.showConfirmDialog(null,
+                    "Anda yakin akan melakukan perubahan data?","Konfirmasi",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(reply == JOptionPane.YES_OPTION){
+                    JOptionPane.showMessageDialog(null, icci.save(tfId.getText(),
+                        tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(),
+                        cbEmployee.getSelectedItem().toString().split(" - ")[0] ));
+
+                clearing();
+                tableData(icci.getAll());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        }
+        clearing();
+        tableData(icci.getAll());
+
+    }//GEN-LAST:event_btSaveActionPerformed
 
     private void btResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResetActionPerformed
         clearing();
     }//GEN-LAST:event_btResetActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        if(tfSearch.equals("")) JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
-        else
-        {
+        String id = tfId.getText();
+        if (id.equals("")) {
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+        } else {
             try {
                 int reply = JOptionPane.showConfirmDialog(null,
-                "Anda yakin ingin menghapus data?","Konfirmasi",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if(reply == JOptionPane.YES_OPTION){
-                    JOptionPane.showMessageDialog(null, 
-                    icc.delete(tfId.getText(), tfReceiveDate.getText(),
-                    tfReturnDate.getText(), tfNote.getText(), cbEmployee.getSelectedItem().toString().split(" - ")[0]));
-                    tableData(icc.getAll());
+                    "Anda yakin akan menghapus data?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE
+                );
+                if (reply == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, icci.delete(id, tfReceiveDate.getText(), tfReturnDate.getText(), tfNote.getText(), cbEmployee.getSelectedItem().toString().split(" - ")[0]));
+                    clearing();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        tableData(icc.getAll());
+        tableData(icci.getAll());
     }//GEN-LAST:event_btDeleteActionPerformed
-
-    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
-        tableData(icc.search(tfSearch.getText()));
-    }//GEN-LAST:event_btSearchActionPerformed
-
-    private void chbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chbSearchActionPerformed
-
-    private void tfReceiveDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfReceiveDateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfReceiveDateActionPerformed
 
     private void tfIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfIdActionPerformed
+
+    private void cbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSearchActionPerformed
+        String cari = tfSearch.getText().toString();
+
+        if (cari != "" && cbSearch.getSelectedItem() == "Search By Id") {
+
+            IdCard tampungan = icci.getByid(cari);
+            tfId.setText(tampungan.getId()+"");
+            cbEmployee.setSelectedItem(tampungan.getEmployee());
+            tfReceiveDate.setText(tampungan.getReceivedate().toString());
+            tfReturnDate.setText(tampungan.getReturndate().toString());
+            tfNote.setText(tampungan.getNote());
+ 
+
+        } else if (cari != "" && cbSearch.getSelectedItem() == "Search") {
+            tableData(icci.search(cari));
+        } else {
+            tableData(icci.getAll());
+        }
+
+    }//GEN-LAST:event_cbSearchActionPerformed
+
+    private void tfReturnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfReturnDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfReturnDateActionPerformed
+
+    private void tbIdCardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbIdCardMouseClicked
+        tfId.setText(tbIdCard.getValueAt(tbIdCard.getSelectedRow(), 1).toString());
+
+        for (int i = 0; i < cbEmployee.getItemCount(); i++) {
+            if (cbEmployee.getItemAt(i).split(" - ")[0].equals(tbIdCard.getValueAt(tbIdCard.getSelectedRow(), 2).toString()))
+            cbEmployee.setSelectedIndex(i);
+        }
+        tfReceiveDate.setText(tbIdCard.getValueAt(tbIdCard.getSelectedRow(), 3).toString());
+        tfReturnDate.setText(tbIdCard.getValueAt(tbIdCard.getSelectedRow(), 4).toString());
+        tfNote.setText(tbIdCard.getValueAt(tbIdCard.getSelectedRow(), 5).toString());
+
+        tfId.setEnabled(false);
+        btDelete.setEnabled(true);
+    }//GEN-LAST:event_tbIdCardMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btReset;
     private javax.swing.JButton btSave;
-    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbEmployee;
-    private javax.swing.JCheckBox chbSearch;
+    private javax.swing.JComboBox<String> cbSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblEmployee;
     private javax.swing.JLabel lblId;

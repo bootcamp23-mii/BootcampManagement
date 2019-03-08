@@ -7,9 +7,12 @@ package controllers;
 
 import daos.DAOInterface;
 import daos.GeneralDAO;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Employee;
 import models.IdCard;
 import org.hibernate.SessionFactory;
@@ -19,7 +22,7 @@ import org.hibernate.SessionFactory;
  * @author Firsta
  */
 public class IdCardController implements IdCardControllerInterface{
-    
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private DAOInterface<IdCard> dao;
     
     public IdCardController(SessionFactory factory){
@@ -43,30 +46,24 @@ public class IdCardController implements IdCardControllerInterface{
 
     @Override
     public String save(String id, String receivedate, String returndate, String note, String employee) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
         try {
-            Date date = dateFormat.parse(receivedate);
-            Date date1= dateFormat.parse(returndate);
-            if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
-            return "Save Data Success";
-        }
-        } catch (Exception e) {
-            e.printStackTrace();
+            if(dao.saveOrDelete(new IdCard(id, dateFormat.parse(receivedate), dateFormat.parse(returndate), note, new Employee(employee)), true)){
+                return "Save Data Success";
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(IdCardController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "Save Failed";
     }
-
+    
     @Override
     public String delete(String id, String receivedate, String returndate, String note, String employee) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
         try {
-            Date date = dateFormat.parse(receivedate);
-            Date date1= dateFormat.parse(returndate);
-            if (dao.saveOrDelete(new IdCard(id, new Date(receivedate), new Date(returndate), note, new Employee(employee)), true)) {
-            return "Delete Data Success";
-        }
-        } catch (Exception e) {
-            e.printStackTrace();
+            if(dao.saveOrDelete(new IdCard(id, dateFormat.parse(receivedate), dateFormat.parse(returndate), note, new Employee(employee)), false)){
+                return "Delete Data Success";
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(IdCardController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "Delete Failed";
     }

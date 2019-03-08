@@ -17,8 +17,10 @@ import models.Placement;
  */
     public interface PlacementControllerInterface {
     public Placement getById (String id);
-    public List<Placement> getALL();
+    public List<Placement> getAll();
     public List<Placement> search(Object keyword);
-    public String save(String id, String isdeleted, String description, String address, String department, String startdate, String finishdate, String company, String employee);
-    public String delete(String id, String isdeleted, String description, String address, String department, String startdate, String finishdate, String company, String employee);
-}
+    public List<Placement> searchWD(Object keyword);
+    public String save(String id,String description, String address, String department, String startdate, String finishdate, String company, String employee);
+    public String delete(String id,String description, String address, String department, String startdate, String finishdate, String company, String employee);
+    public String deleteSoft (String id,String description, String address, String department, String startdate, String finishdate, String company, String employee);
+    }

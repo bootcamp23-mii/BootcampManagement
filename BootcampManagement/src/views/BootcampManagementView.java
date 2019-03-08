@@ -93,17 +93,19 @@ public class BootcampManagementView extends javax.swing.JFrame {
         mnEvaluationView = new javax.swing.JMenuItem();
         mnScoreView = new javax.swing.JMenuItem();
         mnEquipments = new javax.swing.JMenu();
+        mnIdcard = new javax.swing.JMenuItem();
+        mnAccessCard = new javax.swing.JMenuItem();
+        mnAccessLocker = new javax.swing.JMenuItem();
+        mnPlacement = new javax.swing.JMenuItem();
         mnLocation = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bootcamp Management");
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(new java.awt.Dimension(800, 600));
         setMinimumSize(new java.awt.Dimension(800, 600));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         setName("loginView"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(800, 600));
         setSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
 
@@ -112,6 +114,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
         pnBootcamp.setLayout(new java.awt.BorderLayout());
 
         pnLogin.setBackground(new java.awt.Color(204, 255, 255));
+        pnLogin.setName(""); // NOI18N
 
         pnLoginCard.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         pnLoginCard.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -149,6 +152,11 @@ public class BootcampManagementView extends javax.swing.JFrame {
         btRegister.setText("Register");
         btRegister.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRegisterActionPerformed(evt);
+            }
+        });
         pnLoginCard.add(btRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, 180, 30));
 
         lblLogoMII.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -333,6 +341,48 @@ public class BootcampManagementView extends javax.swing.JFrame {
         jMenuBar1.add(mnBCManagement);
 
         mnEquipments.setText("Equipments");
+        mnEquipments.addMenuListener(new javax.swing.event.MenuListener() {
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                mnEquipmentsMenuSelected(evt);
+            }
+        });
+
+        mnIdcard.setText("Id Card");
+        mnIdcard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnIdcardActionPerformed(evt);
+            }
+        });
+        mnEquipments.add(mnIdcard);
+
+        mnAccessCard.setText("Access Card");
+        mnAccessCard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnAccessCardActionPerformed(evt);
+            }
+        });
+        mnEquipments.add(mnAccessCard);
+
+        mnAccessLocker.setText("Access Locker");
+        mnAccessLocker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnAccessLockerActionPerformed(evt);
+            }
+        });
+        mnEquipments.add(mnAccessLocker);
+
+        mnPlacement.setText("Placement");
+        mnPlacement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnPlacementActionPerformed(evt);
+            }
+        });
+        mnEquipments.add(mnPlacement);
+
         jMenuBar1.add(mnEquipments);
 
         mnLocation.setText("Location");
@@ -482,6 +532,42 @@ public class BootcampManagementView extends javax.swing.JFrame {
 }
     }//GEN-LAST:event_mnCVGenerateActionPerformed
 
+    private void btRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegisterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btRegisterActionPerformed
+
+    private void mnEquipmentsMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_mnEquipmentsMenuSelected
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnEquipmentsMenuSelected
+
+    private void mnAccessCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAccessCardActionPerformed
+        EmployeeAccessView eav = new EmployeeAccessView();
+        pnBootcamp.add(eav);
+        pnLogin.setVisible(false);
+        eav.setVisible(true);
+    }//GEN-LAST:event_mnAccessCardActionPerformed
+
+    private void mnIdcardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnIdcardActionPerformed
+        IdCardView icv = new IdCardView();
+        pnBootcamp.add(icv);
+        pnLogin.setVisible(false);
+        icv.setVisible(true);
+    }//GEN-LAST:event_mnIdcardActionPerformed
+
+    private void mnAccessLockerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAccessLockerActionPerformed
+        EmployeeLockerView elv = new EmployeeLockerView();
+        pnBootcamp.add(elv);
+        pnLogin.setVisible(false);
+        elv.setVisible(true);
+    }//GEN-LAST:event_mnAccessLockerActionPerformed
+
+    private void mnPlacementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnPlacementActionPerformed
+        PlacementView pv = new PlacementView();
+        pnBootcamp.add(pv);
+        pnLogin.setVisible(false);
+        pv.setVisible(true);
+    }//GEN-LAST:event_mnPlacementActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -527,6 +613,8 @@ public class BootcampManagementView extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogoMetrodata;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
+    private javax.swing.JMenuItem mnAccessCard;
+    private javax.swing.JMenuItem mnAccessLocker;
     private javax.swing.JMenu mnBCManagement;
     private javax.swing.JMenuItem mnBatchClassView;
     private javax.swing.JMenuItem mnCVAchievement;
@@ -543,9 +631,11 @@ public class BootcampManagementView extends javax.swing.JFrame {
     private javax.swing.JMenu mnEquipments;
     private javax.swing.JMenuItem mnErrorBankView;
     private javax.swing.JMenuItem mnEvaluationView;
+    private javax.swing.JMenuItem mnIdcard;
     private javax.swing.JMenuItem mnLessonView;
     private javax.swing.JMenu mnLocation;
     private javax.swing.JMenuItem mnParticipantView;
+    private javax.swing.JMenuItem mnPlacement;
     private javax.swing.JMenuItem mnScoreView;
     private javax.swing.JPasswordField pfPassword;
     private javax.swing.JPanel pnBootcamp;

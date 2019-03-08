@@ -7,9 +7,12 @@ package controllers;
 
 import daos.DAOInterface;
 import daos.GeneralDAO;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.District;
 import models.Employee;
 import models.Religion;
@@ -20,43 +23,88 @@ import org.hibernate.SessionFactory;
  *
  * @author Firsta
  */
-public class EmployeeController {
-     private GeneralDAO gdao;
+public class EmployeeController implements EmployeeControllerInterface{
+     private DAOInterface<Employee> dao;
+     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
      
      public EmployeeController(SessionFactory factory){
-         gdao = new GeneralDAO(factory, Employee.class);
+         dao = new GeneralDAO(factory, Employee.class);
      }
-     
-     public String insert(String id, String name, String birthdate, String gender, String marriedstatus, String address, String email, String phone, String onboarddate, String password, String securityqestion, String securityanswer, String isdeleted, String hiringlocation, String birthplace, String religion, String village){
-         if(gdao.saveOrDelete(new Employee(id, name, new Date(birthdate), gender, marriedstatus, address, email, phone, new Date(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
-            return "Save Data Success";
-         }else{
-            return "Save Failed";
-         }
-     }
-     
-     public String update (String id, String name, String birthdate, String gender, String marriedstatus, String address, String email, String phone, String onboarddate, String password, String securityqestion, String securityanswer, String isdeleted, String hiringlocation, String birthplace, String religion, String village){
-         if(gdao.saveOrDelete(new Employee(id, name, new Date(birthdate), gender, marriedstatus, address, email, phone, new Date(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
-            return "Save Data Success";
-         }else{
-            return "Save Failed";
-         }
-     }
-     
-     public String delete(String id, String name, String birthdate, String gender, String marriedstatus, String address, String email, String phone, String onboarddate, String password, String securityqestion, String securityanswer, String isdeleted, String hiringlocation, String birthplace, String religion, String village){
-         if(gdao.saveOrDelete(new Employee(id, name, new Date(birthdate), gender, marriedstatus, address, email, phone, new Date(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
-            return "Delete Data Success";
-         }else{
-            return "Delete Failed";
-         }
-     }
-     
-     public List<Employee> getAll(){   
-        return gdao.getData("");
+
+    @Override
+    public Employee getByid(String id) {
+        return dao.getById(id);
+    }
+
+    @Override
+    public List<Employee> getAll() {
+        return dao.getData("");
+    }
+
+    @Override
+    public List<Employee> search(Object keyword) {
+       return dao.getData(keyword);
+    }
+
+    @Override
+    public List<Employee> searchWD(Object keyword) {
+       return dao.getDataWD(keyword, 0);
     }
     
-    public List<Employee> search(Object keyword){
-        return gdao.getData(keyword);
+    @Override
+    public String save(String id, String name, String birthdate, String gender, String marriedstatus, String address, String email, String phone, String onboarddate, String password, String securityqestion, String securityanswer, String hiringlocation, String birthplace, String religion, String village) {
+        try {
+            if(dao.saveOrDelete(new Employee(id, name, dateFormat.parse(birthdate), gender, marriedstatus, address, email, phone, dateFormat.parse(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
+                return "Save Data Success";
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(PlacementController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "Save Failed";
     }
-    
+
+    @Override
+    public String delete(String id, String name, String birthdate, String gender, String marriedstatus, String address, String email, String phone, String onboarddate, String password, String securityqestion, String securityanswer, String hiringlocation, String birthplace, String religion, String village) {
+        try {
+            if(dao.saveOrDelete(new Employee(id, name, dateFormat.parse(birthdate), gender, marriedstatus, address, email, phone, dateFormat.parse(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
+                return "Delete Data Success";
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(PlacementController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "Delete Failed";
+    }
+
+    @Override
+    public String deleteSoft(String id, String name, String birthdate, String gender, String marriedstatus, String address, String email, String phone, String onboarddate, String password, String securityqestion, String securityanswer, String hiringlocation, String birthplace, String religion, String village) {
+    String tempID="";
+        List<Employee> dataList = searchWD("");
+        for (Employee employee : dataList) {
+            if(dateFormat.format(employee.getName()).equals(name)
+            &&employee.getBirthdate().equals(birthdate)
+            &&employee.getGender().equals(gender)
+            &&employee.getMarriedstatus().equals(marriedstatus)
+            &&employee.getAddress().equals(address)
+            &&employee.getEmail().equals(email)
+            &&employee.getPhone().equals(phone)
+            &&employee.getOnboarddate().equals(onboarddate)
+            &&employee.getPassword().equals(password)
+            &&employee.getAddress().equals(address)
+            &&employee.getSecurityqestion().equals(securityqestion)
+            &&employee.getSecurityanswer().equals(securityanswer)
+            &&employee.getHiringlocation().getId().equals(hiringlocation)
+            &&employee.getBirthplace().getId().equals(birthplace)
+            &&employee.getReligion().getId().equals(religion)
+            &&employee.getVillage().getId().equals(village)
+            )tempID=employee.getId();
+        }
+        try {
+            if (dao.saveOrDelete(new Employee(id, name, dateFormat.parse(birthdate), gender, marriedstatus, address, email, phone, dateFormat.parse(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
+                return "Delete Data Success!";
+            }
+            } catch (ParseException ex) {
+            Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "Delete Failed!";
+    }
 }
