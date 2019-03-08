@@ -357,12 +357,12 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed

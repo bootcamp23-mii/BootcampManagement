@@ -8,6 +8,8 @@ package views;
 import controllers.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JRootPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 import models.EmployeeLanguage;
 import models.Language;
@@ -66,6 +68,14 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
             cbEmployeeLanguage.addItem(data.getId()+" - "+data.getName());
         }
     }
+    
+    private void getRidTheBar() {
+        putClientProperty("Home.isPallete", Boolean.TRUE);
+        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        this.setBorder(null);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,6 +104,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         pnMTLeft = new javax.swing.JPanel();
 
         setBorder(null);
+        setTitle("Employee Language");
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
         pnMain.setPreferredSize(new java.awt.Dimension(700, 500));
@@ -273,12 +284,12 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btSaveActionPerformed
 
 

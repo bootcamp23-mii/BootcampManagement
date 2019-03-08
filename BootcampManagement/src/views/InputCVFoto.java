@@ -5,35 +5,13 @@
  */
 package views;
 
-import controllers.UploadController;
-import controllers.UploadControllerInterface;
-import controllers.UploadDBController;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.sql.Blob;
-import java.sql.SQLException;
+import controllers.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileSystemView;
-import models.Upload;
-import models.UploadDB;
-//import oracle.sql.BLOB;
-import org.hibernate.SessionFactory;
-import tools.DBConnection;
-import tools.HibernateUtil;
-import tools.Session;
+import models.*;
+import tools.*;
 
 /**
  *

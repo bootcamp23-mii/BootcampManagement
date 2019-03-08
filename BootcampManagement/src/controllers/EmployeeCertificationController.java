@@ -85,7 +85,7 @@ public class EmployeeCertificationController implements EmployeeCertificationCon
                     )tempID=data.getId();
         }
         try {
-            if (dao.saveOrDelete(new EmployeeCertification(tempID, dateFormat.parse(certificateDate), certificateNumber, new Short("0"), new Certificate(certificate), new Employee(employee)), true)) {
+            if (dao.saveOrDelete(new EmployeeCertification(tempID, dateFormat.parse(certificateDate), certificateNumber, new Short("1"), new Certificate(certificate), new Employee(employee)), true)) {
                 return "Delete Data Success!";
             }
         } catch (ParseException ex) {

@@ -8,6 +8,8 @@ package views;
 import controllers.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JRootPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 import models.Education;
 import models.EducationHistory;
@@ -40,6 +42,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         showAllTable(c.search(Session.getSession()));
         getEducationList();
         setComboBox();
+//        getRidTheBar();
     }
     
     private void showAllTable(List<EducationHistory> eh){
@@ -72,6 +75,14 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
             cbEducationHis.addItem(data.getId()+" - "+data.getDegree().getName()+" ("+data.getMajor().getName()+") "+data.getUniversity().getName());
         }
     }
+    
+    private void getRidTheBar() {
+        putClientProperty("Home.isPallete", Boolean.TRUE);
+        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        this.setBorder(null);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,6 +114,8 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         pnMTLeft = new javax.swing.JPanel();
 
         setBorder(null);
+        setClosable(true);
+        setTitle("Education History");
         setMinimumSize(new java.awt.Dimension(700, 500));
         setPreferredSize(new java.awt.Dimension(700, 500));
 
@@ -308,12 +321,12 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btDeleteActionPerformed
 
 

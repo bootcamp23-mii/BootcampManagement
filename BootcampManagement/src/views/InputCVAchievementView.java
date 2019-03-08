@@ -7,6 +7,8 @@ package views;
 
 import controllers.*;
 import java.util.List;
+import javax.swing.JRootPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 import models.Achievement;
 import org.hibernate.SessionFactory;
@@ -32,6 +34,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
     private void setDefaultCondition(){
         showAllTable(c.searchWD(Session.getSession()));
+//        getRidTheBar();
     }
 
     private void showAllTable(List<Achievement> dataList){
@@ -47,6 +50,13 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         }
         tableModel = new DefaultTableModel(data, columnNames);
         tbAchievement.setModel(tableModel);
+    }
+    
+    private void getRidTheBar() {
+        putClientProperty("Home.isPallete", Boolean.TRUE);
+        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        this.setBorder(null);
     }
     
     /**
@@ -78,6 +88,9 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         pnMTLeft = new javax.swing.JPanel();
 
         setBorder(null);
+        setClosable(true);
+        setTitle("Achievement");
+        setFrameIcon(null);
         setPreferredSize(new java.awt.Dimension(700, 500));
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
@@ -261,12 +274,12 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfAchievement.getText(), Session.getSession());
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         c.save("", tfAchievement.getText(), Session.getSession());
-        setDefaultCondition();
+        showAllTable(c.searchWD(Session.getSession()));
     }//GEN-LAST:event_btSaveActionPerformed
 
 
