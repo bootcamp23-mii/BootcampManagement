@@ -80,14 +80,14 @@ public class EmployeeController implements EmployeeControllerInterface{
     String tempID="";
         List<Employee> dataList = searchWD("");
         for (Employee employee : dataList) {
-            if(dateFormat.format(employee.getName()).equals(name)
-            &&employee.getBirthdate().equals(birthdate)
+            if(employee.getName().equals(name)
+            &&dateFormat.format(employee.getBirthdate()).equals(birthdate)
             &&employee.getGender().equals(gender)
             &&employee.getMarriedstatus().equals(marriedstatus)
             &&employee.getAddress().equals(address)
             &&employee.getEmail().equals(email)
             &&employee.getPhone().equals(phone)
-            &&employee.getOnboarddate().equals(onboarddate)
+            &&dateFormat.format(employee.getOnboarddate()).equals(onboarddate)
             &&employee.getPassword().equals(password)
             &&employee.getAddress().equals(address)
             &&employee.getSecurityqestion().equals(securityqestion)
@@ -99,7 +99,7 @@ public class EmployeeController implements EmployeeControllerInterface{
             )tempID=employee.getId();
         }
         try {
-            if (dao.saveOrDelete(new Employee(id, name, dateFormat.parse(birthdate), gender, marriedstatus, address, email, phone, dateFormat.parse(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
+            if (dao.saveOrDelete(new Employee(tempID, name, dateFormat.parse(birthdate), gender, marriedstatus, address, email, phone, dateFormat.parse(onboarddate), password, securityqestion, securityanswer, new Short("0"), new District(hiringlocation), new District(birthplace), new Religion(religion), new Village(village)), true)){
                 return "Delete Data Success!";
             }
             } catch (ParseException ex) {

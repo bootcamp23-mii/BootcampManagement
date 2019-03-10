@@ -5,12 +5,28 @@
  */
 package views;
 
+import controllers.BatchClassController;
+import controllers.BatchClassControllerInterface;
+import controllers.EmployeeController;
+import controllers.EmployeeControllerInterface;
+import controllers.EmployeeRoleController;
+import controllers.EmployeeRoleControllerInterface;
 import controllers.LoginController;
+import controllers.ParticipantController;
+import controllers.ParticipantControllerInterface;
+import controllers.RoleController;
+import controllers.RoleControllerInterface;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import models.BatchClass;
+import models.Employee;
+import models.EmployeeRole;
+import models.Participant;
+import models.Role;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -30,7 +46,6 @@ public class BootcampManagementView extends javax.swing.JFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private LoginController c = new LoginController(factory);
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-//    UserController uc = new UserController(sessionFactory);
 
     /**
      * Creates new form LoginView
@@ -42,17 +57,78 @@ public class BootcampManagementView extends javax.swing.JFrame {
     
     private void setDefaultCondition(){
         getMiddle();
-        views.LoginView view = new views.LoginView();
-        pnLogin.add(view);
-        view.setVisible(true);
-        mnbBootcamp.setVisible(false);
-        
+        logout();
     }
     
     private void getMiddle() {
         int frameWidth = ((dim.width - this.getSize().width) / 2);
         int frameHeigth = ((dim.height - this.getSize().height) / 2);
         this.setLocation(frameWidth, frameHeigth);
+    }
+    
+    private void logout(){
+        Session.setSession("");
+        mnbBootcamp.setVisible(false);
+        mnAccountSetting.setVisible(false);
+        mnEditCV.setVisible(false);
+        mnBCManagement.setVisible(false);
+        mnEquipments.setVisible(false);
+        mnLocation.setVisible(false);
+        mnSeparator.setVisible(false);
+        mnLogout.setVisible(false);
+        
+        views.LoginView view = new views.LoginView();
+        pnLogin.add(view);
+        view.setVisible(true);
+    }
+    
+    public void login(){
+        
+    }
+    
+    private void autorityCheck(){
+        mnbBootcamp.setVisible(true);
+        mnEditCV.setVisible(true);
+        mnLogout.setVisible(true);
+        mnCVEmployeeRole.setVisible(false);
+        EmployeeControllerInterface e = new EmployeeController(factory);
+        ParticipantControllerInterface eParticipant = new ParticipantController(factory);
+        List<Employee> dataEmployee = e.search(Session.getSession());
+        List<Participant> dataParticipant = eParticipant.search(Session.getSession());
+        for (Participant data : dataParticipant) {
+            if (data.getId().equals(Session.getSession())) {
+                mnBCManagement.setVisible(true);
+                mnBatchClassView.setVisible(false);
+                mnParticipantView.setVisible(false);
+                mnLessonView.setVisible(false);
+                mnErrorBankView.setVisible(true);
+                mnEvaluationView.setVisible(false);
+                mnScoreView.setVisible(false);
+                mnGenerateRaport.setVisible(true);
+            }
+        }
+        for (Employee employee : dataEmployee) {
+            for (BatchClass data : employee.getBatchClassList()) {
+                mnBCManagement.setVisible(true);
+                mnBatchClassView.setVisible(false);
+                mnParticipantView.setVisible(false);
+                mnLessonView.setVisible(false);
+                mnErrorBankView.setVisible(true);
+                mnEvaluationView.setVisible(false);
+                mnScoreView.setVisible(false);
+                mnGenerateRaport.setVisible(true);
+                mnEquipments.setVisible(true);
+            }
+        }
+        for (Employee employee : dataEmployee) {
+            for (EmployeeRole data : employee.getEmployeeRoleList()) {
+                if (data.getRole().getName().equals("Admin")) {
+                    mnCVEmployeeRole.setVisible(true);
+                    mnAccountSetting.setVisible(true);
+                    mnLocation.setVisible(true);
+                }
+            }
+        }
     }
 
     /**
@@ -421,7 +497,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVEmployeeRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeRoleActionPerformed
         InputCVEmployeeRoleView view = new InputCVEmployeeRoleView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -429,7 +505,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVEducationHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEducationHistoryActionPerformed
         InputCVEducationHistoryView view = new InputCVEducationHistoryView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -437,7 +513,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVEmployeeLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeLanguageActionPerformed
         InputCVEmployeeLanguageView view = new InputCVEmployeeLanguageView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -445,7 +521,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVEmployeeSkillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeSkillActionPerformed
         InputCVEmployeeSkillView view = new InputCVEmployeeSkillView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -453,7 +529,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVOrganizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVOrganizationActionPerformed
         InputCVOrganizationView view = new InputCVOrganizationView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -461,7 +537,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVAchievementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVAchievementActionPerformed
         InputCVAchievementView view = new InputCVAchievementView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -469,7 +545,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVEmployeeCertificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVEmployeeCertificationActionPerformed
         InputCVEmployeeCertificationView view = new InputCVEmployeeCertificationView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -477,7 +553,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVWorkExperienceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVWorkExperienceActionPerformed
         InputCVWorkExperienceView view = new InputCVWorkExperienceView();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -485,7 +561,7 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVFotoActionPerformed
         InputCVFoto view = new InputCVFoto();
-        pnBootcamp.removeAll();
+        pnLogin.setVisible(false);
         pnBootcamp.add(view);
         view.setVisible(true);
         view.revalidate();
@@ -507,8 +583,8 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVGenerateActionPerformed
         try {
-            String fileName = "./src/reports/CV2.jrxml";
-            String filetoFill = "./src/reports/CV2.jasper";
+            String fileName = "./src/reports/CV3.jrxml";
+            String filetoFill = "./src/reports/CV3.jasper";
             JasperCompileManager.compileReport(fileName);
             Map param = new HashMap();
             param.put("setID", Session.getSession());

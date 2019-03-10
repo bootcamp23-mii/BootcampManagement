@@ -36,7 +36,7 @@ public class TestController {
         SessionFactory factory = HibernateUtil.getSessionFactory();
         EducationHistoryControllerInterface eh = new EducationHistoryController(factory);
         EmployeeController emp = new EmployeeController(factory);
-        List<Employee> empList = emp.getAll();
+        List<Employee> empList = emp.searchWD("14201");
 //        UploadController up = new UploadController(factory);
 ////        byte temp = (byte) up.getById("14303").getPhoto();
 //        FileInputStream file = new FileInputStream(up.getById("14303").getPhoto().toString()); 
@@ -63,8 +63,13 @@ public class TestController {
 //            System.out.println(ex.toString());
 //        }
         for (Employee employee : empList) {
-            for (BatchClass batchClass : employee.getBatchClassList()) {
-                System.out.println(batchClass.getTrainer().getName());
+            for (BatchClass data : employee.getBatchClassList()) {
+                System.out.println(data.getTrainer());
+            }
+        }
+        for (Employee employee : empList) {
+            for (EmployeeRole data : employee.getEmployeeRoleList()) {
+                System.out.println(data.getRole().getName());
             }
         }
     }
