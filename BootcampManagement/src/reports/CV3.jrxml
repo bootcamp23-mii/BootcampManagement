@@ -23,7 +23,7 @@ join education e on e.id = eh.education
 join degree d on d.id = e.degree
 join major m on m.id = e.major
 join university u on u.id = e.university
-where eh.employee = $P{ID}]]>
+where eh.employee = $P{ID} and eh.isdeleted=0]]>
 		</queryString>
 		<field name="GPA" class="java.lang.String"/>
 		<field name="DEGREE" class="java.lang.String"/>
@@ -36,7 +36,7 @@ where eh.employee = $P{ID}]]>
 		</parameter>
 		<queryString>
 			<![CDATA[select l.id langID,l.name langName from employee_language el
-join language l on l.id=el.language where el.employee=$P{ID}]]>
+join language l on l.id=el.language where el.employee=$P{ID} and el.isdeleted = 0]]>
 		</queryString>
 		<field name="LANGID" class="java.lang.String"/>
 		<field name="LANGNAME" class="java.lang.String"/>
@@ -50,7 +50,7 @@ join language l on l.id=el.language where el.employee=$P{ID}]]>
 from employee_skill es
 join skill s on es.skill=s.id
 join category c on s.category=c.id
-where es.employee =$P{ID}]]>
+where es.employee =$P{ID} and es.isdeleted = 0]]>
 		</queryString>
 		<field name="SKILL" class="java.lang.String"/>
 		<field name="CATEGORY" class="java.lang.String"/>
@@ -60,7 +60,7 @@ where es.employee =$P{ID}]]>
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[select name from organization where employee = $P{ID}]]>
+			<![CDATA[select name from organization where employee = $P{ID} and isdeleted = 0]]>
 		</queryString>
 		<field name="NAME" class="java.lang.String"/>
 	</subDataset>
@@ -69,7 +69,7 @@ where es.employee =$P{ID}]]>
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[select name from achievement where employee = $P{ID}]]>
+			<![CDATA[select name from achievement where employee = $P{ID} and isdeleted = 0]]>
 		</queryString>
 		<field name="NAME" class="java.lang.String"/>
 	</subDataset>
@@ -81,7 +81,7 @@ where es.employee =$P{ID}]]>
 			<![CDATA[select ec.certificatedate certificatedate, ec.certificatenumber certificatenumber, c.name certificate
 from employee_certification ec 
 join certificate c on c.id=ec.certificate
-where ec.employee = $P{ID}]]>
+where ec.employee = $P{ID} and ec.isdeleted = 0]]>
 		</queryString>
 		<field name="CERTIFICATEDATE" class="java.sql.Timestamp"/>
 		<field name="CERTIFICATENUMBER" class="java.lang.String"/>
@@ -92,7 +92,7 @@ where ec.employee = $P{ID}]]>
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[select * from work_experience where employee=$P{ID}]]>
+			<![CDATA[select * from work_experience where employee=$P{ID} and isdeleted = 0]]>
 		</queryString>
 		<field name="ID" class="java.lang.String"/>
 		<field name="NAME" class="java.lang.String"/>

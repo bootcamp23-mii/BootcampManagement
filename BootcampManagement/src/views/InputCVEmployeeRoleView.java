@@ -29,10 +29,9 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private EmployeeRoleControllerInterface c = new EmployeeRoleController(factory);
     private RoleControllerInterface cr = new RoleController(factory);
-
+    private static String tempID;
     private DefaultTableModel tableModel;
     private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
-    
     private List<models.Role> roleList = new ArrayList<>();
     /**
      * Creates new form InputCVEmployeeRoleView
@@ -51,6 +50,7 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         tfEndDate.setEnabled(false);
         getRoleList();
         setComboBox();
+        clean();
     }
 
     private void showAllTable(List<EmployeeRole> er){
@@ -78,8 +78,45 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
     
     private void setComboBox(){
         for (Role data : roleList) {
-            cbEmpRole.addItem(data.getId()+" - "+data.getName());
+            cbEmpRole.addItem(data.getName());
         }
+    }
+    private void clean(){
+        cbEmpRole.setSelectedIndex(0);
+        tfEndDate.setText("");
+        tfStartDate.setText("");
+        tempID="0";
+    }
+    
+    private boolean entryCheck() {
+        try {
+            if (tfEndDate.getText().equals("")
+                    || tfStartDate.getText().equals("")
+                    || cbEmpRole.getSelectedIndex()==0
+                    ) 
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            Date date = new Date();
+            if (date.getTime()<dateFormatOut.parse(tfStartDate.getText()).getTime()){
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            if (date.getTime()<dateFormatOut.parse(tfEndDate.getText()).getTime()){
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            if (dateFormatOut.parse(tfEndDate.getText()).getTime()<dateFormatOut.parse(tfStartDate.getText()).getTime()){
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -113,10 +150,12 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         scpEmployeeRole = new javax.swing.JScrollPane();
         tbEmployeeRole = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
+        setClosable(true);
+        setTitle("Employee Role");
+        setFrameIcon(null);
         setPreferredSize(new java.awt.Dimension(700, 500));
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
@@ -146,7 +185,7 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         pnMTop.setLayout(pnMTopLayout);
         pnMTopLayout.setHorizontalGroup(
             pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 691, Short.MAX_VALUE)
+            .addGap(0, 684, Short.MAX_VALUE)
             .addGroup(pnMTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnMTopLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -168,9 +207,11 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         pnMTRCenter.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRCenter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnMTRCenter.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        pnMTRCenter.setPreferredSize(new java.awt.Dimension(600, 164));
 
         pnMTRC1.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC1.setPreferredSize(new java.awt.Dimension(640, 40));
+        pnMTRC1.setMinimumSize(new java.awt.Dimension(150, 35));
+        pnMTRC1.setPreferredSize(new java.awt.Dimension(600, 40));
         pnMTRC1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblRole1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -187,7 +228,7 @@ public class InputCVEmployeeRoleView extends javax.swing.JInternalFrame {
         pnMTRCenter.add(pnMTRC1);
 
         pnMTRC2.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC2.setPreferredSize(new java.awt.Dimension(640, 70));
+        pnMTRC2.setPreferredSize(new java.awt.Dimension(600, 70));
         pnMTRC2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblRole2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -327,7 +368,13 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
         }
     });
     pnMTRC2.add(dcEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 40, 30, -1));
+
+    tfEndDate.setEditable(false);
+    tfEndDate.setBackground(new java.awt.Color(255, 255, 255));
     pnMTRC2.add(tfEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 120, 30));
+
+    tfStartDate.setEditable(false);
+    tfStartDate.setBackground(new java.awt.Color(255, 255, 255));
     pnMTRC2.add(tfStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 120, 30));
 
     btSave.setText("Save");
@@ -340,7 +387,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
 
     pnMTRCenter.add(pnMTRC2);
 
-    pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 150));
+    pnMTRC3.setPreferredSize(new java.awt.Dimension(600, 200));
 
     scpEmployeeRole.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     scpEmployeeRole.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -364,11 +411,13 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     pnMTRC3.setLayout(pnMTRC3Layout);
     pnMTRC3Layout.setHorizontalGroup(
         pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(scpEmployeeRole, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+        .addComponent(scpEmployeeRole, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
     );
     pnMTRC3Layout.setVerticalGroup(
         pnMTRC3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(scpEmployeeRole, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGroup(pnMTRC3Layout.createSequentialGroup()
+            .addComponent(scpEmployeeRole, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 0, Short.MAX_VALUE))
     );
 
     pnMTRCenter.add(pnMTRC3);
@@ -377,16 +426,6 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
 
     pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
     pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
-
-    btOke.setText("Oke");
-    btOke.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btOkeActionPerformed(evt);
-        }
-    });
-    pnMTBottom.add(btOke);
-    btOke.getAccessibleContext().setAccessibleName("");
-
     pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
     pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
@@ -400,7 +439,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     );
     pnMTRightLayout.setVerticalGroup(
         pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 377, Short.MAX_VALUE)
+        .addGap(0, 430, Short.MAX_VALUE)
     );
 
     pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -416,7 +455,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     );
     pnMTLeftLayout.setVerticalGroup(
         pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 377, Short.MAX_VALUE)
+        .addGap(0, 430, Short.MAX_VALUE)
     );
 
     pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -425,7 +464,7 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
+        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -435,13 +474,14 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
-
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        c.deleteSoft("", tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), cbEmpRole.getSelectedItem().toString().split(" - ")[0]);
+        String temp="";
+        for (Role data : roleList) {
+            if (data.getName().equals(cbEmpRole.getSelectedItem().toString()))temp=data.getId();
+        }
+        c.deleteSoft("", tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), temp);
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void dcStartDateOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dcStartDateOnSelectionChange
@@ -461,34 +501,43 @@ dcEndDate.addSelectionChangedListener(new datechooser.events.SelectionChangedLis
     }//GEN-LAST:event_dcStartDateOnCommit
 
     private void tbEmployeeRoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmployeeRoleMouseClicked
-        String temp="";
-        for (Role data : roleList) {
-            if (data.getName().equals(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 1).toString()))temp=data.getId();
-        }
         for (int i = 0; i < cbEmpRole.getItemCount(); i++) {
-            if (cbEmpRole.getItemAt(i).split(" - ")[0].equals(temp))
+            if (cbEmpRole.getItemAt(i).equals(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 1).toString()))
             cbEmpRole.setSelectedIndex(i);
         }
         tfStartDate.setText(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 2).toString());
         tfEndDate.setText(tbEmployeeRole.getValueAt(tbEmployeeRole.getSelectedRow(), 3).toString());
+
+        List<EmployeeRole> dataList=c.searchWD(Session.getSession());
+        for (EmployeeRole data : dataList) {
+            if (data.getRole().getName().equals(cbEmpRole.getSelectedItem().toString())
+                    &&dateFormatOut.format(data.getStartdate()).equals(tfStartDate.getText())
+                    &&dateFormatOut.format(data.getEnddate()).equals(tfEndDate.getText())
+                    )
+                tempID=data.getId();
+        }        
     }//GEN-LAST:event_tbEmployeeRoleMouseClicked
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
-        cbEmpRole.setSelectedIndex(0);
-        tfEndDate.setText("");
-        tfStartDate.setText("");
+        clean();
     }//GEN-LAST:event_btClearActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        c.save("", tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), cbEmpRole.getSelectedItem().toString().split(" - ")[0]);
-        showAllTable(c.searchWD(Session.getSession()));
+        if (entryCheck()){
+            String temp="";
+            for (Role data : roleList) {
+                if (data.getName().equals(cbEmpRole.getSelectedItem().toString()))temp=data.getId();
+            }
+//            JOptionPane.showMessageDialog(null, tempID);
+            c.save(tempID, tfStartDate.getText(), tfEndDate.getText(), Session.getSession(), temp);
+            showAllTable(c.searchWD(Session.getSession()));
+        }
+        clean();
     }//GEN-LAST:event_btSaveActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbEmpRole;
     private datechooser.beans.DateChooserCombo dcEndDate;

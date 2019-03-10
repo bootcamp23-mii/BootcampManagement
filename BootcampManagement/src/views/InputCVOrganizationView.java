@@ -7,6 +7,7 @@ package views;
 
 import controllers.*;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.Organization;
 import org.hibernate.SessionFactory;
@@ -22,6 +23,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
     private OrganizationControllerInterface c = new OrganizationController(factory);
     
     private DefaultTableModel tableModel;
+    private static String tempID;
     /**
      * Creates new form InputCVOrganizationView
      */
@@ -32,6 +34,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
 
     private void setDefaultCondition(){
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
     }
 
     private void showAllTable(List<Organization> dataList){
@@ -47,6 +50,27 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         }
         tableModel = new DefaultTableModel(data, columnNames);
         tbOrganization.setModel(tableModel);
+    }
+    
+    private void clean(){
+        tfOrganization.setText("");
+        tempID="";
+    }
+    
+    private boolean entryCheck() {
+        try {
+            if (tfOrganization.getText().equals("")
+                    )
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -73,11 +97,13 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         spcOrganization = new javax.swing.JScrollPane();
         tbOrganization = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
         setBorder(null);
+        setClosable(true);
+        setTitle("Organization");
+        setFrameIcon(null);
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
         pnMain.setPreferredSize(new java.awt.Dimension(700, 500));
@@ -189,15 +215,6 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
 
         pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
         pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
-
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
-
         pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
         pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
@@ -211,7 +228,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         );
         pnMTRightLayout.setVerticalGroup(
             pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 430, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -227,7 +244,7 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         );
         pnMTLeftLayout.setVerticalGroup(
             pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 430, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -246,33 +263,35 @@ public class InputCVOrganizationView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
-
     private void tbOrganizationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbOrganizationMouseClicked
         tfOrganization.setText(tbOrganization.getValueAt(tbOrganization.getSelectedRow(), 1).toString());
+        List<Organization> dataList=c.searchWD(Session.getSession());
+        for (Organization data : dataList) {
+            if (tfOrganization.getText().equals(data.getName()))tempID=data.getId();
+        }
     }//GEN-LAST:event_tbOrganizationMouseClicked
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        c.save("", tfOrganization.getText(), Session.getSession());
-        showAllTable(c.searchWD(Session.getSession()));
+        if (entryCheck()) {
+            c.save(tempID, tfOrganization.getText(), Session.getSession());
+            showAllTable(c.searchWD(Session.getSession()));
+        }
+        clean();
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
-        tfOrganization.setText("");
+        clean();
     }//GEN-LAST:event_btClearActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfOrganization.getText(), Session.getSession());
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
     }//GEN-LAST:event_btDeleteActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private javax.swing.JLabel lblOrganization;
     private javax.swing.JLabel lblTitle;

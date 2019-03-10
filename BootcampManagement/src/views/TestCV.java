@@ -7,6 +7,7 @@ package views;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import tools.Session;
 
 /**
  *
@@ -20,6 +21,7 @@ public class TestCV extends javax.swing.JFrame {
      * Creates new form TestCV
      */
     public TestCV() {
+        Session.setSession("14303");
         initComponents();
 //        views.InputCVEmployeeRoleView view = new views.InputCVEmployeeRoleView();
 //        views.InputCVEducationHistoryView view = new views.InputCVEducationHistoryView();

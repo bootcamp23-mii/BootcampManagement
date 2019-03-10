@@ -8,6 +8,7 @@ package views;
 import controllers.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +29,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
     
     private DefaultTableModel tableModel;
     private List<models.Language> languageList = new ArrayList<>();
+    private static String tempID;
     /**
      * Creates new form InputCVEmployeeLanguageView
      */
@@ -40,6 +42,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         showAllTable(c.searchWD(Session.getSession()));
         getLanguageList();
         setComboBox();
+        clean();
     }
 
     private void showAllTable(List<EmployeeLanguage> er){
@@ -76,6 +79,27 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         this.setBorder(null);
     }
     
+    private void clean(){
+        cbEmployeeLanguage.setSelectedIndex(0);
+        tempID="";
+    }
+    
+    private boolean entryCheck() {
+        try {
+            if (cbEmployeeLanguage.getSelectedIndex()==0
+                    )
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,16 +119,17 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         pnMTRC2 = new javax.swing.JPanel();
         btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         pnMTRC3 = new javax.swing.JPanel();
         spcEmpLanguage = new javax.swing.JScrollPane();
         tbEmpLanguage = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
         setBorder(null);
         setTitle("Employee Language");
+        setFrameIcon(null);
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
         pnMain.setPreferredSize(new java.awt.Dimension(700, 500));
@@ -178,6 +203,14 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         });
         pnMTRC2.add(btDelete);
 
+        btClear.setText("Clear");
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnMTRC2.add(btClear);
+
         pnMTRCenter.add(pnMTRC2);
 
         pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
@@ -210,15 +243,6 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
 
         pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
         pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
-
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
-
         pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
         pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
@@ -232,7 +256,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         );
         pnMTRightLayout.setVerticalGroup(
             pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 430, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -248,7 +272,7 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         );
         pnMTLeftLayout.setVerticalGroup(
             pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 430, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -267,10 +291,6 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
-
     private void tbEmpLanguageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmpLanguageMouseClicked
         String temp="";
         for (Language data : languageList) {
@@ -280,22 +300,35 @@ public class InputCVEmployeeLanguageView extends javax.swing.JInternalFrame {
             if (cbEmployeeLanguage.getItemAt(i).split(" - ")[0].equals(temp))
             cbEmployeeLanguage.setSelectedIndex(i);
         }
+        List<EmployeeLanguage> dataList=c.searchWD(Session.getSession());
+        for (EmployeeLanguage data : dataList) {
+            if (data.getLanguage().getId().equals(temp)
+                    )tempID=data.getId();
+        }
     }//GEN-LAST:event_tbEmpLanguageMouseClicked
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        c.save("", Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
-        showAllTable(c.searchWD(Session.getSession()));
+        if (entryCheck()) {
+            c.save(tempID, Session.getSession(), cbEmployeeLanguage.getSelectedItem().toString().split(" - ")[0]);
+            showAllTable(c.searchWD(Session.getSession()));
+        }
+        clean();
     }//GEN-LAST:event_btSaveActionPerformed
+
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        clean();
+    }//GEN-LAST:event_btClearActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbEmployeeLanguage;
     private javax.swing.JLabel lblEmployeeLanguage;

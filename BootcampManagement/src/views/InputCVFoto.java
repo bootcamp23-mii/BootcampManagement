@@ -6,9 +6,14 @@
 package views;
 
 import controllers.*;
+import java.awt.Image;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import models.*;
 import tools.*;
@@ -25,7 +30,7 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
     private UploadDBController cc = new UploadDBController(connection.getConnection());
 
 //    private List<Upload> list = new ArrayList<>();
-    private List<UploadDB> listUp = new ArrayList<>();
+//    private List<UploadDB> listUp;
     private InputCVFileChooser fc = new InputCVFileChooser();
 //    private Blob blobPhoto;
 //    private Serializable serializable;
@@ -39,37 +44,12 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
     }
 
     private void setDefaultCondition() {
-        
-        
-//        list=c.search("14303");
-////        list=c.search(Session.getSession());
-//        if (!list.isEmpty()){
-////            serializable=;
-////             System.out.println(list.get(0).getPhoto().toString());
-////            blobPhoto = ;
-////            try {
-////                InputStream in = blobPhoto.getBinaryStream();  
-////                BufferedImage image = ImageIO.read(in);
-////                lblImage.setIcon(new ImageIcon(image));
-////                
-////            } catch (Exception e) {
-////                e.printStackTrace();
-////            }
-//            
-//            byte [] data = list.get(0).getPhoto();
-//            BufferedImage image = null;
-//            try {
-//            image = ImageIO.read(new ByteArrayInputStream(data));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            lblImage.setIcon(new ImageIcon(image));
-//        }
+        setImagetoLabel();
     }
     
     public void uploadToDB(File file) throws FileNotFoundException{
-        listUp=cc.seachBy(Session.getSession());
-        if (listUp.isEmpty()) {
+        List<UploadDB> list=cc.seachBy(Session.getSession());
+        if (list.isEmpty()) {
             cc.upload(Session.getSession(), fc.getSelectedFile());
             JOptionPane.showMessageDialog(null, "Upload sukses");
         }
@@ -77,18 +57,25 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
             cc.replace(Session.getSession(), fc.getSelectedFile());
             JOptionPane.showMessageDialog(null, "Upload ganti gambar sukses");
         }
-        
+        setImagetoLabel();
     }
-    public void setImagetoLabel(File imageFile){
-//        try {
-//            JOptionPane.showMessageDialog(null, imageFile.getAbsolutePath());
-//            lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//            lblImage.setIcon(new javax.swing.ImageIcon(imageFile.getAbsolutePath()));
-////            lblImage.setIcon(new ImageIcon(image));
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+    public void setImagetoLabel(){
         
+        List<UploadDB> list=cc.seachBy(Session.getSession());
+        try {
+            if (!list.isEmpty()) {
+//                pn2.remove(lblImage);
+//                pn2.add(lblImage);
+                lblImage.setText("");
+                Image image = ImageIO.read(list.get(0).getPhoto());
+                image=image.getScaledInstance(200, 300,  java.awt.Image.SCALE_SMOOTH);
+                lblImage.setIcon(new ImageIcon(image));
+                lblImage.repaint();
+                lblImage.revalidate();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -103,73 +90,42 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
         pnMTop3 = new javax.swing.JPanel();
         lblTitle3 = new javax.swing.JLabel();
         pnMTRCenter = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        pn2 = new javax.swing.JPanel();
         lblImage = new javax.swing.JLabel();
         btUpload = new javax.swing.JButton();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
         setClosable(true);
+        setTitle("Upload Image");
+        setFrameIcon(null);
         setPreferredSize(new java.awt.Dimension(700, 500));
 
         pn.setBackground(new java.awt.Color(204, 255, 255));
         pn.setPreferredSize(new java.awt.Dimension(700, 500));
+        pn.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnMTop3.setBackground(new java.awt.Color(204, 255, 255));
         pnMTop3.setPreferredSize(new java.awt.Dimension(700, 50));
 
         lblTitle3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblTitle3.setText("Upload Image");
+        pnMTop3.add(lblTitle3);
 
-        javax.swing.GroupLayout pnMTop3Layout = new javax.swing.GroupLayout(pnMTop3);
-        pnMTop3.setLayout(pnMTop3Layout);
-        pnMTop3Layout.setHorizontalGroup(
-            pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-            .addGroup(pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnMTop3Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(lblTitle3)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        pnMTop3Layout.setVerticalGroup(
-            pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-            .addGroup(pnMTop3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnMTop3Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(lblTitle3)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        pn.add(pnMTop3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, -1, -1));
 
         pnMTRCenter.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRCenter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnMTRCenter.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pn2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pn2.setPreferredSize(new java.awt.Dimension(300, 200));
 
         lblImage.setText("Image");
+        pn2.add(lblImage);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(119, Short.MAX_VALUE)
-                .addComponent(lblImage)
-                .addGap(117, 117, 117))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(lblImage)
-                .addContainerGap(141, Short.MAX_VALUE))
-        );
-
-        pnMTRCenter.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 270, 290));
+        pnMTRCenter.add(pn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 240, 290));
 
         btUpload.setText("Upload");
         btUpload.addActionListener(new java.awt.event.ActionListener() {
@@ -179,16 +135,11 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
         });
         pnMTRCenter.add(btUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, 40));
 
+        pn.add(pnMTRCenter, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 66, 650, 407));
+
         pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
         pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
-
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
+        pn.add(pnMTBottom, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 478, 700, -1));
 
         pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
         pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
@@ -204,6 +155,8 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
             .addGap(0, 407, Short.MAX_VALUE)
         );
 
+        pn.add(pnMTRight, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 66, -1, 407));
+
         pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
         pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
 
@@ -218,37 +171,7 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
             .addGap(0, 407, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout pnLayout = new javax.swing.GroupLayout(pn);
-        pn.setLayout(pnLayout);
-        pnLayout.setHorizontalGroup(
-            pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnMTop3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnLayout.createSequentialGroup()
-                        .addComponent(pnMTLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(pnMTRCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(pnMTRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pnMTBottom, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        pnLayout.setVerticalGroup(
-            pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(pnMTop3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addGroup(pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnMTLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnMTRCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnMTRight, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addComponent(pnMTBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        pn.add(pnMTLeft, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 66, -1, 407));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -270,10 +193,6 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
-
     private void btUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUploadActionPerformed
         
         fc.setVisible(true);
@@ -282,12 +201,11 @@ public class InputCVFoto extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btUpload;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblTitle3;
     private javax.swing.JPanel pn;
+    private javax.swing.JPanel pn2;
     private javax.swing.JPanel pnMTBottom;
     private javax.swing.JPanel pnMTLeft;
     private javax.swing.JPanel pnMTRCenter;

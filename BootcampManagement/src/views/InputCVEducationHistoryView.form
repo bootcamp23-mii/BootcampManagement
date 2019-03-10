@@ -7,6 +7,9 @@
     </Property>
     <Property name="closable" type="boolean" value="true"/>
     <Property name="title" type="java.lang.String" value="Education History"/>
+    <Property name="frameIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+      <Image iconType="0" name="null"/>
+    </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[700, 500]"/>
     </Property>
@@ -289,16 +292,6 @@
             <Property name="alignment" type="int" value="2"/>
             <Property name="horizontalGap" type="int" value="25"/>
           </Layout>
-          <SubComponents>
-            <Component class="javax.swing.JButton" name="btOke">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Oke"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btOkeActionPerformed"/>
-              </Events>
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnMTRight">
           <Properties>
@@ -323,7 +316,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="380" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="403" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -351,7 +344,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="380" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="403" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>

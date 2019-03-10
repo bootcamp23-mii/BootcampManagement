@@ -8,7 +8,9 @@ package views;
 import controllers.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.EmployeeRole;
 import models.Role;
@@ -27,6 +29,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
     
     private DefaultTableModel tableModel;
     private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
+    private static String tempID;
     
     /**
      * Creates new form InputCVWorkExperienceView
@@ -34,7 +37,8 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
     public InputCVWorkExperienceView() {
         initComponents();
         setDefaultCondition();
-        
+        this.closable=true;
+        this.setTitle("Work Experience");
     }
     
     private void setDefaultCondition(){
@@ -43,7 +47,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         dcEndDate.setDateFormat(dateFormatOut);
         tfStartDate.setEnabled(false);
         tfEndDate.setEnabled(false);
-
+        clean();
     }
 
     private void showAllTable(List<WorkExperience> er){
@@ -62,6 +66,46 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         }
         tableModel = new DefaultTableModel(data, columnNames);
         tbWorkExperience.setModel(tableModel);
+    }
+    
+    private void clean(){
+        tfDescription.setText("");
+        tfStartDate.setText("");
+        tfEndDate.setText("");
+        tfName.setText("");
+        tempID="";
+    }
+    
+    private boolean entryCheck() {
+        try {
+            if (tfEndDate.getText().equals("")
+                    || tfStartDate.getText().equals("")
+                    || tfName.getText().equals("")
+                    || tfDescription.getText().equals("")
+                    ) 
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            Date date = new Date();
+            if (date.getTime()<dateFormatOut.parse(tfStartDate.getText()).getTime()){
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            if (date.getTime()<dateFormatOut.parse(tfEndDate.getText()).getTime()){
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            if (dateFormatOut.parse(tfEndDate.getText()).getTime()<dateFormatOut.parse(tfStartDate.getText()).getTime()){
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -98,11 +142,13 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         scpWorkExperience = new javax.swing.JScrollPane();
         tbWorkExperience = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
-        setBorder(null);
+        setClosable(true);
+        setTitle("Work Experience");
+        setFrameIcon(null);
+        setVisible(true);
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
         pnMain.setPreferredSize(new java.awt.Dimension(700, 500));
@@ -145,8 +191,7 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         pnMTRC1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING));
 
         lblEducationHis1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblEducationHis1.setText("Name: ");
-        lblEducationHis1.setInheritsPopupMenu(false);
+        lblEducationHis1.setText("Work Place: ");
         pnMTRC1.add(lblEducationHis1);
 
         tfName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -163,182 +208,263 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
         lblEmpCertification2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblEmpCertification2.setText("Start Date: ");
         pnMTRC2.add(lblEmpCertification2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-        pnMTRC2.add(dcStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, 20, -1));
 
-        lblEmpCertification3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblEmpCertification3.setText("  End Date: ");
-        pnMTRC2.add(lblEmpCertification3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, -1, -1));
-        pnMTRC2.add(dcEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 0, 20, -1));
+        dcStartDate.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+            new datechooser.view.appearance.ViewAppearance("custom",
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    true,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 255),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(128, 128, 128),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(255, 0, 0),
+                    false,
+                    false,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                (datechooser.view.BackRenderer)null,
+                false,
+                true)));
+    dcStartDate.addCommitListener(new datechooser.events.CommitListener() {
+        public void onCommit(datechooser.events.CommitEvent evt) {
+            dcStartDateOnCommit(evt);
+        }
+    });
+    pnMTRC2.add(dcStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, 20, -1));
 
-        tfStartDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfStartDate.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfStartDate.setPreferredSize(new java.awt.Dimension(150, 25));
-        tfStartDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfStartDateActionPerformed(evt);
-            }
-        });
-        pnMTRC2.add(tfStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, -1));
+    lblEmpCertification3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    lblEmpCertification3.setText("  End Date: ");
+    pnMTRC2.add(lblEmpCertification3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, -1, -1));
 
-        tfEndDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfEndDate.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfEndDate.setPreferredSize(new java.awt.Dimension(150, 25));
-        tfEndDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfEndDateActionPerformed(evt);
-            }
-        });
-        pnMTRC2.add(tfEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
+    dcEndDate.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+        new datechooser.view.appearance.ViewAppearance("custom",
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                true,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 255),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(128, 128, 128),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(255, 0, 0),
+                false,
+                false,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            (datechooser.view.BackRenderer)null,
+            false,
+            true)));
+dcEndDate.addCommitListener(new datechooser.events.CommitListener() {
+    public void onCommit(datechooser.events.CommitEvent evt) {
+        dcEndDateOnCommit(evt);
+    }
+    });
+    pnMTRC2.add(dcEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 0, 20, -1));
 
-        pnMTRCenter.add(pnMTRC2);
+    tfStartDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    tfStartDate.setMinimumSize(new java.awt.Dimension(6, 25));
+    tfStartDate.setPreferredSize(new java.awt.Dimension(150, 25));
+    tfStartDate.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            tfStartDateActionPerformed(evt);
+        }
+    });
+    pnMTRC2.add(tfStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, -1));
 
-        pnMTRC5.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC5.setPreferredSize(new java.awt.Dimension(640, 70));
-        pnMTRC5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+    tfEndDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    tfEndDate.setMinimumSize(new java.awt.Dimension(6, 25));
+    tfEndDate.setPreferredSize(new java.awt.Dimension(150, 25));
+    tfEndDate.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            tfEndDateActionPerformed(evt);
+        }
+    });
+    pnMTRC2.add(tfEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
 
-        lblWorkExperience2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblWorkExperience2.setText("Description: ");
-        lblWorkExperience2.setInheritsPopupMenu(false);
-        pnMTRC5.add(lblWorkExperience2);
+    pnMTRCenter.add(pnMTRC2);
 
-        tfDescription.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfDescription.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfDescription.setPreferredSize(new java.awt.Dimension(630, 25));
-        pnMTRC5.add(tfDescription);
+    pnMTRC5.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRC5.setPreferredSize(new java.awt.Dimension(640, 70));
+    pnMTRC5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        pnMTRCenter.add(pnMTRC5);
+    lblWorkExperience2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    lblWorkExperience2.setText("Description: ");
+    lblWorkExperience2.setInheritsPopupMenu(false);
+    pnMTRC5.add(lblWorkExperience2);
 
-        pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 38));
-        pnMTRC3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+    tfDescription.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    tfDescription.setMinimumSize(new java.awt.Dimension(6, 25));
+    tfDescription.setPreferredSize(new java.awt.Dimension(630, 25));
+    pnMTRC5.add(tfDescription);
 
-        btSave.setText("Save");
-        btSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSaveActionPerformed(evt);
-            }
-        });
-        pnMTRC3.add(btSave);
+    pnMTRCenter.add(pnMTRC5);
 
-        btDelete.setText("Delete");
-        btDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btDeleteActionPerformed(evt);
-            }
-        });
-        pnMTRC3.add(btDelete);
+    pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 38));
+    pnMTRC3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        btClear.setText("Clear");
-        btClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btClearActionPerformed(evt);
-            }
-        });
-        pnMTRC3.add(btClear);
+    btSave.setText("Save");
+    btSave.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btSaveActionPerformed(evt);
+        }
+    });
+    pnMTRC3.add(btSave);
 
-        pnMTRCenter.add(pnMTRC3);
+    btDelete.setText("Delete");
+    btDelete.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btDeleteActionPerformed(evt);
+        }
+    });
+    pnMTRC3.add(btDelete);
 
-        pnMTRC4.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC4.setPreferredSize(new java.awt.Dimension(640, 170));
-        pnMTRC4.setRequestFocusEnabled(false);
+    btClear.setText("Clear");
+    btClear.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btClearActionPerformed(evt);
+        }
+    });
+    pnMTRC3.add(btClear);
 
-        scpWorkExperience.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scpWorkExperience.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    pnMTRCenter.add(pnMTRC3);
 
-        tbWorkExperience.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+    pnMTRC4.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRC4.setPreferredSize(new java.awt.Dimension(640, 170));
+    pnMTRC4.setRequestFocusEnabled(false);
 
-            },
-            new String [] {
+    scpWorkExperience.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    scpWorkExperience.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-            }
-        ));
-        tbWorkExperience.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbWorkExperienceMouseClicked(evt);
-            }
-        });
-        scpWorkExperience.setViewportView(tbWorkExperience);
+    tbWorkExperience.setModel(new javax.swing.table.DefaultTableModel(
+        new Object [][] {
 
-        javax.swing.GroupLayout pnMTRC4Layout = new javax.swing.GroupLayout(pnMTRC4);
-        pnMTRC4.setLayout(pnMTRC4Layout);
-        pnMTRC4Layout.setHorizontalGroup(
-            pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnMTRC4Layout.createSequentialGroup()
-                .addComponent(scpWorkExperience, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        pnMTRC4Layout.setVerticalGroup(
-            pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpWorkExperience, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-        );
+        },
+        new String [] {
 
-        pnMTRCenter.add(pnMTRC4);
+        }
+    ));
+    tbWorkExperience.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            tbWorkExperienceMouseClicked(evt);
+        }
+    });
+    scpWorkExperience.setViewportView(tbWorkExperience);
 
-        pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
+    javax.swing.GroupLayout pnMTRC4Layout = new javax.swing.GroupLayout(pnMTRC4);
+    pnMTRC4.setLayout(pnMTRC4Layout);
+    pnMTRC4Layout.setHorizontalGroup(
+        pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnMTRC4Layout.createSequentialGroup()
+            .addComponent(scpWorkExperience, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+            .addContainerGap())
+    );
+    pnMTRC4Layout.setVerticalGroup(
+        pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(scpWorkExperience, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+    );
 
-        pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
+    pnMTRCenter.add(pnMTRC4);
 
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
+    pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
 
-        pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
+    pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
+    pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
-        pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
+    pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
 
-        javax.swing.GroupLayout pnMTRightLayout = new javax.swing.GroupLayout(pnMTRight);
-        pnMTRight.setLayout(pnMTRightLayout);
-        pnMTRightLayout.setHorizontalGroup(
-            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        pnMTRightLayout.setVerticalGroup(
-            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 407, Short.MAX_VALUE)
-        );
+    javax.swing.GroupLayout pnMTRightLayout = new javax.swing.GroupLayout(pnMTRight);
+    pnMTRight.setLayout(pnMTRightLayout);
+    pnMTRightLayout.setHorizontalGroup(
+        pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 20, Short.MAX_VALUE)
+    );
+    pnMTRightLayout.setVerticalGroup(
+        pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 434, Short.MAX_VALUE)
+    );
 
-        pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
+    pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
 
-        pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
+    pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
 
-        javax.swing.GroupLayout pnMTLeftLayout = new javax.swing.GroupLayout(pnMTLeft);
-        pnMTLeft.setLayout(pnMTLeftLayout);
-        pnMTLeftLayout.setHorizontalGroup(
-            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        pnMTLeftLayout.setVerticalGroup(
-            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 407, Short.MAX_VALUE)
-        );
+    javax.swing.GroupLayout pnMTLeftLayout = new javax.swing.GroupLayout(pnMTLeft);
+    pnMTLeft.setLayout(pnMTLeftLayout);
+    pnMTLeftLayout.setHorizontalGroup(
+        pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 20, Short.MAX_VALUE)
+    );
+    pnMTLeftLayout.setVerticalGroup(
+        pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 434, Short.MAX_VALUE)
+    );
 
-        pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
+    pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(pnMain, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
 
-        pack();
+    pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
 
     private void tfStartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStartDateActionPerformed
         // TODO add your handling code here:
@@ -351,32 +477,48 @@ public class InputCVWorkExperienceView extends javax.swing.JInternalFrame {
     private void tbWorkExperienceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbWorkExperienceMouseClicked
         tfName.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 1).toString());
         tfStartDate.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 2).toString());
-        tfStartDate.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 3).toString());
+        tfEndDate.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 3).toString());
         tfDescription.setText(tbWorkExperience.getValueAt(tbWorkExperience.getSelectedRow(), 4).toString());
+        List<WorkExperience> dataList=c.searchWD(Session.getSession());
+        for (WorkExperience data : dataList) {
+            if (data.getName().equals(tfName.getText())
+                    &&dateFormatOut.format(data.getStartdate()).equals(tfStartDate.getText())
+                    &&dateFormatOut.format(data.getEnddate()).equals(tfEndDate.getText())
+                    &&data.getDescription().equals(tfDescription.getText())
+                    )tempID=data.getId();
+        }
     }//GEN-LAST:event_tbWorkExperienceMouseClicked
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        c.save("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
-        showAllTable(c.searchWD(Session.getSession()));
+        if (entryCheck()) {
+            c.save(tempID, tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
+            showAllTable(c.searchWD(Session.getSession()));
+        }
+        clean();
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfName.getText(), tfDescription.getText(), tfStartDate.getText(), tfEndDate.getText(), Session.getSession());
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
-        tfDescription.setText("");
-        tfStartDate.setText("");
-        tfEndDate.setText("");
-        tfName.setText("");
+        clean();
     }//GEN-LAST:event_btClearActionPerformed
+
+    private void dcStartDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dcStartDateOnCommit
+        tfStartDate.setText(dcStartDate.getText());
+    }//GEN-LAST:event_dcStartDateOnCommit
+
+    private void dcEndDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dcEndDateOnCommit
+        tfEndDate.setText(dcEndDate.getText());
+    }//GEN-LAST:event_dcEndDateOnCommit
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private datechooser.beans.DateChooserCombo dcEndDate;
     private datechooser.beans.DateChooserCombo dcStartDate;

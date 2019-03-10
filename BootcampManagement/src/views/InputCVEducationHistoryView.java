@@ -8,6 +8,7 @@ package views;
 import controllers.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +26,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private EducationHistoryControllerInterface c = new EducationHistoryController(factory);
     private EducationControllerInterface ce = new EducationController(factory);
-    
+    private static String tempID;
     private DefaultTableModel tableModel;
     
     private List<models.Education> educationList = new ArrayList<>();
@@ -39,9 +40,10 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
     }
 
     private void setDefaultCondition(){
-        showAllTable(c.search(Session.getSession()));
+        showAllTable(c.searchWD(Session.getSession()));
         getEducationList();
         setComboBox();
+        clean();
 //        getRidTheBar();
     }
     
@@ -72,7 +74,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
     
     private void setComboBox(){
         for (Education data : educationList) {
-            cbEducationHis.addItem(data.getId()+" - "+data.getDegree().getName()+" ("+data.getMajor().getName()+") "+data.getUniversity().getName());
+            cbEducationHis.addItem(data.getDegree().getName()+" ("+data.getMajor().getName()+") "+data.getUniversity().getName());
         }
     }
     
@@ -81,6 +83,35 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         getRootPane().setWindowDecorationStyle(JRootPane.NONE);
         ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         this.setBorder(null);
+    }
+    
+    private void clean(){
+        tfEducationHisGPA.setText("");
+        cbEducationHis.setSelectedIndex(0);
+        tempID="";
+    }
+    
+    private boolean entryCheck() {
+        try {
+            if (tfEducationHisGPA.getText().equals("")
+                    || cbEducationHis.getSelectedIndex()==0
+                    )
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            if (Double.parseDouble(tfEducationHisGPA.getText())<0.0
+                    || Double.parseDouble(tfEducationHisGPA.getText())>4.0)
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -109,13 +140,13 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         spcEducationHistory = new javax.swing.JScrollPane();
         tbEducationHistory = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
         setBorder(null);
         setClosable(true);
         setTitle("Education History");
+        setFrameIcon(null);
         setMinimumSize(new java.awt.Dimension(700, 500));
         setPreferredSize(new java.awt.Dimension(700, 500));
 
@@ -238,15 +269,6 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
 
         pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
         pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
-
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
-
         pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
         pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
@@ -260,7 +282,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         );
         pnMTRightLayout.setVerticalGroup(
             pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGap(0, 403, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -276,7 +298,7 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         );
         pnMTLeftLayout.setVerticalGroup(
             pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGap(0, 403, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -295,13 +317,8 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
-
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
-        tfEducationHisGPA.setText("");
-        cbEducationHis.setSelectedIndex(0);
+        clean();
     }//GEN-LAST:event_btClearActionPerformed
 
     private void tbEducationHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEducationHistoryMouseClicked
@@ -313,27 +330,49 @@ public class InputCVEducationHistoryView extends javax.swing.JInternalFrame {
                     )temp=data.getId();
         }
         for (int i = 0; i < cbEducationHis.getItemCount(); i++) {
-            if (cbEducationHis.getItemAt(i).split(" - ")[0].equals(temp))
+            if (cbEducationHis.getItemAt(i).equals(tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 2).toString()
+                    +" ("+tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 3).toString()
+                    +") "+tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 4).toString()))
             cbEducationHis.setSelectedIndex(i);
         }
         tfEducationHisGPA.setText(tbEducationHistory.getValueAt(tbEducationHistory.getSelectedRow(), 1).toString());
+        List<EducationHistory> dataList=c.searchWD(Session.getSession());
+        for (EducationHistory data : dataList) {
+            if (data.getGpa().equals(tfEducationHisGPA.getText())
+                    &&data.getEducation().getId().equals(temp)
+                    )tempID=data.getId();
+        }
     }//GEN-LAST:event_tbEducationHistoryMouseClicked
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        c.save("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
-        showAllTable(c.searchWD(Session.getSession()));
+        if (entryCheck()) {
+            String temp="";
+            for (Education data : educationList) {
+                if (cbEducationHis.getSelectedItem().equals(data.getDegree().getName()+" ("+data.getMajor().getName()+") "+data.getUniversity().getName()))
+                    temp=data.getId();
+            }
+            c.save(tempID, tfEducationHisGPA.getText(), temp, Session.getSession());
+            showAllTable(c.searchWD(Session.getSession()));
+        }
+        clean();
     }//GEN-LAST:event_btSaveActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        c.deleteSoft("", tfEducationHisGPA.getText(), cbEducationHis.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+        String temp="";
+        for (Education data : educationList) {
+            if (cbEducationHis.getSelectedItem().equals(data.getDegree().getName()+" ("+data.getMajor().getName()+") "+data.getUniversity().getName()))
+                temp=data.getId();
+        }
+
+        c.deleteSoft("", tfEducationHisGPA.getText(), temp, Session.getSession());
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
     }//GEN-LAST:event_btDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbEducationHis;
     private javax.swing.JLabel lblEducationHis1;

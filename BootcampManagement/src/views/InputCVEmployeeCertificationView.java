@@ -8,7 +8,9 @@ package views;
 import controllers.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
     private EmployeeCertificationControllerInterface c = new EmployeeCertificationController(factory);
     private CertificateControllerInterface cc = new CertificateController(factory);
     
+    private static String tempID;
     private DefaultTableModel tableModel;
     private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
     private List<models.Certificate> certificateList = new ArrayList<>();
@@ -45,6 +48,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         tfCertificateDate.setEnabled(false);
         getRoleList();
         setComboBox();
+        clean();
     }
 
     private void showAllTable(List<EmployeeCertification> ec){
@@ -72,7 +76,7 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
     
     private void setComboBox(){
         for (Certificate data : certificateList) {
-            cbEmpCertification.addItem(data.getId()+" - "+data.getName());
+            cbEmpCertification.addItem(data.getName());
         }
     }
     
@@ -81,6 +85,41 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         getRootPane().setWindowDecorationStyle(JRootPane.NONE);
         ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         this.setBorder(null);
+    }
+    
+    private void clean(){
+        cbEmpCertification.setSelectedIndex(0);
+        tfCertificateDate.setText("");
+        tfCertificateNumber.setText("");
+        tempID = "";
+    }
+    
+    private boolean entryCheck() {
+        try {
+            if (tfCertificateDate.getText().equals("")
+                    || cbEmpCertification.getSelectedIndex()==0
+                    || tfCertificateNumber.getText().equals("")
+                    ) 
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            Date date = new Date();
+            if (date.getTime()<dateFormatOut.parse(tfCertificateDate.getText()).getTime())
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+            if (new Double(tfCertificateNumber.getText())<0) {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -113,12 +152,13 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         scpEmpCertification = new javax.swing.JScrollPane();
         tbEmpCertification = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
         setBorder(null);
+        setClosable(true);
         setTitle("Employee Certification");
+        setFrameIcon(null);
 
         pnMain.setBackground(new java.awt.Color(204, 255, 255));
         pnMain.setPreferredSize(new java.awt.Dimension(700, 500));
@@ -185,166 +225,194 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
         lblEmpCertification3.setText("  Date: ");
         pnMTRC2.add(lblEmpCertification3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, -1, -1));
 
-        dcEmployeeCertification.addCommitListener(new datechooser.events.CommitListener() {
-            public void onCommit(datechooser.events.CommitEvent evt) {
-                dcEmployeeCertificationOnCommit(evt);
-            }
-        });
-        pnMTRC2.add(dcEmployeeCertification, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 30, -1));
+        dcEmployeeCertification.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+            new datechooser.view.appearance.ViewAppearance("custom",
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    true,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 255),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(128, 128, 128),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(255, 0, 0),
+                    false,
+                    false,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                (datechooser.view.BackRenderer)null,
+                false,
+                true)));
+    dcEmployeeCertification.addCommitListener(new datechooser.events.CommitListener() {
+        public void onCommit(datechooser.events.CommitEvent evt) {
+            dcEmployeeCertificationOnCommit(evt);
+        }
+    });
+    pnMTRC2.add(dcEmployeeCertification, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 30, -1));
 
-        tfCertificateDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfCertificateDate.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfCertificateDate.setPreferredSize(new java.awt.Dimension(150, 25));
-        tfCertificateDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfCertificateDateActionPerformed(evt);
-            }
-        });
-        pnMTRC2.add(tfCertificateDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, -1, -1));
+    tfCertificateDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    tfCertificateDate.setMinimumSize(new java.awt.Dimension(6, 25));
+    tfCertificateDate.setPreferredSize(new java.awt.Dimension(150, 25));
+    tfCertificateDate.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            tfCertificateDateActionPerformed(evt);
+        }
+    });
+    pnMTRC2.add(tfCertificateDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, -1, -1));
 
-        tfCertificateNumber.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfCertificateNumber.setMinimumSize(new java.awt.Dimension(6, 25));
-        tfCertificateNumber.setPreferredSize(new java.awt.Dimension(150, 25));
-        tfCertificateNumber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfCertificateNumberActionPerformed(evt);
-            }
-        });
-        pnMTRC2.add(tfCertificateNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, -1));
+    tfCertificateNumber.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    tfCertificateNumber.setMinimumSize(new java.awt.Dimension(6, 25));
+    tfCertificateNumber.setPreferredSize(new java.awt.Dimension(150, 25));
+    tfCertificateNumber.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            tfCertificateNumberActionPerformed(evt);
+        }
+    });
+    pnMTRC2.add(tfCertificateNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, -1));
 
-        pnMTRCenter.add(pnMTRC2);
+    pnMTRCenter.add(pnMTRC2);
 
-        pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 38));
-        pnMTRC3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+    pnMTRC3.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRC3.setPreferredSize(new java.awt.Dimension(640, 38));
+    pnMTRC3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        btSave.setText("Save");
-        btSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSaveActionPerformed(evt);
-            }
-        });
-        pnMTRC3.add(btSave);
+    btSave.setText("Save");
+    btSave.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btSaveActionPerformed(evt);
+        }
+    });
+    pnMTRC3.add(btSave);
 
-        btDelete.setText("Delete");
-        btDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btDeleteActionPerformed(evt);
-            }
-        });
-        pnMTRC3.add(btDelete);
+    btDelete.setText("Delete");
+    btDelete.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btDeleteActionPerformed(evt);
+        }
+    });
+    pnMTRC3.add(btDelete);
 
-        btClear.setText("Clear");
-        btClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btClearActionPerformed(evt);
-            }
-        });
-        pnMTRC3.add(btClear);
+    btClear.setText("Clear");
+    btClear.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btClearActionPerformed(evt);
+        }
+    });
+    pnMTRC3.add(btClear);
 
-        pnMTRCenter.add(pnMTRC3);
+    pnMTRCenter.add(pnMTRC3);
 
-        pnMTRC4.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRC4.setPreferredSize(new java.awt.Dimension(640, 250));
+    pnMTRC4.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRC4.setPreferredSize(new java.awt.Dimension(640, 250));
 
-        scpEmpCertification.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scpEmpCertification.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    scpEmpCertification.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    scpEmpCertification.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        tbEmpCertification.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+    tbEmpCertification.setModel(new javax.swing.table.DefaultTableModel(
+        new Object [][] {
 
-            },
-            new String [] {
+        },
+        new String [] {
 
-            }
-        ));
-        tbEmpCertification.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbEmpCertificationMouseClicked(evt);
-            }
-        });
-        scpEmpCertification.setViewportView(tbEmpCertification);
+        }
+    ));
+    tbEmpCertification.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            tbEmpCertificationMouseClicked(evt);
+        }
+    });
+    scpEmpCertification.setViewportView(tbEmpCertification);
 
-        javax.swing.GroupLayout pnMTRC4Layout = new javax.swing.GroupLayout(pnMTRC4);
-        pnMTRC4.setLayout(pnMTRC4Layout);
-        pnMTRC4Layout.setHorizontalGroup(
-            pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scpEmpCertification, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-        );
-        pnMTRC4Layout.setVerticalGroup(
-            pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnMTRC4Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(scpEmpCertification, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+    javax.swing.GroupLayout pnMTRC4Layout = new javax.swing.GroupLayout(pnMTRC4);
+    pnMTRC4.setLayout(pnMTRC4Layout);
+    pnMTRC4Layout.setHorizontalGroup(
+        pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(scpEmpCertification, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+    );
+    pnMTRC4Layout.setVerticalGroup(
+        pnMTRC4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnMTRC4Layout.createSequentialGroup()
+            .addGap(5, 5, 5)
+            .addComponent(scpEmpCertification, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
 
-        pnMTRCenter.add(pnMTRC4);
+    pnMTRCenter.add(pnMTRC4);
 
-        pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
+    pnMain.add(pnMTRCenter, java.awt.BorderLayout.CENTER);
 
-        pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
+    pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
+    pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
+    pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
 
-        pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
+    javax.swing.GroupLayout pnMTRightLayout = new javax.swing.GroupLayout(pnMTRight);
+    pnMTRight.setLayout(pnMTRightLayout);
+    pnMTRightLayout.setHorizontalGroup(
+        pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 20, Short.MAX_VALUE)
+    );
+    pnMTRightLayout.setVerticalGroup(
+        pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 430, Short.MAX_VALUE)
+    );
 
-        pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTRight.setPreferredSize(new java.awt.Dimension(20, 390));
+    pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
 
-        javax.swing.GroupLayout pnMTRightLayout = new javax.swing.GroupLayout(pnMTRight);
-        pnMTRight.setLayout(pnMTRightLayout);
-        pnMTRightLayout.setHorizontalGroup(
-            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        pnMTRightLayout.setVerticalGroup(
-            pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 417, Short.MAX_VALUE)
-        );
+    pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
+    pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
 
-        pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
+    javax.swing.GroupLayout pnMTLeftLayout = new javax.swing.GroupLayout(pnMTLeft);
+    pnMTLeft.setLayout(pnMTLeftLayout);
+    pnMTLeftLayout.setHorizontalGroup(
+        pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 20, Short.MAX_VALUE)
+    );
+    pnMTLeftLayout.setVerticalGroup(
+        pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 430, Short.MAX_VALUE)
+    );
 
-        pnMTLeft.setBackground(new java.awt.Color(204, 255, 255));
-        pnMTLeft.setPreferredSize(new java.awt.Dimension(20, 390));
+    pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
 
-        javax.swing.GroupLayout pnMTLeftLayout = new javax.swing.GroupLayout(pnMTLeft);
-        pnMTLeft.setLayout(pnMTLeftLayout);
-        pnMTLeftLayout.setHorizontalGroup(
-            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        pnMTLeftLayout.setVerticalGroup(
-            pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 417, Short.MAX_VALUE)
-        );
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(pnMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
 
-        pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        pack();
+    pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
 
     private void tfCertificateDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCertificateDateActionPerformed
         // TODO add your handling code here:
@@ -359,40 +427,53 @@ public class InputCVEmployeeCertificationView extends javax.swing.JInternalFrame
     }//GEN-LAST:event_dcEmployeeCertificationOnCommit
 
     private void tbEmpCertificationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEmpCertificationMouseClicked
-        String temp="";
-        for (Certificate data : certificateList) {
-            if (data.getName().equals(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 1).toString()))temp=data.getId();
-        }
+
         for (int i = 0; i < cbEmpCertification.getItemCount(); i++) {
-            if (cbEmpCertification.getItemAt(i).split(" - ")[0].equals(temp))
+            if (cbEmpCertification.getItemAt(i).equals(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 1).toString()))
             cbEmpCertification.setSelectedIndex(i);
         }
         tfCertificateDate.setText(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 2).toString());
         tfCertificateNumber.setText(tbEmpCertification.getValueAt(tbEmpCertification.getSelectedRow(), 3).toString());
+        List<EmployeeCertification> dataList=c.searchWD(Session.getSession());
+        for (EmployeeCertification data : dataList) {
+            if (data.getCertificatenumber().equals(tfCertificateNumber.getText())
+                    &&data.getCertificate().getName().equals(cbEmpCertification.getSelectedItem())
+                    &&dateFormatOut.format(data.getCertificatedate()).equals(tfCertificateDate.getText())
+                    )tempID=data.getId();
+        }
     }//GEN-LAST:event_tbEmpCertificationMouseClicked
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
-        cbEmpCertification.setSelectedIndex(0);
-        tfCertificateDate.setText("");
-        tfCertificateNumber.setText("");
+        clean();
     }//GEN-LAST:event_btClearActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
-        c.deleteSoft("", tfCertificateDate.getText(), tfCertificateNumber.getText(), cbEmpCertification.getSelectedItem().toString().split(" - ")[0], Session.getSession());
+        String temp="";
+        for (Certificate data : certificateList) {
+            if(cbEmpCertification.getSelectedItem().equals(data.getName()))temp = data.getId();
+        }
+        c.deleteSoft("", tfCertificateDate.getText(), tfCertificateNumber.getText(), temp, Session.getSession());
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
                 
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        c.save("", tfCertificateDate.getText(), tfCertificateNumber.getText(), cbEmpCertification.getSelectedItem().toString().split(" - ")[0], Session.getSession());
-        showAllTable(c.searchWD(Session.getSession()));
+        if (entryCheck()) {
+            String temp="";
+            for (Certificate data : certificateList) {
+                if(cbEmpCertification.getSelectedItem().equals(data.getName()))temp = data.getId();
+            }
+            c.save(tempID, tfCertificateDate.getText(), tfCertificateNumber.getText(), temp, Session.getSession());
+            showAllTable(c.searchWD(Session.getSession()));
+        }
+        clean();
     }//GEN-LAST:event_btSaveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbEmpCertification;
     private datechooser.beans.DateChooserCombo dcEmployeeCertification;

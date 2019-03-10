@@ -7,6 +7,7 @@ package views;
 
 import controllers.*;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
@@ -24,6 +25,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
     private AchievementControllerInterface c = new AchievementController(factory);
     
     private DefaultTableModel tableModel;
+    private static String tempID;
     /**
      * Creates new form InputCVAchievementView
      */
@@ -34,6 +36,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
     private void setDefaultCondition(){
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
 //        getRidTheBar();
     }
 
@@ -57,6 +60,27 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         getRootPane().setWindowDecorationStyle(JRootPane.NONE);
         ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         this.setBorder(null);
+    }
+    
+    private void clean(){
+        tfAchievement.setText("");
+        tempID="";
+    }
+    
+    private boolean entryCheck() {
+        try {
+            if (tfAchievement.getText().equals("")
+                    )
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Incorrect data entry!");
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -83,7 +107,6 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         spcAchievement = new javax.swing.JScrollPane();
         tbAchievement = new javax.swing.JTable();
         pnMTBottom = new javax.swing.JPanel();
-        btOke = new javax.swing.JButton();
         pnMTRight = new javax.swing.JPanel();
         pnMTLeft = new javax.swing.JPanel();
 
@@ -203,15 +226,6 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
 
         pnMTBottom.setBackground(new java.awt.Color(204, 255, 255));
         pnMTBottom.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 25, 5));
-
-        btOke.setText("Oke");
-        btOke.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkeActionPerformed(evt);
-            }
-        });
-        pnMTBottom.add(btOke);
-
         pnMain.add(pnMTBottom, java.awt.BorderLayout.PAGE_END);
 
         pnMTRight.setBackground(new java.awt.Color(204, 255, 255));
@@ -225,7 +239,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         );
         pnMTRightLayout.setVerticalGroup(
             pnMTRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGap(0, 403, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTRight, java.awt.BorderLayout.LINE_END);
@@ -241,7 +255,7 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         );
         pnMTLeftLayout.setVerticalGroup(
             pnMTLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGap(0, 403, Short.MAX_VALUE)
         );
 
         pnMain.add(pnMTLeft, java.awt.BorderLayout.LINE_START);
@@ -260,33 +274,36 @@ public class InputCVAchievementView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkeActionPerformed
-        dispose();
-    }//GEN-LAST:event_btOkeActionPerformed
-
     private void tbAchievementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAchievementMouseClicked
         tfAchievement.setText(tbAchievement.getValueAt(tbAchievement.getSelectedRow(), 1).toString());
+        List<Achievement> dataList=c.searchWD(Session.getSession());
+        for (Achievement data : dataList) {
+            if (tfAchievement.getText().equals(data.getName()))tempID=data.getId();
+        }
     }//GEN-LAST:event_tbAchievementMouseClicked
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
-        tfAchievement.setText("");
+        clean();
     }//GEN-LAST:event_btClearActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         c.deleteSoft("", tfAchievement.getText(), Session.getSession());
         showAllTable(c.searchWD(Session.getSession()));
+        clean();
     }//GEN-LAST:event_btDeleteActionPerformed
 
     private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
-        c.save("", tfAchievement.getText(), Session.getSession());
-        showAllTable(c.searchWD(Session.getSession()));
+        if (entryCheck()) {
+            c.save(tempID, tfAchievement.getText(), Session.getSession());
+            showAllTable(c.searchWD(Session.getSession()));
+        }
+        clean();
     }//GEN-LAST:event_btSaveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btOke;
     private javax.swing.JButton btSave;
     private javax.swing.JLabel lblAchievement;
     private javax.swing.JLabel lblTitle;

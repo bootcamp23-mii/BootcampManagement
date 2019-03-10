@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 /**
@@ -29,6 +30,8 @@ public class InputCVFileChooser extends javax.swing.JFrame {
     public InputCVFileChooser() {
         initComponents();
         getMiddle();
+        jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
+        jFileChooser.setAcceptAllFileFilterUsed(true);
     }
 
     private void getMiddle() {
@@ -56,7 +59,8 @@ public class InputCVFileChooser extends javax.swing.JFrame {
 
         jFileChooser = new javax.swing.JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Select Image");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);

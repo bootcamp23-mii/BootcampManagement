@@ -67,7 +67,7 @@ public class EducationHistoryController implements EducationHistoryControllerInt
         List<EducationHistory> dataList = searchWD("");
         for (EducationHistory data : dataList) {
             if (data.getGpa().equals(gpa)
-                    &&data.getEducation().getId().equals(employee)
+                    &&data.getEducation().getId().equals(education)
                     &&data.getEmployee().getId().equals(employee)
                     )tempID=data.getId();
         }
