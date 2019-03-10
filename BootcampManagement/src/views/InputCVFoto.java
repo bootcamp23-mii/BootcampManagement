@@ -25,15 +25,8 @@ import tools.*;
 public class InputCVFoto extends javax.swing.JInternalFrame {
     
     private DBConnection connection = new DBConnection();
-//    private SessionFactory factory = HibernateUtil.getSessionFactory();
-//    private UploadControllerInterface c = new UploadController(factory);
     private UploadDBController cc = new UploadDBController(connection.getConnection());
-
-//    private List<Upload> list = new ArrayList<>();
-//    private List<UploadDB> listUp;
     private InputCVFileChooser fc = new InputCVFileChooser();
-//    private Blob blobPhoto;
-//    private Serializable serializable;
     
     /**
      * Creates new form InputCVFoto
