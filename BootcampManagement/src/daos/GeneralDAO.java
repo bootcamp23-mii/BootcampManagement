@@ -69,6 +69,7 @@ public class GeneralDAO<T> implements DAOInterface<T>{
         return obj;
     }
 
+    
     @Override
     public T getById(Object id) {
         T obj=null;
@@ -158,5 +159,12 @@ public class GeneralDAO<T> implements DAOInterface<T>{
         }
         
         return users;
+    }
+
+    @Override
+    public boolean switchDelete(T entity, Object id) {
+        T obj = getById(id);
+        
+        return false;
     }
 }

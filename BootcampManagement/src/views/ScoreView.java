@@ -5,17 +5,71 @@
  */
 package views;
 
+import controllers.AspectController;
+import controllers.EvaluationController;
+import controllers.ScoreController;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Aspect;
+import models.Evaluation;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
+
 /**
  *
  * @author gerydanu
  */
 public class ScoreView extends javax.swing.JInternalFrame {
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EvaluationController evc = new EvaluationController(factory);
+    private AspectController apc = new AspectController(factory);
+    private ScoreController scc = new ScoreController(factory);
+    DefaultTableModel myTableModel = new DefaultTableModel();
+    private List<Integer> ratingList = new ArrayList<>();
+    private List<models.Evaluation> evaluationList = new ArrayList<>();
+    private List<models.Aspect> aspectList = new ArrayList<>();
+//    private List<models.Score> scoreList = new ArrayList<>();
 
     /**
      * Creates new form AspectView
      */
     public ScoreView() {
         initComponents();
+        showEvaluation();
+        showAspect();
+        tableScore(scc.getAll());
+    }
+    
+    void showRating() {
+    }
+    
+    private void showEvaluation() {
+//        for (Topic topic : topicList) cbTopic.addItem(topic.getName());
+        for (Evaluation score : evc.getAll()) {
+            cbEvaluation.addItem(score.getNote());
+        }
+    }
+    
+    private void showAspect() {
+//        for (Topic topic : topicList) cbTopic.addItem(topic.getName());
+        for (Aspect aspect : apc.getAll()) {
+            cbAspect.addItem(aspect.getName());
+        }
+    }
+    
+    private void tableScore(List<models.Score> score) {
+        Object[] columnNames = {"No.", "ID", "Rating", "Evaluation Date", "Aspect"};
+        Object[][] data = new Object[score.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            data[i][0] = (i + 1);
+            data[i][1] = score.get(i).getId();
+            data[i][2] = score.get(i).getRating();
+            data[i][3] = score.get(i).getEvaluation();
+            data[i][4] = score.get(i).getAspect();
+        }
+        myTableModel = new DefaultTableModel(data, columnNames);
+        tbScore.setModel(myTableModel);
     }
 
     /**
@@ -38,11 +92,9 @@ public class ScoreView extends javax.swing.JInternalFrame {
         lblAspect = new javax.swing.JLabel();
         cbAspect = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
-        tfKeyword = new javax.swing.JTextField();
         btInsert = new javax.swing.JButton();
-        chbGetById = new javax.swing.JCheckBox();
         btDelete = new javax.swing.JButton();
-        btSearch = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         scpScore = new javax.swing.JScrollPane();
         tbScore = new javax.swing.JTable();
 
@@ -84,20 +136,21 @@ public class ScoreView extends javax.swing.JInternalFrame {
 
         pnScore.add(cbAspect, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 117, 560, 34));
         pnScore.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 630, 34));
-        pnScore.add(tfKeyword, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 208, 34));
 
         btInsert.setText("Insert");
         pnScore.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 180, 80, 34));
 
-        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
-        chbGetById.setText("Get by ID");
-        pnScore.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, 80, 34));
-
         btDelete.setText("Delete");
         pnScore.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, 80, 34));
 
-        btSearch.setText("Search");
-        pnScore.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 80, 34));
+        btClear.setText("Clear");
+        btClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnScore.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 80, 30));
 
         tbScore.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -143,15 +196,26 @@ public class ScoreView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        clearField();
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private void clearField() {
+        tfID.setEnabled(true);
+        tfID.setEditable(true);
+        tfID.setText("");
+        cbRating.setSelectedIndex(0);
+        cbEvaluation.setSelectedIndex(0);
+        cbAspect.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btInsert;
-    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbAspect;
     private javax.swing.JComboBox<String> cbEvaluation;
     private javax.swing.JComboBox<String> cbRating;
-    private javax.swing.JCheckBox chbGetById;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAspect;
     private javax.swing.JLabel lblEvaluation;
@@ -162,6 +226,5 @@ public class ScoreView extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane scpScore;
     private javax.swing.JTable tbScore;
     private javax.swing.JTextField tfID;
-    private javax.swing.JTextField tfKeyword;
     // End of variables declaration//GEN-END:variables
 }

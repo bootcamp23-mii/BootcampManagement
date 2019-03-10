@@ -5,17 +5,50 @@
  */
 package views;
 
+import controllers.ClassesController;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Classes;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
+
 /**
  *
  * @author gerydanu
  */
 public class LessonView extends javax.swing.JInternalFrame {
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private ClassesController csc = new ClassesController(factory);
+    DefaultTableModel myTableModel = new DefaultTableModel();
+    private List<models.Classes> classTypeList= new ArrayList<>();
 
     /**
      * Creates new form AspectView
      */
     public LessonView() {
         initComponents();
+        showClass();
+    }
+    
+    void showClass() {
+//        for (Lesson lesson : lessonList) cbLesson.addItem(lesson.getName());
+        for (Classes classes : csc.getAll()) {
+            cbClasses.addItem(classes.getName());
+        }
+    }
+    
+    private void tableLesson(List<models.Lesson> lesson) {
+        Object[] columnNames = {"No.", "ID", "Lesson", "Class"};
+        Object[][] data = new Object[lesson.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            data[i][0] = (i + 1);
+            data[i][1] = lesson.get(i).getId();
+            data[i][2] = lesson.get(i).getName();
+            data[i][3] = lesson.get(i).getClasses().getName();
+        }
+        myTableModel = new DefaultTableModel(data, columnNames);
+        tbLesson.setModel(myTableModel);
     }
 
     /**
@@ -36,11 +69,9 @@ public class LessonView extends javax.swing.JInternalFrame {
         lblClasses = new javax.swing.JLabel();
         cbClasses = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
-        jTextField1 = new javax.swing.JTextField();
         btInsert = new javax.swing.JButton();
-        chbGetById = new javax.swing.JCheckBox();
         btDelete = new javax.swing.JButton();
-        btSearch = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         scpLesson = new javax.swing.JScrollPane();
         tbLesson = new javax.swing.JTable();
 
@@ -80,7 +111,6 @@ public class LessonView extends javax.swing.JInternalFrame {
         });
         pnLesson.add(cbClasses, new org.netbeans.lib.awtextra.AbsoluteConstraints(167, 81, 290, 34));
         pnLesson.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 420, 34));
-        pnLesson.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 159, 220, 34));
 
         btInsert.setText("Insert");
         btInsert.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -91,16 +121,6 @@ public class LessonView extends javax.swing.JInternalFrame {
         });
         pnLesson.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(321, 159, 140, 34));
 
-        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
-        chbGetById.setText("Get by ID");
-        chbGetById.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chbGetById.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                chbGetByIdMouseClicked(evt);
-            }
-        });
-        pnLesson.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 198, 80, 34));
-
         btDelete.setText("Delete");
         btDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btDelete.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -110,14 +130,14 @@ public class LessonView extends javax.swing.JInternalFrame {
         });
         pnLesson.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 200, 140, 34));
 
-        btSearch.setText("Search");
-        btSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btSearch.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btSearchMouseClicked(evt);
+        btClear.setText("Clear");
+        btClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
             }
         });
-        pnLesson.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 200, 140, 34));
+        pnLesson.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 80, 30));
 
         tbLesson.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -163,14 +183,6 @@ public class LessonView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbClassesMouseClicked
 
-    private void chbGetByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chbGetByIdMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chbGetByIdMouseClicked
-
-    private void btSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSearchMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btSearchMouseClicked
-
     private void btInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btInsertMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btInsertMouseClicked
@@ -179,15 +191,24 @@ public class LessonView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btDeleteMouseClicked
 
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        clearField();
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private void clearField() {
+        tfID.setEnabled(true);
+        tfID.setEditable(true);
+        tfID.setText("");
+        tfName.setText("");
+        cbClasses.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btInsert;
-    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbClasses;
-    private javax.swing.JCheckBox chbGetById;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblClasses;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblName;

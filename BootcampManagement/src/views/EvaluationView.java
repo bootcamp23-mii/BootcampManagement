@@ -5,17 +5,90 @@
  */
 package views;
 
+import controllers.EvaluationController;
+import controllers.LessonController;
+import controllers.ParticipantController;
+import controllers.RoomController;
+import controllers.TopicController;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Evaluation;
+import models.Lesson;
+import models.Participant;
+import models.Topic;
+import org.hibernate.Hibernate;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
+
 /**
  *
  * @author gerydanu
  */
 public class EvaluationView extends javax.swing.JInternalFrame {
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EvaluationController evc = new EvaluationController(factory);
+    private ParticipantController prc = new ParticipantController(factory);
+    private LessonController lc = new LessonController(factory);
+    private TopicController tc = new TopicController(factory);
+    DefaultTableModel myTableModel = new DefaultTableModel();
+    private List<models.Evaluation> evaluationList = new ArrayList<>();
+    private List<models.Participant> participantList = new ArrayList<>();
+    private List<models.Lesson> lessonList = new ArrayList<>();
+    private List<models.Topic> topicList = new ArrayList<>();
 
     /**
      * Creates new form AspectView
      */
     public EvaluationView() {
         initComponents();
+        showParticipant();
+        showLesson();
+        showTopic();
+        tableEvaluation(evc.getAll());
+    }
+    
+//    void showParticipant() {
+//        for (Participant participant : participantList) cbParticipant.addItem(participant.getEmployee().getName());
+//    }
+    
+    void showParticipant() {
+        for (Participant participant : prc.getAll()) {
+            cbParticipant.addItem(participant.getEmployee().getName());
+        }
+    }
+    
+    void showLesson() {
+//        for (Lesson lesson : lessonList) cbLesson.addItem(lesson.getName());
+        for (Lesson lesson : lc.getAll()) {
+            cbLesson.addItem(lesson.getName());
+        }
+    }
+    
+    void showTopic() {
+//        for (Topic topic : topicList) cbTopic.addItem(topic.getName());
+        for (Topic topic : tc.getAll()) {
+            cbTopic.addItem(topic.getName());
+        }
+    }
+    
+    
+    private void tableEvaluation(List<models.Evaluation> evaluation) {
+        Object[] columnNames = {"No.", "ID", "Is Daily", "Evaluation Date", "Note", "Participant", "Lesson", "Topic"};
+        Object[][] data = new Object[evaluation.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            data[i][0] = (i + 1);
+            data[i][1] = evaluation.get(i).getId();
+            data[i][2] = evaluation.get(i).getIsdaily();
+            data[i][3] = evaluation.get(i).getEvaluationdate();
+            data[i][4] = evaluation.get(i).getNote();
+            data[i][5] = evaluation.get(i).getParticipant();
+            data[i][6] = evaluation.get(i).getLesson();
+            data[i][7] = evaluation.get(i).getTopic();
+
+        }
+        myTableModel = new DefaultTableModel(data, columnNames);
+        tbEvaluation.setModel(myTableModel);
     }
 
     /**
@@ -44,11 +117,8 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         lblTopic = new javax.swing.JLabel();
         cbTopic = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
-        tfKeyword = new javax.swing.JTextField();
         btInsert = new javax.swing.JButton();
-        chbGetById = new javax.swing.JCheckBox();
         btDelete = new javax.swing.JButton();
-        btSearch = new javax.swing.JButton();
         scpEvaluation = new javax.swing.JScrollPane();
         tbEvaluation = new javax.swing.JTable();
 
@@ -125,7 +195,6 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         });
         pnEvaluation.add(cbTopic, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, 230, 28));
         pnEvaluation.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 610, 23));
-        pnEvaluation.add(tfKeyword, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 194, 30));
 
         btInsert.setText("Insert");
         btInsert.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -136,15 +205,6 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         });
         pnEvaluation.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 80, 30));
 
-        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
-        chbGetById.setText("Get by ID");
-        chbGetById.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                chbGetByIdMouseClicked(evt);
-            }
-        });
-        pnEvaluation.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, 80, 30));
-
         btDelete.setText("Delete");
         btDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btDelete.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -154,17 +214,9 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         });
         pnEvaluation.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 170, 80, 30));
 
-        btSearch.setText("Search");
-        btSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btSearch.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btSearchMouseClicked(evt);
-            }
-        });
-        pnEvaluation.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 80, 30));
-
         scpEvaluation.setBackground(new java.awt.Color(153, 255, 153));
 
+        tbEvaluation.setAutoCreateRowSorter(true);
         tbEvaluation.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -175,7 +227,15 @@ public class EvaluationView extends javax.swing.JInternalFrame {
             new String [] {
                 "ID", "Is Daily", "Date", "Note", "Participant", "Lesson", "Topic"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         scpEvaluation.setViewportView(tbEvaluation);
 
         javax.swing.GroupLayout pnCenterLayout = new javax.swing.GroupLayout(pnCenter);
@@ -216,14 +276,6 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbTopicMouseClicked
 
-    private void chbGetByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chbGetByIdMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chbGetByIdMouseClicked
-
-    private void btSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSearchMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btSearchMouseClicked
-
     private void btInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btInsertMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btInsertMouseClicked
@@ -240,11 +292,9 @@ public class EvaluationView extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btInsert;
-    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbLesson;
     private javax.swing.JComboBox<String> cbParticipant;
     private javax.swing.JComboBox<String> cbTopic;
-    private javax.swing.JCheckBox chbGetById;
     private javax.swing.JCheckBox chbIsDaily;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblDate;
@@ -260,7 +310,6 @@ public class EvaluationView extends javax.swing.JInternalFrame {
     private javax.swing.JTable tbEvaluation;
     private javax.swing.JTextField tfDate;
     private javax.swing.JTextField tfID;
-    private javax.swing.JTextField tfKeyword;
     private javax.swing.JTextField tfNote;
     // End of variables declaration//GEN-END:variables
 }

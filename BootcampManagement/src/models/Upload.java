@@ -36,7 +36,7 @@ public class Upload implements Serializable {
     @Column(name = "ID")
     private String id;
     @Column(name = "PHOTO")
-    private byte[] photo;
+    private Serializable photo;
 
     public Upload() {
     }
@@ -45,7 +45,7 @@ public class Upload implements Serializable {
         this.id = id;
     }
 
-    public Upload(String id, byte[] photo) {
+    public Upload(String id, Serializable photo) {
         this.id = id;
         this.photo = photo;
     }
@@ -58,7 +58,7 @@ public class Upload implements Serializable {
         this.id = id;
     }
 
-    public byte[] getPhoto() {
+    public Serializable getPhoto() {
         return photo;
     }
 

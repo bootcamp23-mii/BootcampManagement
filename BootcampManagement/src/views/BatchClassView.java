@@ -8,9 +8,11 @@ package views;
 import controllers.BatchClassController;
 import controllers.BatchController;
 import controllers.ClassesController;
+import controllers.EmployeeController;
 import controllers.RoomController;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.Employee;
 import models.Batch;
@@ -20,6 +22,7 @@ import models.Room;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
+import tools.Session;
 
 /**
  *
@@ -27,6 +30,7 @@ import tools.HibernateUtil;
  */
 public class BatchClassView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private EmployeeController emc = new EmployeeController(factory);
     private BatchClassController bcc = new BatchClassController(factory);
     private BatchController bc = new BatchController(factory);
     private ClassesController csc = new ClassesController(factory);
@@ -51,7 +55,10 @@ public class BatchClassView extends javax.swing.JInternalFrame {
     }
     
     private void showTrainer() {
-        for (Employee trainer : trainerList) cbTrainer.addItem(trainer.getName());
+//        for (Employee trainer : trainerList) cbTrainer.addItem(trainer.getName());
+        for (Employee trainer : emc.getAll()) {
+            cbTrainer.addItem(trainer.getId()+" - "+trainer.getName());
+        }
     }
     
     void showBatch() {
@@ -111,11 +118,9 @@ public class BatchClassView extends javax.swing.JInternalFrame {
         lblRoom = new javax.swing.JLabel();
         cbRoom = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
-        tfKeyword = new javax.swing.JTextField();
+        btClear = new javax.swing.JButton();
         btInsert = new javax.swing.JButton();
-        chbGetById = new javax.swing.JCheckBox();
         btDelete = new javax.swing.JButton();
-        btSearch = new javax.swing.JButton();
         scpBatchClass = new javax.swing.JScrollPane();
         tbBatchClass = new javax.swing.JTable();
 
@@ -182,34 +187,33 @@ public class BatchClassView extends javax.swing.JInternalFrame {
         });
         pnBatchClass.add(cbRoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 90, 210, 30));
         pnBatchClass.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 570, 28));
-        pnBatchClass.add(tfKeyword, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 210, 30));
+
+        btClear.setText("Clear");
+        btClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnBatchClass.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 80, 28));
 
         btInsert.setText("Insert");
         btInsert.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        pnBatchClass.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 70, 28));
-
-        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
-        chbGetById.setText("Get by ID");
-        chbGetById.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chbGetById.addActionListener(new java.awt.event.ActionListener() {
+        btInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chbGetByIdActionPerformed(evt);
+                btInsertActionPerformed(evt);
             }
         });
-        pnBatchClass.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 80, 30));
+        pnBatchClass.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 70, 28));
 
         btDelete.setText("Delete");
         btDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        pnBatchClass.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 150, 70, 28));
-
-        btSearch.setText("Search");
-        btSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btSearch.addActionListener(new java.awt.event.ActionListener() {
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSearchActionPerformed(evt);
+                btDeleteActionPerformed(evt);
             }
         });
-        pnBatchClass.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, 80, 30));
+        pnBatchClass.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 150, 70, 28));
 
         scpBatchClass.setBackground(new java.awt.Color(153, 255, 153));
 
@@ -266,14 +270,6 @@ public class BatchClassView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btSearchActionPerformed
-
-    private void chbGetByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbGetByIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chbGetByIdActionPerformed
-
     private void tbBatchClassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbBatchClassMouseClicked
         tfID.setText(tbBatchClass.getValueAt(tbBatchClass.getSelectedRow(), 1).toString());
         for (int i = 0; i < cbTrainer.getItemCount(); i++) {
@@ -300,16 +296,61 @@ public class BatchClassView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbRoomMouseClicked
 
+    private void btInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btInsertActionPerformed
+        if (isEmpty()) {
+            JOptionPane.showMessageDialog(null, bcc.save(tfID.getText(), "", cbBatch.getSelectedItem().toString(), cbClasses.getSelectedItem().toString(), cbTrainer.getSelectedItem().toString(), cbRoom.getSelectedItem().toString()));
+        }else{
+            try {
+                int reply = JOptionPane.showConfirmDialog(null, "Update Data?",
+                    "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(reply == JOptionPane.YES_OPTION){
+                    JOptionPane.showMessageDialog(null, bcc.save(tfID.getText(), "", cbBatch.getSelectedItem().toString(), cbClasses.getSelectedItem().toString(), cbTrainer.getSelectedItem().toString(), cbRoom.getSelectedItem().toString()));
+
+                clearField();
+                tableBatchClass(bcc.getAll());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        }
+        clearField();
+        tableBatchClass(bcc.getAll());
+    }//GEN-LAST:event_btInsertActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+//        bcc.delete(null, bcc.save(tfID.getText(), "", cbBatch.getSelectedItem().toString(), cbClasses.getSelectedItem().toString(), cbTrainer.getSelectedItem().toString(), cbRoom.getSelectedItem().toString()));
+        clearField();
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        clearField();
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private boolean isEmpty(){
+        if(bcc.search(tfID.getText()).isEmpty()){
+            return true;
+        }
+        return false;
+    }
+    
+    private void clearField() {
+        tfID.setEnabled(true);
+        tfID.setEditable(true);
+        tfID.setText("");
+        cbTrainer.setSelectedIndex(0);
+        cbBatch.setSelectedIndex(0);
+        cbClasses.setSelectedIndex(0);
+        cbRoom.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btInsert;
-    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbBatch;
     private javax.swing.JComboBox<String> cbClasses;
     private javax.swing.JComboBox<String> cbRoom;
     private javax.swing.JComboBox<String> cbTrainer;
-    private javax.swing.JCheckBox chbGetById;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblBatch;
     private javax.swing.JLabel lblClasses;
@@ -321,6 +362,5 @@ public class BatchClassView extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane scpBatchClass;
     private javax.swing.JTable tbBatchClass;
     private javax.swing.JTextField tfID;
-    private javax.swing.JTextField tfKeyword;
     // End of variables declaration//GEN-END:variables
 }

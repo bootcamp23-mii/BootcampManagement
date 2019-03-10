@@ -5,17 +5,71 @@
  */
 package views;
 
+import controllers.ClassesController;
+import controllers.EmployeeController;
+import controllers.ErrorBankController;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Classes;
+import models.Employee;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
+
 /**
  *
  * @author gerydanu
  */
 public class ErrorBankView extends javax.swing.JInternalFrame {
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private ClassesController csc = new ClassesController(factory);
+    private EmployeeController emc = new EmployeeController(factory);
+    private ErrorBankController ebc = new ErrorBankController(factory);
+    DefaultTableModel myTableModel = new DefaultTableModel();
+    private List<models.Classes> classTypeList= new ArrayList<>();
+    private List<models.Employee> employeeList = new ArrayList<>();
+    private List<models.ErrorBank> errorBankList = new ArrayList<>();
 
     /**
      * Creates new form AspectView
      */
     public ErrorBankView() {
         initComponents();
+        showClass();
+        showEmployee();
+        tableErrorBank(ebc.getAll());
+    }
+    
+    
+    void showClass() {
+//        for (Lesson lesson : lessonList) cbLesson.addItem(lesson.getName());
+        for (Classes classes : csc.getAll()) {
+            cbClasses.addItem(classes.getName());
+        }
+    }
+    
+    void showEmployee() {
+//        for (Lesson lesson : lessonList) cbLesson.addItem(lesson.getName());
+        for (Employee employee : emc.getAll()) {
+            cbEmployee.addItem(employee.getName());
+        }
+    }
+    
+    private void tableErrorBank(List<models.ErrorBank> errorBank) {
+        Object[] columnNames = {"No.", "ID", "Submit Date", "Description", "Solution", "Class", "Employee"};
+        Object[][] data = new Object[errorBank.size()][columnNames.length];
+        for (int i = 0; i < data.length; i++) {
+            data[i][0] = (i + 1);
+            data[i][1] = errorBank.get(i).getId();
+            data[i][2] = errorBank.get(i).getSubmitdate();
+            data[i][3] = errorBank.get(i).getDescription();
+            data[i][4] = errorBank.get(i).getSolution();
+            data[i][5] = errorBank.get(i).getClasses().getName();
+            data[i][6] = errorBank.get(i).getEmployee().getName();
+
+        }
+        myTableModel = new DefaultTableModel(data, columnNames);
+        tbErrorBank.setModel(myTableModel);
     }
 
     /**
@@ -42,11 +96,9 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         lblEmployee = new javax.swing.JLabel();
         cbEmployee = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
-        jTextField1 = new javax.swing.JTextField();
         btInsert = new javax.swing.JButton();
-        chbGetById = new javax.swing.JCheckBox();
         btDelete = new javax.swing.JButton();
-        btSearch = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         scpErrorBank = new javax.swing.JScrollPane();
         tbErrorBank = new javax.swing.JTable();
 
@@ -104,7 +156,6 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         });
         pnErrorBank.add(cbEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 40, 180, 30));
         pnErrorBank.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 560, 34));
-        pnErrorBank.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 210, 34));
 
         btInsert.setText("Insert");
         btInsert.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -115,16 +166,6 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         });
         pnErrorBank.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 70, 34));
 
-        chbGetById.setBackground(new java.awt.Color(153, 255, 153));
-        chbGetById.setText("Get by ID");
-        chbGetById.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chbGetById.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                chbGetByIdMouseClicked(evt);
-            }
-        });
-        pnErrorBank.add(chbGetById, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, 80, 34));
-
         btDelete.setText("Delete");
         btDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btDelete.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -134,14 +175,14 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         });
         pnErrorBank.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 180, 70, 34));
 
-        btSearch.setText("Search");
-        btSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btSearch.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btSearchMouseClicked(evt);
+        btClear.setText("Clear");
+        btClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
             }
         });
-        pnErrorBank.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 70, 34));
+        pnErrorBank.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 80, 30));
 
         tbErrorBank.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -179,14 +220,6 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void chbGetByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chbGetByIdMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chbGetByIdMouseClicked
-
-    private void btSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSearchMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btSearchMouseClicked
-
     private void btInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btInsertMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btInsertMouseClicked
@@ -203,16 +236,28 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbEmployeeMouseClicked
 
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        clearField();
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private void clearField() {
+        tfID.setEnabled(true);
+        tfID.setEditable(true);
+        tfID.setText("");
+        tfSubmitDate.setText("");
+        tfDescription.setText("");
+        tfSolution.setText("");
+        cbClasses.setSelectedIndex(0);
+        cbEmployee.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btInsert;
-    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbClasses;
     private javax.swing.JComboBox<String> cbEmployee;
-    private javax.swing.JCheckBox chbGetById;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblClasses;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblEmployee;
