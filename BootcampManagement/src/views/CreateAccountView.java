@@ -68,6 +68,7 @@ public class CreateAccountView extends javax.swing.JInternalFrame {
         tfSecurityAnswer = new javax.swing.JTextField();
         btRegister = new javax.swing.JButton();
 
+        setClosable(true);
         setTitle("Create Account");
         setToolTipText("");
 

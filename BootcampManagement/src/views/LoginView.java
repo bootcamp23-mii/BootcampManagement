@@ -5,6 +5,10 @@
  */
 package views;
 
+import controllers.LoginController;
+import javax.swing.JOptionPane;
+import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
 import tools.Session;
 
 /**
@@ -13,12 +17,22 @@ import tools.Session;
  */
 public class LoginView extends javax.swing.JInternalFrame {
     
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private LoginController c = new LoginController(factory);
 
     /**
      * Creates new form LoginView
      */
     public LoginView() {
         initComponents();
+    }
+    
+    private boolean login(){
+        if (c.login(tfUsername.getText(), pfPassword.getText())){
+            Session.setSession(tfUsername.getText());
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -130,12 +144,17 @@ public class LoginView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoginActionPerformed
-//        if (c.login(tfUsername.getText(), pfPassword.getText())) {
-//            bmv.mnbBootcamp.setVisible(true);
-//            Session.setSession(tfUsername.getText());
-//            pnBootcamp.removeAll();
-//            this.revalidate();
-//        }
+        BootcampManagementView view = new BootcampManagementView();
+        if (login()){
+            this.dispose();
+            view.login();
+//            view.revalidate();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Username atau Password salah.");
+            tfUsername.setText("");
+            pfPassword.setText("");
+        }
     }//GEN-LAST:event_btLoginActionPerformed
 
 
