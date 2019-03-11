@@ -679,8 +679,8 @@ public class BootcampManagementView extends javax.swing.JFrame {
 
     private void mnCVGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCVGenerateActionPerformed
         try {
-            String fileName = "./src/reports/CV3.jrxml";
-            String filetoFill = "./src/reports/CV3.jasper";
+            String fileName = "./src/reports/CV4.jrxml";
+            String filetoFill = "./src/reports/CV4.jasper";
             JasperCompileManager.compileReport(fileName);
             Map param = new HashMap();
             param.put("setID", Session.getSession());
