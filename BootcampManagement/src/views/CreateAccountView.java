@@ -67,6 +67,7 @@ public class CreateAccountView extends javax.swing.JInternalFrame {
         tfSecurityQuestion = new javax.swing.JTextField();
         tfSecurityAnswer = new javax.swing.JTextField();
         btRegister = new javax.swing.JButton();
+        dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
 
         setClosable(true);
         setTitle("Create Account");
@@ -105,7 +106,7 @@ public class CreateAccountView extends javax.swing.JInternalFrame {
         pnRegister1.add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 200, -1));
         pnRegister1.add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 200, -1));
         pnRegister1.add(tfBirthPlace, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 200, -1));
-        pnRegister1.add(tfBirthDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 200, -1));
+        pnRegister1.add(tfBirthDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 170, -1));
 
         pnRegister1.add(cbGender, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 200, -1));
 
@@ -170,6 +171,7 @@ public class CreateAccountView extends javax.swing.JInternalFrame {
             }
         });
         pnRegister1.add(btRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 400, 110, 30));
+        pnRegister1.add(dateChooserCombo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 120, 20, -1));
 
         javax.swing.GroupLayout pnRegisterLayout = new javax.swing.GroupLayout(pnRegister);
         pnRegister.setLayout(pnRegisterLayout);
@@ -206,6 +208,7 @@ public class CreateAccountView extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> cbReligion;
     private javax.swing.JComboBox<String> cbSubdistrict;
     private javax.swing.JComboBox<String> cbVillage;
+    private datechooser.beans.DateChooserCombo dateChooserCombo1;
     private javax.swing.JLabel lblAddress;
     private javax.swing.JLabel lblBirthDate;
     private javax.swing.JLabel lblBirthPlace;

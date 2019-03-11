@@ -87,6 +87,23 @@ public class GeneralDAO<T> implements DAOInterface<T>{
     }
 
     @Override
+    public T getById2(Object id) {
+        T obj=null;
+        session = this.factory.openSession();
+        transaction = session.beginTransaction();
+        try {
+            obj = (T) session.createQuery("FROM " + t.getClass().getSimpleName() + " WHERE "
+                    +factory.getClassMetadata(t.getClass()).getIdentifierPropertyName()+" = '" + id + "'").uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+        return obj;
+    }
+
+    @Override
     public boolean saveOrDelete(T entity, boolean isSave) {
         boolean result = false;
         session = this.factory.openSession();

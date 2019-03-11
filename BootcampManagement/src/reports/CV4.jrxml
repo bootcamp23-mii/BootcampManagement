@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CV" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="7d0148b3-ddc0-46c9-bb0c-6b565fc67459">
+	<property name="ireport.zoom" value="1.0533250172243205"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="Education History" whenResourceMissingType="Empty" uuid="353c12fc-d5eb-406e-a532-10095be56e3e">
+		<parameter name="ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select eh.gpa gpa, d.name degree, m.name major, u.name university from education_history eh 
+join education e on e.id = eh.education 
+join degree d on d.id = e.degree
+join major m on m.id = e.major
+join university u on u.id = e.university
+where eh.employee = $P{ID} and eh.isdeleted=0]]>
+		</queryString>
+		<field name="GPA" class="java.lang.String"/>
+		<field name="DEGREE" class="java.lang.String"/>
+		<field name="MAJOR" class="java.lang.String"/>
+		<field name="UNIVERSITY" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Employee Language" whenResourceMissingType="Empty" uuid="6a204eab-a3df-4cc3-aee4-76f2d09a4006">
+		<parameter name="ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select l.id langID,l.name langName from employee_language el
+join language l on l.id=el.language where el.employee=$P{ID} and el.isdeleted = 0]]>
+		</queryString>
+		<field name="LANGID" class="java.lang.String"/>
+		<field name="LANGNAME" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Employee SKill" whenResourceMissingType="Empty" uuid="90e9e343-d73a-493b-81f2-1ad8d4492ef9">
+		<parameter name="ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select s.name skill, c.name category 
+from employee_skill es
+join skill s on es.skill=s.id
+join category c on s.category=c.id
+where es.employee =$P{ID} and es.isdeleted = 0]]>
+		</queryString>
+		<field name="SKILL" class="java.lang.String"/>
+		<field name="CATEGORY" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Organization" uuid="5f8c6d78-98b4-4018-9182-39bd2efb28c5">
+		<parameter name="ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select name from organization where employee = $P{ID} and isdeleted = 0]]>
+		</queryString>
+		<field name="NAME" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Achievement" uuid="fd6e9036-c37a-4817-a574-8fd117e7faee">
+		<parameter name="ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select name from achievement where employee = $P{ID} and isdeleted = 0]]>
+		</queryString>
+		<field name="NAME" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Employee Certification" whenResourceMissingType="Empty" uuid="07a9cfc9-c55e-44d7-ac27-2690cb89ec3a">
+		<parameter name="ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select ec.certificatedate certificatedate, ec.certificatenumber certificatenumber, c.name certificate
+from employee_certification ec 
+join certificate c on c.id=ec.certificate
+where ec.employee = $P{ID} and ec.isdeleted = 0]]>
+		</queryString>
+		<field name="CERTIFICATEDATE" class="java.sql.Timestamp"/>
+		<field name="CERTIFICATENUMBER" class="java.lang.String"/>
+		<field name="CERTIFICATE" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="Work Experience" uuid="3ea23085-10a9-43ad-9790-61f1a68867a7">
+		<parameter name="ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from work_experience where employee=$P{ID} and isdeleted = 0]]>
+		</queryString>
+		<field name="ID" class="java.lang.String"/>
+		<field name="NAME" class="java.lang.String"/>
+		<field name="DESCRIPTION" class="java.lang.String"/>
+		<field name="STARTDATE" class="java.sql.Timestamp"/>
+		<field name="ENDDATE" class="java.sql.Timestamp"/>
+		<field name="ISDELETED" class="java.math.BigDecimal"/>
+		<field name="EMPLOYEE" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="setID" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select e.name, to_date(e.birthdate,'dd-mm-yyyy') birthdate, e.gender gender, e.marriedstatus marriedstatus, e.address address,
+e.email email, e.phone phone, d.name birthplace, r.name religion, v.name village,
+u.photo
+from employee e
+join village v on v.id=e.village
+join district d on d.id=e.birthplace
+join religion r on r.id=e.religion
+left outer join upload u on u.id=e.id
+where e.id = $P{setID}]]>
+	</queryString>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="BIRTHDATE" class="java.sql.Timestamp"/>
+	<field name="GENDER" class="java.lang.String"/>
+	<field name="MARRIEDSTATUS" class="java.lang.String"/>
+	<field name="ADDRESS" class="java.lang.String"/>
+	<field name="EMAIL" class="java.lang.String"/>
+	<field name="PHONE" class="java.lang.String"/>
+	<field name="BIRTHPLACE" class="java.lang.String"/>
+	<field name="RELIGION" class="java.lang.String"/>
+	<field name="VILLAGE" class="java.lang.String"/>
+	<field name="PHOTO" class="java.awt.Image"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="337" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="164" y="131" width="174" height="20" uuid="c16b1624-e718-4888-ba10-ac0973a065e5"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BIRTHDATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="164" y="151" width="174" height="20" uuid="6d33ec2b-2d04-4229-8309-e4a859d45620"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GENDER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="99" width="219" height="32" uuid="57e29d8d-a645-4602-858c-e63b4326ccbc"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERSONAL DATA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="449" y="99" width="100" height="132" uuid="14167b20-4a8d-444c-909d-1aec6ba4e3be"/>
+				<imageExpression><![CDATA[$F{PHOTO}]]></imageExpression>
+			</image>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Title" x="2" y="8" width="449" height="50" forecolor="#000000" uuid="d116c264-b522-499d-b877-3344de32a9cd"/>
+				<textElement markup="none">
+					<font size="40" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="41" y="171" width="100" height="20" uuid="c5be7551-5464-4c2e-886b-1751242d06fe"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Marital Status:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="191" width="100" height="20" uuid="1541ba71-7201-4aab-835e-a173ca3a8725"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Religion:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="211" width="100" height="20" uuid="617ca978-6228-42c1-9aea-a00afe5cd0c8"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="231" width="100" height="20" uuid="94a94365-7cd7-4ece-b084-ae94072feb67"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Phone:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="251" width="100" height="20" uuid="44d1681b-bf94-4b35-aa25-c223d7409fd1"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Address:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="164" y="171" width="174" height="20" uuid="5adee2dc-2a19-4185-b739-69c16a77e382"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MARRIEDSTATUS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="164" y="191" width="174" height="20" uuid="4076af73-c4d9-40cd-974d-dbbadba313db"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RELIGION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="41" y="151" width="100" height="20" uuid="405457dd-2e41-4ccd-9a90-e9bbd2a5ea9c"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Gender]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="131" width="100" height="20" uuid="e9053aa4-4cdb-4aa9-9e4a-8fa09566859c"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Date of Birth]]></text>
+			</staticText>
+			<image>
+				<reportElement x="463" y="0" width="92" height="70" uuid="570fe535-e23a-4192-9cd3-1584a8f71af8"/>
+				<imageExpression><![CDATA["/reports/mii-logo.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="2" y="85" width="549" height="1" uuid="a853ca4e-fba0-40c1-8a02-e401540f7e4b"/>
+			</line>
+			<staticText>
+				<reportElement x="164" y="211" width="209" height="20" uuid="2cfed804-b82f-4348-8ba0-68f6ec61ddc2"/>
+				<textElement>
+					<font size="14" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[recruitment@mii.co.id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="231" width="209" height="20" uuid="025cfb2f-cbe5-4308-aca8-1dc73aca0fe4"/>
+				<textElement>
+					<font size="14" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[+62 21 52 327 307]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="251" width="349" height="78" uuid="ccec19a8-ecfa-4714-a0f0-e33c2fafa059"/>
+				<textElement>
+					<font size="14" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[PT Mitra Integrasi Informatika
+APL Tower 37 th floor, Suite 1-8
+Jl. LetJen S. Parman Kav 28, Tanjung Duren Selatan
+Grogol Petamburan, Jakarta Barat, 11470]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="6" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="7" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="115" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="551" height="107" uuid="69c2db5a-a87e-4aad-8d52-1cfa4dee1970"/>
+				<staticText>
+					<reportElement x="0" y="0" width="221" height="32" uuid="e78388c0-7568-4bef-98ff-ad027b427821"/>
+					<textElement>
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[EDUCATION HISTORIES]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement x="41" y="32" width="510" height="73" uuid="32caf07d-c2da-4ea8-a4c2-c8f97dfd8e5f"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="Education History" uuid="9b773603-8693-420b-a9f8-000a881d8f17">
+							<datasetParameter name="ID">
+								<datasetParameterExpression><![CDATA[$P{setID}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:listContents height="73" width="510">
+							<textField>
+								<reportElement x="0" y="0" width="48" height="20" uuid="467f3f71-9c9a-4fd1-85fe-df0c7499403d"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{DEGREE}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="48" y="0" width="462" height="20" uuid="ff8746bd-86c2-452e-bf65-957a8c3047c2"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{MAJOR}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="48" y="41" width="100" height="20" uuid="9329e6e4-4aa9-4a0e-8e7d-8094bb38f4a3"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{GPA}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="0" y="21" width="510" height="20" uuid="b3938bc5-2b19-4fe0-8a75-f3c1f73ca94a"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{UNIVERSITY}]]></textFieldExpression>
+							</textField>
+							<staticText>
+								<reportElement x="2" y="41" width="35" height="20" uuid="f4b7e400-19d8-4206-a328-e1a348be5f04"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<text><![CDATA[GPA:]]></text>
+							</staticText>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</frame>
+		</band>
+		<band height="66">
+			<frame>
+				<reportElement x="0" y="0" width="551" height="62" uuid="6771f03e-040f-4d8e-89e1-947ae6e99d21"/>
+				<staticText>
+					<reportElement x="0" y="0" width="295" height="32" uuid="695c75dd-24c2-4194-b569-9d331839ed3a"/>
+					<textElement>
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[LANGUAGES]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement x="43" y="32" width="508" height="20" uuid="eb70a23e-2619-4ade-bd2d-90a9e5b2bf5c"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="Employee Language" uuid="399e4408-1396-45a9-a920-1c891cb7d59c">
+							<datasetParameter name="ID">
+								<datasetParameterExpression><![CDATA[$P{setID}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:listContents height="20" width="508">
+							<textField>
+								<reportElement x="0" y="0" width="35" height="20" uuid="c73476f7-c5f5-4ee6-aa43-7c7841c6e016"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{LANGID}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="35" y="0" width="462" height="20" uuid="802e60eb-447d-4fde-a3d0-8788367cff78"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{LANGNAME}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</frame>
+		</band>
+		<band height="70">
+			<frame>
+				<reportElement x="0" y="0" width="551" height="64" uuid="3beab3d8-0390-4dab-aa7d-3305660e32b2"/>
+				<componentElement>
+					<reportElement x="41" y="32" width="510" height="26" uuid="26482096-ece7-4e56-8ee2-fa5af06e14b9"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="Employee SKill" uuid="a2ee37a4-77e7-4cfb-a9ca-15128c4fd347">
+							<datasetParameter name="ID">
+								<datasetParameterExpression><![CDATA[$P{setID}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:listContents height="26" width="510">
+							<textField>
+								<reportElement x="2" y="0" width="508" height="20" uuid="254bb2d7-2088-45d4-9e82-0d01774bcdc1"/>
+								<textElement>
+									<font size="14" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{SKILL}+" - "+$F{CATEGORY}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+				<staticText>
+					<reportElement x="0" y="0" width="221" height="32" uuid="cd6ad0b6-3fe8-46d4-b67f-148104d0ac67"/>
+					<textElement>
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SKILLS]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="72">
+			<frame>
+				<reportElement x="-2" y="0" width="551" height="64" uuid="4753787a-81a1-4cf8-8b5a-d83336a7ee58"/>
+				<staticText>
+					<reportElement x="0" y="0" width="221" height="32" uuid="4378b71b-dc79-4162-a9ed-70c24f234aa3"/>
+					<textElement>
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ORGANIZATIONS]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement x="43" y="32" width="508" height="20" uuid="c95367dc-8787-4f21-ae69-099edb9f2d20"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="Organization" uuid="00409d01-5c79-4643-b1fd-6209744f773f">
+							<datasetParameter name="ID">
+								<datasetParameterExpression><![CDATA[$P{setID}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:listContents height="20" width="508">
+							<textField>
+								<reportElement x="0" y="0" width="508" height="20" uuid="ac5d3fc6-2521-4d5a-8345-ad4ecc50c721"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</frame>
+		</band>
+		<band height="75">
+			<frame>
+				<reportElement x="0" y="0" width="551" height="63" uuid="0306cfc9-3235-4610-99d6-18654c798904"/>
+				<staticText>
+					<reportElement x="0" y="0" width="221" height="32" uuid="6a9af67a-ee33-4823-b59f-d066a1d8d465"/>
+					<textElement>
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ACHIEVEMENTS]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement x="41" y="32" width="510" height="31" uuid="0c685c88-a248-4968-bbf8-9820e5c6449d"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="Achievement" uuid="421fad59-7319-4ccb-832e-e18a27b33152">
+							<datasetParameter name="ID">
+								<datasetParameterExpression><![CDATA[$P{setID}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:listContents height="31" width="510">
+							<textField>
+								<reportElement x="2" y="0" width="508" height="20" uuid="08e027c5-6eca-41dc-9317-78ce0c7dd6ce"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</frame>
+		</band>
+		<band height="101">
+			<frame>
+				<reportElement x="2" y="0" width="551" height="87" uuid="6af0e43d-ff45-4fbc-aca0-65f980562c6d"/>
+				<componentElement>
+					<reportElement x="43" y="32" width="508" height="48" uuid="058b07ee-abab-4a91-8954-eb584d7aa5c1"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="Employee Certification" uuid="41396c7f-ba78-4c44-bed3-864039a9560f">
+							<datasetParameter name="ID">
+								<datasetParameterExpression><![CDATA[$P{setID}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:listContents height="48" width="508">
+							<textField>
+								<reportElement x="0" y="0" width="420" height="20" uuid="1ec5094f-dfbb-468e-9a69-4c6a9633772f"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CERTIFICATE}+" ("+$F{CERTIFICATENUMBER}+")"]]></textFieldExpression>
+							</textField>
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="0" y="20" width="195" height="20" uuid="17467e92-055e-4da9-ac5e-7187eb2ba24f"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CERTIFICATEDATE}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+				<staticText>
+					<reportElement x="0" y="0" width="221" height="32" uuid="daf3e45a-e548-4333-b2b8-bcbabc43fd42"/>
+					<textElement>
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CERTIFICATIONS]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="119">
+			<frame>
+				<reportElement x="2" y="0" width="553" height="119" uuid="c3f55922-6253-403f-88a8-13c4f95781d1"/>
+				<componentElement>
+					<reportElement x="43" y="33" width="510" height="86" uuid="0546a46e-5cae-4cb5-a8b6-e56945c68226"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="Work Experience" uuid="d5a3a8e2-0cad-4381-bf51-ae48c1a2918e">
+							<datasetParameter name="ID">
+								<datasetParameterExpression><![CDATA[$P{setID}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:listContents height="86" width="510">
+							<textField>
+								<reportElement x="0" y="0" width="468" height="20" uuid="ef9fb3a3-b763-46cd-a569-76cad2f560dc"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+							</textField>
+							<staticText>
+								<reportElement x="0" y="20" width="100" height="20" uuid="7ec5046f-c541-47c8-819b-a6c52b1ffe5f"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<text><![CDATA[START DATE:]]></text>
+							</staticText>
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="100" y="20" width="272" height="20" uuid="46729ff7-3ce8-461e-a0eb-4fa3daf4aa02"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{STARTDATE}]]></textFieldExpression>
+							</textField>
+							<staticText>
+								<reportElement x="0" y="40" width="100" height="20" uuid="c40e695b-8433-4dc1-b4bd-2fbc4a08d566"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<text><![CDATA[END DATE:]]></text>
+							</staticText>
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="100" y="40" width="272" height="20" uuid="c6092721-65e6-4caa-8adb-e990204f9650"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ENDDATE}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="0" y="60" width="508" height="20" uuid="40db2075-dc01-4001-9542-aa8e129dd2eb"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+				<staticText>
+					<reportElement x="0" y="1" width="221" height="32" uuid="7c3f50fb-177f-4da6-b9b9-469fcc2f4598"/>
+					<textElement>
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[WORK EXPERIENCES]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="6e20f337-8c26-4737-8b3b-ecef1ae83b01"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="1" width="555" height="24" forecolor="#D0B48E" backcolor="#000000" uuid="f71aab8c-cbb4-471e-8b19-eeb78e5039f2"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="513" y="0" width="40" height="20" forecolor="#FFFFFF" uuid="daea1252-a7a4-472f-b96e-2ab4577f1c36"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="433" y="0" width="80" height="20" forecolor="#FFFFFF" uuid="0d142699-a09e-409b-933f-feb3183c44b8"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
