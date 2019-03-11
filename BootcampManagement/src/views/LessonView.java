@@ -6,6 +6,7 @@
 package views;
 
 import controllers.ClassesController;
+import controllers.ClassesControllerInterface;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +20,7 @@ import tools.HibernateUtil;
  */
 public class LessonView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private ClassesController csc = new ClassesController(factory);
+    private ClassesControllerInterface csc = new ClassesController(factory);
     DefaultTableModel myTableModel = new DefaultTableModel();
     private List<models.Classes> classTypeList= new ArrayList<>();
 
@@ -141,15 +142,28 @@ public class LessonView extends javax.swing.JInternalFrame {
 
         tbLesson.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Class"
+                "No.", "ID", "Name", "Class"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbLesson.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbLessonMouseClicked(evt);
+            }
+        });
         scpLesson.setViewportView(tbLesson);
 
         javax.swing.GroupLayout pnCenterLayout = new javax.swing.GroupLayout(pnCenter);
@@ -194,6 +208,10 @@ public class LessonView extends javax.swing.JInternalFrame {
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
         clearField();
     }//GEN-LAST:event_btClearActionPerformed
+
+    private void tbLessonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLessonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbLessonMouseClicked
 
     private void clearField() {
         tfID.setEnabled(true);

@@ -6,8 +6,12 @@
 package views;
 
 import controllers.ClassesController;
+import controllers.ClassesControllerInterface;
 import controllers.EmployeeController;
+import controllers.EmployeeControllerInterface;
 import controllers.ErrorBankController;
+import controllers.ErrorBankControllerInterface;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -22,19 +26,21 @@ import tools.HibernateUtil;
  */
 public class ErrorBankView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private ClassesController csc = new ClassesController(factory);
-    private EmployeeController emc = new EmployeeController(factory);
-    private ErrorBankController ebc = new ErrorBankController(factory);
+    private ClassesControllerInterface csc = new ClassesController(factory);
+    private EmployeeControllerInterface emc = new EmployeeController(factory);
+    private ErrorBankControllerInterface ebc = new ErrorBankController(factory);
     DefaultTableModel myTableModel = new DefaultTableModel();
     private List<models.Classes> classTypeList= new ArrayList<>();
     private List<models.Employee> employeeList = new ArrayList<>();
     private List<models.ErrorBank> errorBankList = new ArrayList<>();
+    private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
 
     /**
      * Creates new form AspectView
      */
     public ErrorBankView() {
         initComponents();
+        dcSubmitDate.setDateFormat(dateFormatOut);
         showClass();
         showEmployee();
         tableErrorBank(ebc.getAll());
@@ -61,7 +67,7 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         for (int i = 0; i < data.length; i++) {
             data[i][0] = (i + 1);
             data[i][1] = errorBank.get(i).getId();
-            data[i][2] = errorBank.get(i).getSubmitdate();
+            data[i][2] = dateFormatOut.format(errorBank.get(i).getSubmitdate());
             data[i][3] = errorBank.get(i).getDescription();
             data[i][4] = errorBank.get(i).getSolution();
             data[i][5] = errorBank.get(i).getClasses().getName();
@@ -87,6 +93,7 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         tfID = new javax.swing.JTextField();
         lblSubmitDate = new javax.swing.JLabel();
         tfSubmitDate = new javax.swing.JTextField();
+        dcSubmitDate = new datechooser.beans.DateChooserCombo();
         lblDescription = new javax.swing.JLabel();
         tfDescription = new javax.swing.JTextField();
         lblSolution = new javax.swing.JLabel();
@@ -126,7 +133,14 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
 
         lblSubmitDate.setText("Submit Date");
         pnErrorBank.add(lblSubmitDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 70, 30));
-        pnErrorBank.add(tfSubmitDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 40, 180, 30));
+        pnErrorBank.add(tfSubmitDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 40, 160, 30));
+
+        dcSubmitDate.addCommitListener(new datechooser.events.CommitListener() {
+            public void onCommit(datechooser.events.CommitEvent evt) {
+                dcSubmitDateOnCommit(evt);
+            }
+        });
+        pnErrorBank.add(dcSubmitDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 40, 30, 30));
 
         lblDescription.setText("Description");
         pnErrorBank.add(lblDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 79, 70, 30));
@@ -186,15 +200,28 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
 
         tbErrorBank.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Submit Date", "Description", "Solution", "Class", "Employee"
+                "No.", "ID", "Submit Date", "Description", "Solution", "Class", "Employee"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbErrorBank.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbErrorBankMouseClicked(evt);
+            }
+        });
         scpErrorBank.setViewportView(tbErrorBank);
 
         javax.swing.GroupLayout pnCenterLayout = new javax.swing.GroupLayout(pnCenter);
@@ -240,6 +267,27 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
         clearField();
     }//GEN-LAST:event_btClearActionPerformed
 
+    private void tbErrorBankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbErrorBankMouseClicked
+        tfID.setText(tbErrorBank.getValueAt(tbErrorBank.getSelectedRow(), 1).toString());
+        tfSubmitDate.setText(tbErrorBank.getValueAt(tbErrorBank.getSelectedRow(), 2).toString());
+        tfDescription.setText(tbErrorBank.getValueAt(tbErrorBank.getSelectedRow(), 3).toString());
+        tfSolution.setText(tbErrorBank.getValueAt(tbErrorBank.getSelectedRow(), 4).toString());
+        for (int i = 0; i < cbClasses.getItemCount(); i++) {
+            if (cbClasses.getItemAt(i).equals(tbErrorBank.getValueAt(tbErrorBank.getSelectedRow(), 5).toString()))
+                cbClasses.setSelectedIndex(i);
+        }
+        for (int j = 0; j < cbEmployee.getItemCount(); j++) {
+            if (cbEmployee.getItemAt(j).equals(tbErrorBank.getValueAt(tbErrorBank.getSelectedRow(), 6).toString()))
+                cbEmployee.setSelectedIndex(j);
+        }
+
+        tfID.setEnabled(false);
+    }//GEN-LAST:event_tbErrorBankMouseClicked
+
+    private void dcSubmitDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dcSubmitDateOnCommit
+        tfSubmitDate.setText(dcSubmitDate.getText());
+    }//GEN-LAST:event_dcSubmitDateOnCommit
+
     private void clearField() {
         tfID.setEnabled(true);
         tfID.setEditable(true);
@@ -257,6 +305,7 @@ public class ErrorBankView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btInsert;
     private javax.swing.JComboBox<String> cbClasses;
     private javax.swing.JComboBox<String> cbEmployee;
+    private datechooser.beans.DateChooserCombo dcSubmitDate;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblClasses;
     private javax.swing.JLabel lblDescription;

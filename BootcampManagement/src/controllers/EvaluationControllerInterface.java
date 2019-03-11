@@ -16,6 +16,8 @@ public interface EvaluationControllerInterface {
     public Evaluation getByid(String id);
     public List<Evaluation> getAll();
     public List<Evaluation> search(Object keyword);
-    public String save(String id, String isdaily, String evaluationdate, String note, String isdeleted, String participant, String lesson, String topic);
-    public String delete(String id, String isdaily, String evaluationdate, String note, String isdeleted, String participant, String lesson, String topic);
+    public List<Evaluation> searchWD(Object keyword);
+    public String save(String id, String isdaily, String evaluationdate, String note, String participant, String lesson, String topic);
+    public String delete(String id, String isdaily, String evaluationdate, String note, String participant, String lesson, String topic);
+    public String deleteSoft(String id, String isdaily, String evaluationdate, String note, String participant, String lesson, String topic);
 }

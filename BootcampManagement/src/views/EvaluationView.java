@@ -6,10 +6,15 @@
 package views;
 
 import controllers.EvaluationController;
+import controllers.EvaluationControllerInterface;
 import controllers.LessonController;
+import controllers.LessonControllerInterface;
 import controllers.ParticipantController;
+import controllers.ParticipantControllerInterface;
 import controllers.RoomController;
 import controllers.TopicController;
+import controllers.TopicControllerInterface;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -27,21 +32,23 @@ import tools.HibernateUtil;
  */
 public class EvaluationView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private EvaluationController evc = new EvaluationController(factory);
-    private ParticipantController prc = new ParticipantController(factory);
-    private LessonController lc = new LessonController(factory);
-    private TopicController tc = new TopicController(factory);
+    private EvaluationControllerInterface evc = new EvaluationController(factory);
+    private ParticipantControllerInterface prc = new ParticipantController(factory);
+    private LessonControllerInterface lc = new LessonController(factory);
+    private TopicControllerInterface tc = new TopicController(factory);
     DefaultTableModel myTableModel = new DefaultTableModel();
     private List<models.Evaluation> evaluationList = new ArrayList<>();
     private List<models.Participant> participantList = new ArrayList<>();
     private List<models.Lesson> lessonList = new ArrayList<>();
     private List<models.Topic> topicList = new ArrayList<>();
+    private SimpleDateFormat dateFormatOut = new SimpleDateFormat("dd-MM-yyyy");
 
     /**
      * Creates new form AspectView
      */
     public EvaluationView() {
         initComponents();
+        dcDate.setDateFormat(dateFormatOut);
         showParticipant();
         showLesson();
         showTopic();
@@ -80,7 +87,7 @@ public class EvaluationView extends javax.swing.JInternalFrame {
             data[i][0] = (i + 1);
             data[i][1] = evaluation.get(i).getId();
             data[i][2] = evaluation.get(i).getIsdaily();
-            data[i][3] = evaluation.get(i).getEvaluationdate();
+            data[i][3] = dateFormatOut.format(evaluation.get(i).getEvaluationdate());
             data[i][4] = evaluation.get(i).getNote();
             data[i][5] = evaluation.get(i).getParticipant();
             data[i][6] = evaluation.get(i).getLesson();
@@ -108,6 +115,7 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         chbIsDaily = new javax.swing.JCheckBox();
         lblDate = new javax.swing.JLabel();
         tfDate = new javax.swing.JTextField();
+        dcDate = new datechooser.beans.DateChooserCombo();
         lblNote = new javax.swing.JLabel();
         tfNote = new javax.swing.JTextField();
         lblParticipant = new javax.swing.JLabel();
@@ -119,6 +127,7 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         jSeparator1 = new javax.swing.JSeparator();
         btInsert = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         scpEvaluation = new javax.swing.JScrollPane();
         tbEvaluation = new javax.swing.JTable();
 
@@ -159,7 +168,14 @@ public class EvaluationView extends javax.swing.JInternalFrame {
 
         lblDate.setText("Date");
         pnEvaluation.add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 60, 28));
-        pnEvaluation.add(tfDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 230, 28));
+        pnEvaluation.add(tfDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 200, 28));
+
+        dcDate.addCommitListener(new datechooser.events.CommitListener() {
+            public void onCommit(datechooser.events.CommitEvent evt) {
+                dcDateOnCommit(evt);
+            }
+        });
+        pnEvaluation.add(dcDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 30, 30));
 
         lblNote.setText("Note");
         pnEvaluation.add(lblNote, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 60, 28));
@@ -214,26 +230,40 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         });
         pnEvaluation.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 170, 80, 30));
 
+        btClear.setText("Clear");
+        btClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
+        pnEvaluation.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 170, 80, 30));
+
         scpEvaluation.setBackground(new java.awt.Color(153, 255, 153));
 
         tbEvaluation.setAutoCreateRowSorter(true);
         tbEvaluation.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Is Daily", "Date", "Note", "Participant", "Lesson", "Topic"
+                "No.", "ID", "Is Daily", "Date", "Note", "Participant", "Lesson", "Topic"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tbEvaluation.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbEvaluationMouseClicked(evt);
             }
         });
         scpEvaluation.setViewportView(tbEvaluation);
@@ -288,14 +318,56 @@ public class EvaluationView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_chbIsDailyMouseClicked
 
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        clearField();
+    }//GEN-LAST:event_btClearActionPerformed
+
+    private void dcDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dcDateOnCommit
+        tfDate.setText(dcDate.getText());
+    }//GEN-LAST:event_dcDateOnCommit
+
+    private void tbEvaluationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEvaluationMouseClicked
+        tfID.setText(tbEvaluation.getValueAt(tbEvaluation.getSelectedRow(), 1).toString());
+//        chbIsDaily.setSelected(tbEvaluation.getValueAt(tbEvaluation.getSelectedRow(), 2).toString());
+        tfDate.setText(tbEvaluation.getValueAt(tbEvaluation.getSelectedRow(), 3).toString());
+        tfNote.setText(tbEvaluation.getValueAt(tbEvaluation.getSelectedRow(), 4).toString());
+        for (int i = 0; i < cbParticipant.getItemCount(); i++) {
+            if (cbParticipant.getItemAt(i).equals(tbEvaluation.getValueAt(tbEvaluation.getSelectedRow(), 5).toString()))
+                cbParticipant.setSelectedIndex(i);
+        }
+        for (int j = 0; j < cbLesson.getItemCount(); j++) {
+            if (cbLesson.getItemAt(j).equals(tbEvaluation.getValueAt(tbEvaluation.getSelectedRow(), 6).toString()))
+                cbLesson.setSelectedIndex(j);
+        }
+        for (int j = 0; j < cbTopic.getItemCount(); j++) {
+            if (cbTopic.getItemAt(j).equals(tbEvaluation.getValueAt(tbEvaluation.getSelectedRow(), 7).toString()))
+                cbTopic.setSelectedIndex(j);
+        }
+
+        tfID.setEnabled(false);
+    }//GEN-LAST:event_tbEvaluationMouseClicked
+
+    private void clearField() {
+        tfID.setEnabled(true);
+        tfID.setEditable(true);
+        tfID.setText("");
+        chbIsDaily.setSelected(false);
+        tfDate.setText("");
+        tfNote.setText("");
+        cbParticipant.setSelectedIndex(0);
+        cbLesson.setSelectedIndex(0);
+        cbTopic.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btInsert;
     private javax.swing.JComboBox<String> cbLesson;
     private javax.swing.JComboBox<String> cbParticipant;
     private javax.swing.JComboBox<String> cbTopic;
     private javax.swing.JCheckBox chbIsDaily;
+    private datechooser.beans.DateChooserCombo dcDate;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblID;

@@ -6,8 +6,11 @@
 package views;
 
 import controllers.AspectController;
+import controllers.AspectControllerInterface;
 import controllers.EvaluationController;
+import controllers.EvaluationControllerInterface;
 import controllers.ScoreController;
+import controllers.ScoreControllerInterface;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -22,9 +25,9 @@ import tools.HibernateUtil;
  */
 public class ScoreView extends javax.swing.JInternalFrame {
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private EvaluationController evc = new EvaluationController(factory);
-    private AspectController apc = new AspectController(factory);
-    private ScoreController scc = new ScoreController(factory);
+    private EvaluationControllerInterface evc = new EvaluationController(factory);
+    private AspectControllerInterface apc = new AspectController(factory);
+    private ScoreControllerInterface scc = new ScoreController(factory);
     DefaultTableModel myTableModel = new DefaultTableModel();
     private List<Integer> ratingList = new ArrayList<>();
     private List<models.Evaluation> evaluationList = new ArrayList<>();
@@ -45,14 +48,12 @@ public class ScoreView extends javax.swing.JInternalFrame {
     }
     
     private void showEvaluation() {
-//        for (Topic topic : topicList) cbTopic.addItem(topic.getName());
         for (Evaluation score : evc.getAll()) {
             cbEvaluation.addItem(score.getNote());
         }
     }
     
     private void showAspect() {
-//        for (Topic topic : topicList) cbTopic.addItem(topic.getName());
         for (Aspect aspect : apc.getAll()) {
             cbAspect.addItem(aspect.getName());
         }
@@ -86,13 +87,13 @@ public class ScoreView extends javax.swing.JInternalFrame {
         lblID = new javax.swing.JLabel();
         tfID = new javax.swing.JTextField();
         lblRating = new javax.swing.JLabel();
-        cbRating = new javax.swing.JComboBox<>();
+        slRating = new javax.swing.JSlider();
         lblEvaluation = new javax.swing.JLabel();
         cbEvaluation = new javax.swing.JComboBox<>();
         lblAspect = new javax.swing.JLabel();
         cbAspect = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
-        btInsert = new javax.swing.JButton();
+        btSave = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         btClear = new javax.swing.JButton();
         scpScore = new javax.swing.JScrollPane();
@@ -124,24 +125,39 @@ public class ScoreView extends javax.swing.JInternalFrame {
         lblRating.setText("Rating");
         pnScore.add(lblRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 39, 60, 34));
 
-        pnScore.add(cbRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 39, 560, 34));
+        slRating.setBackground(new java.awt.Color(153, 255, 153));
+        slRating.setMajorTickSpacing(1);
+        slRating.setMaximum(5);
+        slRating.setMinimum(1);
+        slRating.setPaintLabels(true);
+        slRating.setPaintTicks(true);
+        slRating.setSnapToTicks(true);
+        slRating.setToolTipText("");
+        slRating.setValue(3);
+        slRating.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        pnScore.add(slRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, 560, -1));
 
         lblEvaluation.setText("Evaluation");
-        pnScore.add(lblEvaluation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 78, 60, 34));
+        pnScore.add(lblEvaluation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 60, 34));
 
-        pnScore.add(cbEvaluation, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 78, 560, 34));
+        pnScore.add(cbEvaluation, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, 560, 34));
 
         lblAspect.setText("Aspect");
-        pnScore.add(lblAspect, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 117, 60, 34));
+        pnScore.add(lblAspect, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 60, 34));
 
-        pnScore.add(cbAspect, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 117, 560, 34));
-        pnScore.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 630, 34));
+        pnScore.add(cbAspect, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 560, 34));
+        pnScore.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 630, 34));
 
-        btInsert.setText("Insert");
-        pnScore.add(btInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 180, 80, 34));
+        btSave.setText("Save");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
+        pnScore.add(btSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 210, 80, 34));
 
         btDelete.setText("Delete");
-        pnScore.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, 80, 34));
+        pnScore.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 210, 80, 34));
 
         btClear.setText("Clear");
         btClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -150,7 +166,7 @@ public class ScoreView extends javax.swing.JInternalFrame {
                 btClearActionPerformed(evt);
             }
         });
-        pnScore.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 80, 30));
+        pnScore.add(btClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 210, 80, 30));
 
         tbScore.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -171,6 +187,11 @@ public class ScoreView extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tbScore.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbScoreMouseClicked(evt);
+            }
+        });
         scpScore.setViewportView(tbScore);
 
         javax.swing.GroupLayout pnCenterLayout = new javax.swing.GroupLayout(pnCenter);
@@ -186,9 +207,9 @@ public class ScoreView extends javax.swing.JInternalFrame {
         pnCenterLayout.setVerticalGroup(
             pnCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnCenterLayout.createSequentialGroup()
-                .addComponent(pnScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnScore, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(scpScore, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
+                .addComponent(scpScore, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         getContentPane().add(pnCenter, java.awt.BorderLayout.CENTER);
@@ -200,11 +221,31 @@ public class ScoreView extends javax.swing.JInternalFrame {
         clearField();
     }//GEN-LAST:event_btClearActionPerformed
 
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btSaveActionPerformed
+
+    private void tbScoreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbScoreMouseClicked
+        tfID.setText(tbScore.getValueAt(tbScore.getSelectedRow(), 1).toString());
+        slRating.setValue(Integer.parseInt(tbScore.getValueAt(tbScore.getSelectedRow(), 2).toString()));
+        for (int i = 0; i < cbEvaluation.getItemCount(); i++) {
+            if (cbEvaluation.getItemAt(i).equals(tbScore.getValueAt(tbScore.getSelectedRow(), 3).toString()))
+                cbEvaluation.setSelectedIndex(i);
+        }
+        for (int j = 0; j < cbAspect.getItemCount(); j++) {
+            if (cbAspect.getItemAt(j).equals(tbScore.getValueAt(tbScore.getSelectedRow(), 4).toString()))
+                cbAspect.setSelectedIndex(j);
+        }
+        
+
+        tfID.setEnabled(false);
+    }//GEN-LAST:event_tbScoreMouseClicked
+
     private void clearField() {
         tfID.setEnabled(true);
         tfID.setEditable(true);
         tfID.setText("");
-        cbRating.setSelectedIndex(0);
+        slRating.setValue(3);
         cbEvaluation.setSelectedIndex(0);
         cbAspect.setSelectedIndex(0);
     }
@@ -212,10 +253,9 @@ public class ScoreView extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
     private javax.swing.JButton btDelete;
-    private javax.swing.JButton btInsert;
+    private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbAspect;
     private javax.swing.JComboBox<String> cbEvaluation;
-    private javax.swing.JComboBox<String> cbRating;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAspect;
     private javax.swing.JLabel lblEvaluation;
@@ -224,6 +264,7 @@ public class ScoreView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnCenter;
     private javax.swing.JPanel pnScore;
     private javax.swing.JScrollPane scpScore;
+    private javax.swing.JSlider slRating;
     private javax.swing.JTable tbScore;
     private javax.swing.JTextField tfID;
     // End of variables declaration//GEN-END:variables

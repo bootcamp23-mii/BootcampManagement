@@ -16,6 +16,8 @@ public interface BatchClassControllerInterface {
     public BatchClass getByid(String id);
     public List<BatchClass> getAll();
     public List<BatchClass> search(Object keyword);
-    public String save(String id, String isdeleted, String batch, String classes, String trainer, String room);
-    public String delete(String id, String isdeleted, String batch, String classes, String trainer, String room);
+    public List<BatchClass> searchWD(Object keyword);
+    public String save(String id, String batch, String classes, String trainer, String room);
+    public String delete(String id, String batch, String classes, String trainer, String room);
+    public String deleteSoft(String id, String batch, String classes, String trainer, String room);
 }

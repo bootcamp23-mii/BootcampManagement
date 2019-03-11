@@ -16,6 +16,8 @@ public interface ScoreControllerInterface {
     public Score getByid(String id);
     public List<Score> getAll();
     public List<Score> search(Object keyword);
-    public String save(String id, String rating, String isdeleted, String aspect, String evaluation);
-    public String delete(String id, String rating, String isdeleted, String aspect, String evaluation);
+    public List<Score> searchWD(Object keyword);
+    public String save(String id, String rating, String aspect, String evaluation);
+    public String delete(String id, String rating, String aspect, String evaluation);
+    public String deleteSoft(String id, String rating, String aspect, String evaluation);
 }
